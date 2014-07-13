@@ -1,0 +1,6 @@
+{block content}
+<div class="post">
+	<h2 n:inner-block="title"><a href="{link show $post->id}">{$post->title}</a></h2>
+	<div>{$post->content|noescape}</div>
+	<div class="date">{$post->timestamp|date:'F j, Y'} by {$post->user->username}{if $user->isInRole('admin')} · <a n:href="edit $post->id">Upravit</a>{/if}</div>
+</div>

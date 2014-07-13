@@ -1,0 +1,112 @@
+{**
+ * My Application layout template.
+ *
+ * @param string   $basePath web base path
+ * @param string   $robots   tell robots how to index the content of a page (optional)
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{block title|striptags}fan-club-penguin.cz{/block}{ifset #title} – fan-club-penguin.cz{/ifset}</title>
+
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/bootstrap.min.css">
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
+	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
+
+	<link rel="shortcut icon" href="{$basePath}/icons/favicon.ico">
+	<link rel="apple-touch-icon" sizes="57x57" href="{$basePath}/icons/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="{$basePath}/icons/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="{$basePath}/icons/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="{$basePath}/icons/apple-touch-icon-76x76.png">
+	<link rel="icon" type="image/png" href="{$basePath}/icons/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="{$basePath}/icons/favicon-16x16.png" sizes="16x16">
+	<link rel="icon" type="image/png" href="{$basePath}/icons/favicon-32x32.png" sizes="32x32">
+	<meta name="msapplication-TileColor" content="#2ad4ff">
+
+	{block head}{/block}
+</head>
+
+<body>
+	<script> document.documentElement.className+=' js' </script>
+	<nav class="navbar navbar-default" role="navigation">
+		<div class="container container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#panel-collapse">
+					<span class="sr-only">Přepnout navigaci</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+
+			<div class="collapse navbar-collapse" id="panel-collapse">
+				<ul class="nav navbar-nav">
+				{if $user->loggedIn}
+					<li n:class="$presenter->isLinkCurrent('Homepage:list') ? active"><a href="#"><span class="glyphicon glyphicon-calendar"></span> Srazy <span class="badge badge-inverse">TBD</span></a></li>
+					<li n:class="$presenter->isLinkCurrent('Homepage:') ? active"><a n:href="User:list">Uživatelé</a></li>
+				{else}
+					<li n:class="$presenter->isLinkCurrent('Sign:up') ? active"><a n:href="Sign:up">Registrovat se</a></li>
+				{/if}
+				</ul>
+				<form class="navbar-form navbar-left" role="search">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Hledání">
+					</div>
+				</form>
+				<ul class="nav navbar-nav navbar-right">
+				{if $user->loggedIn}
+					<li n:class="$presenter->isLinkCurrent('Homepage:mail') ? active"><a href="#"><span class="glyphicon glyphicon-envelope"></span> Zprávy <span class="badge badge-inverse">TBD</span></a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {$user->identity->username} <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="User:profile">Profil</a></li>
+							<li><a href="Admin:">Správa webu</a></li>
+							<li class="divider"></li>
+							<li><a n:href="Sign:out">Odhlásit se</a></li>
+						</ul>
+					</li>
+				{else}
+					<li n:class="$presenter->isLinkCurrent('Sign:in') ? active"><a n:href="Sign:in">Přihlásit se</a></li>
+				{/if}
+				</ul>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container container-fluid">
+		<ul class="nav nav-pills">
+		<li n:class="$presenter->isLinkCurrent('Homepage:') ? active"><a n:href="Homepage:">Novinky</a></li>
+		</ul>
+
+		<div class="row">
+			<div class="col-xs-12 col-md-9">
+				<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">{$flash->message}</div>
+
+				{include content}
+			</div>
+			<div class="col-xs-6 col-md-3">
+				<ul class="nav nav-stacked">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#">Profile</a></li>
+					<li><a href="#">Messages</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<script src="{$basePath}/js/jquery.js"></script>
+	<script src="{$basePath}/js/bootstrap.min.js"></script>
+	<script src="{$basePath}/js/netteForms.js"></script>
+	<script src="{$basePath}/js/main.js"></script>
+	{block scripts}	{/block}
+</body>
+</html>

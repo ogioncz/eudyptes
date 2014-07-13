@@ -1,0 +1,22 @@
+<ul class="pagination pagination-centered" n:if="$paginator->pageCount > 1">
+	{if $paginator->isFirst()}
+	<li class="disabled"><span title="Předchozí">«</span></li>
+	{else}
+	<li><a n:href="this, 'page' => $paginator->page - 1" rel="prev" title="Předchozí">«</a><li>
+	{/if}
+
+	{foreach $steps as $step}
+	{if $step == $paginator->page}
+	<li class="active"><span>{$step} <span class="sr-only">(aktuální)</span></span></li>
+	{else}
+	<li><a n:href="this, 'page' => $step">{$step}</a></li>
+	{/if}
+	<li class="disabled" n:if="$iterator->nextValue > $step + 1"><span>…</span></li>
+	{/foreach}
+
+	{if $paginator->isLast()}
+	<li class="disabled"><span title="Další">»</span></li>
+	{else}
+	<li><a n:href="this, 'page' => $paginator->page + 1" rel="next" title="Další">»</a></li>
+	{/if}
+</ul>

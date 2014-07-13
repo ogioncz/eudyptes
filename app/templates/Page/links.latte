@@ -1,0 +1,55 @@
+{block content}
+<h2 n:inner-block="title">Síť odkazů</h2>
+<input type="range" min="0" max="10000" value="400" step="100" title="repulsion" id="repulsion">
+<input type="range" min="0" max="10000" value="400" step="100" title="stiffness" id="stiffness">
+<input type="range" min="0" max="1" value="0.5" step="0.01" title="damping" id="damping">
+<button type="button" id="regenerate">regenerate</button> <a href="https://github.com/dhotson/springy/issues/58#issuecomment-39634615">Popis</a>
+<canvas id="canvas" width="800" height="600"></canvas>
+{/block}
+{block scripts}
+<script src="{$baseUrl}/js/springy.js"></script>
+<script src="{$baseUrl}/js/springyui.js"></script>
+<!-- click to highlight and bring to front neighbours -->
+<script>
+var graph = new Springy.Graph();
+
+var pages = {$pages};
+var elements = {};
+var links = [];
+for(var page in pages) {
+	if(pages.hasOwnProperty(page)) {
+		var page = pages[page];
+		
+		elements[page.slug] = graph.newNode({ slug: page.slug, label: page.title, ondoubleclick: function() { window.open('/page/show?slug='+this.slug); } });
+
+		for(var href in page.links) {
+			if(page.links.hasOwnProperty(href)) {
+				links.push([page.slug, page.links[href]]);
+			}
+		}
+	}
+}
+
+for(var edge in links) {
+	if(links.hasOwnProperty(edge)) {
+		var edge = links[edge];
+		graph.newEdge(elements[edge[0]], elements[edge[1]]);
+	}
+}
+var springyness = null;
+function regenerate() {
+	if(springyness) {
+		springyness.renderer.stop();
+		$('#canvas').replaceWith('<canvas id="canvas" width="800" height="600"></canvas>');
+	}
+	springyness = $('#canvas').springy({
+		graph: graph,
+		repulsion: $('#repulsion').val(),
+		stiffness: $('#stiffness').val(),
+		damping: $('#damping').val()
+	});
+}
+regenerate();
+$('#regenerate').click(regenerate);
+</script>
+{/block}
