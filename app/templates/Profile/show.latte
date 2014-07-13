@@ -5,7 +5,7 @@
 <dt>Jméno:</dt><dd>{$profile->username}</dd>
 <dt>Member:</dt><dd>{$profile->member ? 'Ano' : 'Ne'}</dd>
 <dt>E-Mail:</dt><dd>{$user->isInRole('moderator') || $isMe ? $profile->email : 'tajné'}{if !$isMe} (<a href="mail:new $profile->id">Poslat zprávu</a>){/if}</dd>
-{if $profile->registered}<dt>Registrace:</dt><dd>{$profile->registered|date:'F j, Y'}</dd>{/if}
+{if $profile->registered}<dt>Registrace:</dt><dd>{$profile->registered|date:'j. n. Y H:i:s'}</dd>{/if}
 {if $profile->skype}<dt>Skype:</dt><dd><a href="callto:{$profile->skype}">{$profile->skype}</a></dd>{/if}
 {if $isMe}<dt>IP:</dt><dd>{$ipAddress}</dd>{/if}
 </dl>
