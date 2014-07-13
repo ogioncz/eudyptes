@@ -10,8 +10,8 @@ class PostPresenter extends BasePresenter {
 	/** @var Nette\Database\Context @inject */
 	public $database;
 
-	public function renderShow($postId) {
-		$post = $this->database->table('post')->get($postId);
+	public function renderShow($id) {
+		$post = $this->database->table('post')->get($id);
 		if(!$post) {
 			$this->error('Aktuálka nenalezena');
 		}
@@ -37,10 +37,10 @@ class PostPresenter extends BasePresenter {
 		}
 		$values = $form->getValues();
 		$values['content'] = $this->parsedown->parse($values['markdown']);
-		$postId = $this->getParameter('postId');
+		$id = $this->getParameter('id');
 		
-		if($postId) {
-			$post = $this->database->table('post')->get($postId);
+		if($id) {
+			$post = $this->database->table('post')->get($id);
 			$post->update($values);
 		} else {
 			$values['user_id'] = $this->user->identity->id;
@@ -57,11 +57,11 @@ class PostPresenter extends BasePresenter {
 		}
 	}
 	
-	public function actionEdit($postId) {
+	public function actionEdit($id) {
 		if(!$this->user->isInRole('admin')) {
 			$this->redirect('Sign:in');
 		}
-		$post = $this->database->table('post')->get($postId);
+		$post = $this->database->table('post')->get($id);
 		if(!$post) {
 			$this->error('Aktuálka nenalezena');
 		}
