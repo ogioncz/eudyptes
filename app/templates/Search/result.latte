@@ -1,0 +1,13 @@
+{block content}
+<h1 n:block="title">{ifset $query}Hledání {$query}{else}Hledání{/ifset}</h1>
+{ifset $query}
+
+{foreach $results as $result}
+<a href="{$result->docid}">{$result->title}</a>
+<p>{$result->snippet_text|noescape}</p>
+{/foreach}
+
+{control paginator}
+{else}
+<p>Zadej hledaný výraz.</p>
+{/ifset}

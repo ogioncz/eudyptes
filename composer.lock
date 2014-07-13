@@ -1,9 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
     ],
-    "hash": "cdb9e3f2002b0c9a60e0a6c8071fe0b2",
+    "hash": "ef62daea16c1b70216e803c69754ae58",
     "packages": [
         {
             "name": "erusev/parsedown",
@@ -87,6 +88,46 @@
                 "parser"
             ],
             "time": "2014-06-18 23:58:16"
+        },
+        {
+            "name": "flaptor/indextank-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/flaptor/indextank-php.git",
+                "reference": "7faa453e4b47d514171e978c3bff20734c7a039e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/flaptor/indextank-php/zipball/7faa453e4b47d514171e978c3bff20734c7a039e",
+                "reference": "7faa453e4b47d514171e978c3bff20734c7a039e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Indextank_": ""
+                }
+            },
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "PHP Client for the IndexTank API",
+            "homepage": "http://www.searchify.com/documentation/php-client",
+            "keywords": [
+                "Client",
+                "Indextank",
+                "PHP",
+                "Search"
+            ],
+            "support": {
+                "source": "https://github.com/flaptor/indextank-php/tree/master",
+                "issues": "https://github.com/flaptor/indextank-php/issues"
+            },
+            "time": "2014-07-07 18:17:22"
         },
         {
             "name": "latte/latte",
@@ -1253,7 +1294,8 @@
     "minimum-stability": "beta",
     "stability-flags": {
         "nette/nette": 20,
-        "erusev/parsedown-extra": 20
+        "erusev/parsedown-extra": 20,
+        "flaptor/indextank-php": 20
     },
     "platform": {
         "php": ">= 5.3.7"

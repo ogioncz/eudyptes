@@ -57,9 +57,9 @@
 					<li n:class="$presenter->isLinkCurrent('Sign:up') ? active"><a n:href="Sign:up">Registrovat se</a></li>
 				{/if}
 				</ul>
-				<form class="navbar-form navbar-left" role="search">
+				<form class="navbar-form navbar-left" role="search" action="{link search:result}" method="get">
 					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Hledání">
+						<input type="search" name="query" class="form-control" placeholder="Hledání"{ifset $query} value="{$query}"{/ifset}>
 					</div>
 				</form>
 				<ul class="nav navbar-nav navbar-right">

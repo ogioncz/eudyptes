@@ -9,10 +9,17 @@
 			"homepage": "http://ogion.cz"
 		}
 	],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/flaptor/indextank-php"
+		}
+	],
 	"require": {
 		"php": ">= 5.3.7",
 		"nette/nette": "~2.3.0@dev",
-		"erusev/parsedown-extra": "dev-master"
+		"erusev/parsedown-extra": "dev-master",
+		"flaptor/indextank-php": "dev-master"
 	},
 	"require-dev": {
 		"nette/tester": "~1.1"
