@@ -81,7 +81,7 @@ class PagePresenter extends BasePresenter {
 		}
 
 		$this->flashMessage('Stránka byla odeslána.', 'success');
-		$this->redirect('show', $page->id);
+		$this->redirect('show', $values->slug);
 	}
 
 	public function actionCreate() {
@@ -94,7 +94,7 @@ class PagePresenter extends BasePresenter {
 		if(!$this->user->isInRole('admin')) {
 			$this->redirect('Sign:in');
 		}
-		$page = $this->database->table('page')->where('slug', $slug);
+		$page = $this->database->table('page')->where('slug', $slug)->fetch();
 		if(!$page) {
 			$this->error('Stránka nenalezena');
 		}
