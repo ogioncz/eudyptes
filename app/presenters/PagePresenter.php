@@ -35,22 +35,6 @@ class PagePresenter extends BasePresenter {
 		$this->template->pages = $pagesJson;
 	}
 
-	public function renderLinks2() {
-		$slugs = $this->database->table('page')->fetchPairs(null, 'slug');
-		$pages = $this->database->table('page');
-		foreach($pages as $page) {
-			preg_match_all('~<a[^>]* href="(?:http://(?:www\.)fan-club-penguin.cz)?/([^"]+)\.html(?:#[^"]+)?"[^>]*>~', $page->content, $links, PREG_PATTERN_ORDER);
-			$links = array_unique($links[1]);
-			$links = array_filter($links, function($item) use ($slugs) {
-				if(in_array($item, $slugs)) {
-					return true;
-				}
-			});
-			$pagesJson[] = array('slug' => $page->slug, 'title' => $page->title, 'links' => $links);
-		}
-		$this->template->pages = $pagesJson;
-	}
-
 	protected function createComponentPageForm() {
 		$form = new Nette\Application\UI\Form;
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
