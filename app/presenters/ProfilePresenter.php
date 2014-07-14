@@ -12,6 +12,10 @@ class ProfilePresenter extends BasePresenter {
 	/** @var Nette\Database\Context @inject */
 	public $database;
 
+	public function renderList() {
+		$this->template->profiles = $this->database->table('user')->order('username');
+	}
+
 	public function renderShow($id) {
 		$profile = $this->database->table('user')->get($id);
 		if(!$profile) {

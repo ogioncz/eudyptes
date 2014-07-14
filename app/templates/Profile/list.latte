@@ -1,0 +1,18 @@
+{block content}
+<h2 n:inner-block="title">Uživatelé</h2>
+<table class="table table-striped table-condensed">
+<thead>
+<tr>
+<th>Jméno</th>
+<th>E-Mail</th>
+<th>Akce</th>
+</tr>
+</thead>
+<tbody>
+<tr n:foreach="$profiles as $profile">
+<td>{$profile|userLink}</td>
+<td>{$user->isInRole('moderator') || ($user->loggedIn && $profile->id === $user->identity->id) ? $profile->email : 'tajné'}</td>
+<td>{if $user->loggedIn && $profile->id !== $user->identity->id}<a n:href="mail:create $profile->id">Poslat zprávu</a>{/if}</td>
+</tr>
+</tbody>
+</table>
