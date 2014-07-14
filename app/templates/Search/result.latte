@@ -1,5 +1,5 @@
 {block content}
-<h1 n:block="title">{ifset $query}Hledání {$query}{else}Hledání{/ifset}</h1>
+<h2 n:inner-block="title">{ifset $query}Hledání {$query}{else}Hledání{/ifset}</h2>
 {ifset $query}
 
 {foreach $results as $result}

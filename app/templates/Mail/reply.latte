@@ -1,4 +1,4 @@
 {block content}
-<h1>Odpovědět na zprávu <a n:href="show $original->id">{$original->subject}</a> uživatele {$original->ref('user', 'from')|userLink}</h1>
+<h2 n:inner-block="title">Odpovědět na zprávu <a n:href="show $original->id">{$original->subject}</a> uživatele {$original->ref('user', 'from')|userLink}</h2>
 
 {control mailForm}

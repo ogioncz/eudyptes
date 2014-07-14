@@ -1,5 +1,5 @@
 {block content}
-<h1>Pošta</h1>
+<h2>Pošta</h2>
 {define title}{$sent ? 'Odeslané zprávy' : 'Příchozí zprávy'}{/define}
 <ul class="nav nav-tabs" role="tablist">
 	<li{if !$sent} class="active"{/if}><a n:href="this sent => false">Příchozí</a></li>
