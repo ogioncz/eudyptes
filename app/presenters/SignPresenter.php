@@ -10,6 +10,8 @@ use Nette, App\Model, Nextras\Forms\Rendering;
  */
 class SignPresenter extends BasePresenter {
 
+	/** @persistent */
+	public $backlink = '';
 
 	/**
 	 * Sign-in form factory.
@@ -43,6 +45,7 @@ class SignPresenter extends BasePresenter {
 
 		try {
 			$this->getUser()->login($values->username, $values->password);
+			$this->restoreRequest($this->backlink);
 			$this->redirect('Homepage:');
 
 		} catch (Nette\Security\AuthenticationException $e) {
