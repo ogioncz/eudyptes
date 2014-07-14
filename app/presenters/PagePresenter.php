@@ -49,8 +49,11 @@ class PagePresenter extends BasePresenter {
 	}
 	
 	public function pageFormSucceeded($form) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
 		if(!$this->user->isInRole('admin')) {
-			$this->error('You need to log in to create or edit pages');
+			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->getValues();
 		$values['content'] = $this->parsedown->parse($values['markdown']);
@@ -69,14 +72,20 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionCreate() {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
 		if(!$this->user->isInRole('admin')) {
-			$this->redirect('Sign:in');
+			$this->error('Pro vytváření stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
 	
 	public function actionEdit($slug) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
 		if(!$this->user->isInRole('admin')) {
-			$this->redirect('Sign:in');
+			$this->error('Pro úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$page = $this->database->table('page')->where('slug', $slug)->fetch();
 		if(!$page) {

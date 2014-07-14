@@ -17,6 +17,10 @@ class MailPresenter extends BasePresenter {
 	private $items_per_page = 25;
 
 	public function renderList($sent = false) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
 		$this->template->sent = $sent;
 		$paginator = $this["paginator"]->getPaginator();
 		$paginator->itemsPerPage = $this->items_per_page;
@@ -25,6 +29,10 @@ class MailPresenter extends BasePresenter {
 	}
 
 	public function renderShow($id) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
 		$mail = $this->database->table('mail')->get($id);
 
 		if(!$mail) {
@@ -55,6 +63,10 @@ class MailPresenter extends BasePresenter {
 	}
 	
 	public function mailFormSucceeded($form) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
 		$values = $form->getValues();
 		$values['content'] = $this->parsedown->parse($values['content']);
 		$values['from'] = $this->user->identity->id;
@@ -72,7 +84,7 @@ class MailPresenter extends BasePresenter {
 			}
 
 			if($original->to !== $this->user->identity->id) {
-				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.');
+				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
 		
 			$values['to'] = $original->from;
@@ -101,6 +113,10 @@ class MailPresenter extends BasePresenter {
 	}
 
 	public function actionCreate($to) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
 		if(!$to) {
 			$this->error('Zadej id uživatele, kterému chceš napsat.');
 		}
@@ -115,6 +131,10 @@ class MailPresenter extends BasePresenter {
 	}
 
 	public function actionReply($id) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
 		if(!$id) {
 			$this->error('Zadej id zprávy, na kterou chceš odpovědět.');
 		}
@@ -125,7 +145,7 @@ class MailPresenter extends BasePresenter {
 		}
 
 		if($original->to !== $this->user->identity->id) {
-			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.');
+			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$this->template->original = $original;
 	}

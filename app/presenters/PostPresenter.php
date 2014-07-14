@@ -32,8 +32,11 @@ class PostPresenter extends BasePresenter {
 	}
 	
 	public function postFormSucceeded($form) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
 		if(!$this->user->isInRole('admin')) {
-			$this->error('You need to log in to create or edit posts');
+			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->getValues();
 		$values['content'] = $this->parsedown->parse($values['markdown']);
@@ -52,14 +55,20 @@ class PostPresenter extends BasePresenter {
 	}
 
 	public function actionCreate() {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
 		if(!$this->user->isInRole('admin')) {
-			$this->redirect('Sign:in');
+			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
 	
 	public function actionEdit($id) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
 		if(!$this->user->isInRole('admin')) {
-			$this->redirect('Sign:in');
+			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$post = $this->database->table('post')->get($id);
 		if(!$post) {
