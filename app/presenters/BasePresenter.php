@@ -19,9 +19,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	protected function createTemplate($class=null) {
 		$template = parent::createTemplate($class);
-		$template->registerHelper('userLink', function($user) use ($template) {
-			return Html::el('a', $user->username)->href($template->presenter->link('profile:show', $user->id));
-		});
+		$template->getLatte()->addFilter(null, [new \App\Model\HelperLoader($this), 'loader']);
 		return $template;
 	}
 }
