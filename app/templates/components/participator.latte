@@ -1,2 +1,2 @@
-{foreach $participants as $participant}{first} ({/first}{$participant->user|userLink}{sep}, {/sep}{last}){/last}{/foreach}
+{count($participants)} {foreach $participants as $participant}{first} ({/first}{$participant->user|userLink}{sep}, {/sep}{last}){/last}{/foreach}
 {control participateForm}
