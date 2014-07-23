@@ -2,3 +2,8 @@
 <h2 n:inner-block="title">Odpovědět na zprávu <a n:href="show $original->id">{$original->subject}</a> uživatele {$original->ref('user', 'from')|userLink}</h2>
 
 {control mailForm}
+{/block}
+{block scripts}
+<script src="{$basePath}/js/insert5.js"></script>
+<script src="{$basePath}/js/toolbar.js"></script>
+{/block}
