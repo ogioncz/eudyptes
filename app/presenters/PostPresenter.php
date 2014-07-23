@@ -5,8 +5,9 @@ use Nette, Nextras\Forms\Rendering;
 
 
 class PostPresenter extends BasePresenter {
-	/** @var \Parsedown @inject */
-	public $parsedown;
+	/** @var \App\Model\Formatter @inject */
+	public $formatter;
+
 	/** @var Nette\Database\Context @inject */
 	public $database;
 
@@ -39,7 +40,7 @@ class PostPresenter extends BasePresenter {
 			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->getValues();
-		$values['content'] = $this->parsedown->parse($values['markdown']);
+		$values['content'] = $this->formatter->format($values['markdown']);
 		$id = $this->getParameter('id');
 		
 		if($id) {

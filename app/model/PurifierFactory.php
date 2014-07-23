@@ -69,18 +69,12 @@ class PurifierFactory extends \Nette\Object {
 			$def->addElement('ins', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'CDATA'));
 			$def->addElement('del', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'CDATA'));
 
-			// TinyMCE
-			$def->addAttribute('img', 'data-mce-src', 'Text');
-			$def->addAttribute('img', 'data-mce-json', 'Text');
+			// Custom data attributes
+			$def->addAttribute('a', 'data-lightbox', 'Bool');
+			$def->addAttribute('blockquote', 'data-from', 'Text');
 
 			// Others
 			$def->addAttribute('iframe', 'allowfullscreen', 'Bool');
-			$def->addAttribute('table', 'height', 'Text');
-			$def->addAttribute('td', 'border', 'Text');
-			$def->addAttribute('th', 'border', 'Text');
-			$def->addAttribute('tr', 'width', 'Text');
-			$def->addAttribute('tr', 'height', 'Text');
-			$def->addAttribute('tr', 'border', 'Text');
 		}
 
 		return new \HTMLPurifier($config);	

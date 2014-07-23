@@ -28,5 +28,6 @@ services:
 	- App\RouterFactory
 	- App\Model\PurifierFactory
 	parsedown: ParsedownExtra
+	formatter: App\Model\Formatter(@parsedown, @purifier)
 	router: @App\RouterFactory::createRouter
 	purifier: @App\Model\PurifierFactory::createPurifier('%tempDir%/cache')
