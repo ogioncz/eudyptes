@@ -1,0 +1,31 @@
+{block content}
+<h2 n:inner-block="title">Srazy</h2>
+
+<a class="pull-right link-icon" href="meeting:new"><i class="glyphicon glyphicon-plus"></i>Nový sraz</a>
+{if count($meetings)}
+{foreach $meetings as $meeting}
+<a n:if="$user->isInRole('admin') || $meeting->user_id === $user->identity->id" class="pull-right link-icon" href="meeting:edit $meeting->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
+<a n:if="$user->isInRole('admin') || $meeting->user_id === $user->identity->id" class="pull-right link-icon" href="meeting:delete $meeting->id"><span class="glyphicon glyphicon-remove"></span>Smazat</a>
+<a n:if="$user->isInRole('admin')" class="pull-right link-icon" href="profile:ban $meeting->user $meeting->ip"><span class="glyphicon glyphicon-ban-circle"></span>Udělit ban</a>
+<h3>{$meeting->title}</h3>
+<dl class="dl-horizontal">
+<dt>Navrhnul:</dt><dd>{$meeting->user|userLink}</dd>
+<dt>Datum:</dt><dd>{$meeting->date|date:'j. n. Y'} {$meeting->date|relDate}</dd>
+<dt>Server:</dt><dd>{$meeting->server}</dd>
+<dt>Program:</dt><dd>
+{?$events = \Nette\Utils\Json::decode($meeting->program)}
+{if count($events > 0)}
+<table class="table table-striped"><tbody>
+<tr n:foreach="$events as $event"><th>{$event->time}</th><td>{$event->event}</td></tr>
+</tbody></table>
+{else}
+Na programu nic není.
+{/if}
+</dd>
+<dt>Popis:</dt><dd>{$meeting->description|noescape}</dd>
+<dt>Účastníci:</dt><dd>{control participator, $meeting}</button></form></dd>
+</dl>
+{/foreach}
+{else}
+<p class="alert alert-info">Nekonají se žádné srazy</p>
+{/if}

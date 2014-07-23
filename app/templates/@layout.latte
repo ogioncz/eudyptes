@@ -51,7 +51,7 @@
 			<div class="collapse navbar-collapse" id="panel-collapse">
 				<ul class="nav navbar-nav">
 				{if $user->loggedIn}
-					<li n:class="$presenter->isLinkCurrent('Homepage:list') ? active"><a href="#"><span class="glyphicon glyphicon-calendar"></span> Srazy <span class="badge badge-inverse">TBD</span></a></li>
+					<li n:class="$presenter->isLinkCurrent('meeting:list') ? active"><a n:href="meeting:list"><span class="glyphicon glyphicon-calendar"></span> Srazy <span class="badge badge-inverse">TBD</span></a></li>
 					<li n:class="$presenter->isLinkCurrent('profile:list') ? active"><a n:href="profile:list">Uživatelé</a></li>
 				{else}
 					<li n:class="$presenter->isLinkCurrent('Sign:up') ? active"><a n:href="Sign:up">Registrovat se</a></li>
