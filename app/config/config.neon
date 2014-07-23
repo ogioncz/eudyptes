@@ -26,5 +26,7 @@ nette:
 services:
 	- App\Model\UserManager
 	- App\RouterFactory
+	- App\Model\PurifierFactory
 	parsedown: ParsedownExtra
 	router: @App\RouterFactory::createRouter
+	purifier: @App\Model\PurifierFactory::createPurifier('%tempDir%/cache')

@@ -20,7 +20,8 @@
 		"nette/nette": "~2.3.0@dev",
 		"erusev/parsedown-extra": "dev-master",
 		"flaptor/indextank-php": "dev-master",
-		"nextras/forms": "dev-master"
+		"nextras/forms": "dev-master",
+		"ezyang/htmlpurifier": "dev-master"
 	},
 	"require-dev": {
 		"nette/tester": "~1.1"
