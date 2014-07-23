@@ -9,8 +9,9 @@ use Nette, App\Model, Nextras\Forms\Rendering;
  * Mail presenter.
  */
 class MailPresenter extends BasePresenter {
-	/** @var \Parsedown @inject */
-	public $parsedown;
+	/** @var \App\Model\Formatter @inject */
+	public $formatter;
+
 	/** @var Nette\Database\Context @inject */
 	public $database;
 
@@ -68,7 +69,7 @@ class MailPresenter extends BasePresenter {
 		}
 
 		$values = $form->getValues();
-		$values['content'] = $this->parsedown->parse($values['content']);
+		$values['content'] = $this->formatter->format($values['content']);
 		$values['from'] = $this->user->identity->id;
 		$values['ip'] = $this->context->httpRequest->remoteAddress;
 		
