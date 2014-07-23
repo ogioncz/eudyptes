@@ -51,7 +51,7 @@
 			<div class="collapse navbar-collapse" id="panel-collapse">
 				<ul class="nav navbar-nav">
 				{if $user->loggedIn}
-					<li n:class="$presenter->isLinkCurrent('meeting:list') ? active"><a n:href="meeting:list"><span class="glyphicon glyphicon-calendar"></span> Srazy <span class="badge badge-inverse">TBD</span></a></li>
+					<li n:class="$presenter->isLinkCurrent('meeting:list') ? active"><a n:href="meeting:list"><span class="glyphicon glyphicon-calendar"></span> Srazy <span class="badge">TBD</span></a></li>
 					<li n:class="$presenter->isLinkCurrent('profile:list') ? active"><a n:href="profile:list">Uživatelé</a></li>
 				{else}
 					<li n:class="$presenter->isLinkCurrent('Sign:up') ? active"><a n:href="Sign:up">Registrovat se</a></li>
@@ -64,7 +64,7 @@
 				</form>
 				<ul class="nav navbar-nav navbar-right">
 				{if $user->loggedIn}
-					<li n:class="$presenter->isLinkCurrent('mail:list') ? active"><a n:href="mail:list"><span class="glyphicon glyphicon-envelope"></span> Zprávy <span class="badge badge-inverse">TBD</span></a></li>
+					<li n:class="$presenter->isLinkCurrent('mail:list') ? active"><a n:href="mail:list"><span class="glyphicon glyphicon-envelope"></span> Zprávy <span class="badge">TBD</span></a></li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {$user->identity->username} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
