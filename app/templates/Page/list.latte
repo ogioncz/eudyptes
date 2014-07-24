@@ -15,7 +15,7 @@
 <tr n:foreach="$pages as $page">
 {?$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch()}
 <td><a n:href="show $page->slug">{$page->title}</a></td>
-<td>{$last_revision->timestamp|date:'j. n. Y H:i:s'}</td>
+<td>{$last_revision->timestamp|dateNA:'j. n. Y H:i:s'}</td>
 <td>{$last_revision->user|userLink}</td>
 <td>{$page->menu ? 'ano' : 'ne'}</td>
 <td>{if $user->isInRole('editor')}<a n:href="edit $page->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>{/if} <a n:href="history $page->id"><span class="glyphicon glyphicon-time"></span>Historie</a></td>

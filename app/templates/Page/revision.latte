@@ -2,5 +2,5 @@
 <div class="post">
 	<h2 n:inner-block="title">Revize stránky <a n:href="show $page['slug']">{$page['title']}</a></h2>
 	<div>{$revision['content']|noescape}</div>
-	<div class="date">Upravil {$revision->user|userLink} · {$revision->timestamp|date:'j. n. Y H:i:s'}</div>
+	<div class="date">Upravil {$revision->user|userLink} · {$revision->timestamp|dateNA:'j. n. Y H:i:s'}</div>
 </div>
