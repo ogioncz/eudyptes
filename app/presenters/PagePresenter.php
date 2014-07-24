@@ -16,8 +16,22 @@ class PagePresenter extends BasePresenter {
 		if(!$page) {
 			$this->error('Stránka nenalezena');
 		}
+		$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch();
+		if(!$last_revision) {
+			$this->error('Stránka nemá žádné revize.');
+		}
+
+		$page = $page->toArray();
+		$page['content'] = $last_revision->content;
+		$page['user'] = $last_revision->user;
+		$page['timestamp'] = $last_revision->timestamp;
 
 		$this->template->page = $page;
+	}
+
+	public function renderList() {
+		$pages = $this->database->table('page');
+		$this->template->pages = $pages;
 	}
 
 	public function renderLinks() {
@@ -57,16 +71,29 @@ class PagePresenter extends BasePresenter {
 			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->getValues();
-		$values['content'] = $this->formatter->format($values['markdown']);
 		$slug = $this->getParameter('slug');
 		
 		if($slug) {
-			$page = $this->database->table('page')->where('slug', $slug);
-			$page->update($values);
+			$page = $this->database->table('page')->where('slug', $slug)->fetch();
+			$page->update([
+				'slug' => $values['slug'],
+				'title' => $values['title']
+			]);
 		} else {
 			$values['user_id'] = $this->user->identity->id;
-			$page = $this->database->table('page')->insert($values);
+			$page = $this->database->table('page')->insert([
+				'slug' => $values['slug'],
+				'title' => $values['title'],
+				'user_id' => $this->user->identity->id
+			]);
 		}
+		$this->database->table('page_revision')->insert([
+			'page_id' => $page['id'],
+			'markdown' => $values['markdown'],
+			'content' => $this->formatter->format($values['markdown']),
+			'user_id' => $this->user->identity->id,
+			'ip' => $this->context->httpRequest->remoteAddress
+		]);
 
 		$this->flashMessage('Stránka byla odeslána.', 'success');
 		$this->redirect('show', $values->slug);
@@ -92,7 +119,13 @@ class PagePresenter extends BasePresenter {
 		if(!$page) {
 			$this->error('Stránka nenalezena');
 		}
+		$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch();
+		if(!$last_revision) {
+			$this->error('Stránka nemá žádné revize.');
+		}
+
 		$data = $page->toArray();
+		$data['markdown'] = $last_revision->markdown;
 		$this['pageForm']->setDefaults($data);
 	}
 }
