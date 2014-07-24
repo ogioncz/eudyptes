@@ -1,5 +1,5 @@
 {block content}
-<h2 n:inner-block="title">Historie stránky {$page->title}</h2>
+<h2 n:inner-block="title">Historie stránky <a n:href="show $page->slug">{$page->title}</a></h2>
 <a n:if="$user->isInRole('editor')" class="pull-right link-icon" n:href="edit $page->id"><i class="glyphicon glyphicon-pencil"></i>Upravit</a>
 {if count($revisions)}
 <ul>
