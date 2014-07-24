@@ -38,7 +38,8 @@ class PagePresenter extends BasePresenter {
 		$slugs = $this->database->table('page')->fetchPairs(null, 'slug');
 		$pages = $this->database->table('page');
 		foreach($pages as $page) {
-			preg_match_all('~<a[^>]* href="(?:http://(?:www\.)fan-club-penguin.cz)?/([^"]+)\.html(?:#[^"]+)?"[^>]*>~', $page->content, $links, PREG_PATTERN_ORDER);
+			$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch();
+			preg_match_all('~<a[^>]* href="(?:http://(?:www\.)fan-club-penguin.cz)?/([^"]+)\.html(?:#[^"]+)?"[^>]*>~', $last_revision->content, $links, PREG_PATTERN_ORDER);
 			$links = array_unique($links[1]);
 			$links = array_filter($links, function($item) use ($slugs) {
 				if(in_array($item, $slugs)) {
