@@ -114,7 +114,7 @@ class MeetingPresenter extends BasePresenter {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		$meeting = $this->database->table('meeting')->where('id', $id)->fetch();
+		$meeting = $this->database->table('meeting')->get($id);
 		if(!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
@@ -124,6 +124,50 @@ class MeetingPresenter extends BasePresenter {
 		$data = $meeting->toArray();
 		$data['times'] = Json::decode($data['program'], true);
 		$this['meetingForm']->setDefaults($data);
+	}
+
+	protected function createComponentDeleteForm() {
+		$form = new Nette\Application\UI\Form;
+		$form->setRenderer(new Rendering\Bs3FormRenderer);
+
+		$submit = $form->addSubmit('send', 'Ano, smazat');
+		$submit->getControlPrototype()->removeClass('btn-primary')->addClass('btn-danger');
+		$form->onSuccess[] = $this->deleteFormSucceeded;
+
+		return $form;
+	}
+
+	public function deleteFormSucceeded($form) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+		$meeting = $this->database->table('meeting')->get($this->getParameter('id'));
+		if(!$meeting) {
+			$this->error('Sraz nenalezen.');
+		}
+		if(!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
+			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+		}
+
+		$meeting->delete();
+
+		$this->flashMessage('Sraz byl odstraněn.', 'success');
+		$this->redirect('list');
+	}
+
+	public function actionDelete($id) {
+		if(!$this->user->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+		$meeting = $this->database->table('meeting')->get($id);
+		if(!$meeting) {
+			$this->error('Sraz nenalezen.');
+		}
+		if(!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
+			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+		}
+
+		$this->template->meeting = $meeting;
 	}
 
 	/**
