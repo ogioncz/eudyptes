@@ -18,7 +18,7 @@
 <td>{$last_revision->timestamp|date:'j. n. Y H:i:s'}</td>
 <td>{$last_revision->user|userLink}</td>
 <td>{$page->menu ? 'ano' : 'ne'}</td>
-<td>{if $user->isInRole('editor')}<a n:href="edit $page->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>{/if}</td>
+<td>{if $user->isInRole('editor')}<a n:href="edit $page->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>{/if} <a n:href="history $page->id"><span class="glyphicon glyphicon-time"></span>Historie</a></td>
 </tr>
 </tbody>
 </table>

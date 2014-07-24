@@ -129,4 +129,23 @@ class PagePresenter extends BasePresenter {
 		$data['markdown'] = $last_revision->markdown;
 		$this['pageForm']->setDefaults($data);
 	}
+
+	public function renderHistory($id) {
+		$page = $this->database->table('page')->get($id);
+		if(!$page) {
+			$this->error('Stránka nenalezena.');
+		}
+		$this->template->page = $page;
+		$this->template->revisions = $page->related('page_revision')->order('timestamp', 'desc');
+	}
+
+	public function renderRevision($id) {
+		$revision = $this->database->table('page_revision')->get($id);
+		if(!$revision) {
+			$this->error('Revize nenalezena.');
+		}
+		$page = $revision->ref('page');
+		$this->template->page = $page;
+		$this->template->revision = $revision;
+	}
 }
