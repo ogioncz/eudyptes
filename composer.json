@@ -22,7 +22,8 @@
 		"flaptor/indextank-php": "dev-master",
 		"nextras/forms": "dev-master",
 		"ezyang/htmlpurifier": "dev-master",
-		"alb/oembed": "dev-master"
+		"alb/oembed": "dev-master",
+		"kdyby/forms-replicator": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "~1.1"

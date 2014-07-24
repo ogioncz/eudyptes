@@ -1,10 +1,10 @@
 {block content}
 <h2 n:inner-block="title">Srazy</h2>
 
-<a class="pull-right link-icon" href="meeting:new"><i class="glyphicon glyphicon-plus"></i>Nový sraz</a>
+<a class="pull-right link-icon" n:href="meeting:create"><i class="glyphicon glyphicon-plus"></i>Nový sraz</a>
 {if count($meetings)}
 {foreach $meetings as $meeting}
-<a n:if="$user->isInRole('admin') || $meeting->user_id === $user->identity->id" class="pull-right link-icon" href="meeting:edit $meeting->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
+<a n:if="$user->isInRole('admin') || $meeting->user_id === $user->identity->id" class="pull-right link-icon" n:href="meeting:edit $meeting->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
 <a n:if="$user->isInRole('admin') || $meeting->user_id === $user->identity->id" class="pull-right link-icon" href="meeting:delete $meeting->id"><span class="glyphicon glyphicon-remove"></span>Smazat</a>
 <a n:if="$user->isInRole('admin')" class="pull-right link-icon" href="profile:ban $meeting->user $meeting->ip"><span class="glyphicon glyphicon-ban-circle"></span>Udělit ban</a>
 <h3>{$meeting->title}</h3>
