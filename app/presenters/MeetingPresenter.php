@@ -23,7 +23,7 @@ class MeetingPresenter extends BasePresenter {
 
 	/**
 	* Participator control factory.
-	* @return FifteenControl
+	* @return App\Components\Participator
 	*/
 	protected function createComponentParticipator() {
 		$participator = new App\Components\Participator;
