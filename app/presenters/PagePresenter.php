@@ -71,10 +71,10 @@ class PagePresenter extends BasePresenter {
 			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->getValues();
-		$slug = $this->getParameter('slug');
+		$id = $this->getParameter('id');
 		
-		if($slug) {
-			$page = $this->database->table('page')->where('slug', $slug)->fetch();
+		if($id) {
+			$page = $this->database->table('page')->get($id);
 			$page->update([
 				'slug' => $values['slug'],
 				'title' => $values['title']
@@ -108,14 +108,14 @@ class PagePresenter extends BasePresenter {
 		}
 	}
 	
-	public function actionEdit($slug) {
+	public function actionEdit($id) {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if(!$this->user->isInRole('admin')) {
 			$this->error('Pro úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
-		$page = $this->database->table('page')->where('slug', $slug)->fetch();
+		$page = $this->database->table('page')->get($id);
 		if(!$page) {
 			$this->error('Stránka nenalezena');
 		}
