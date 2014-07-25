@@ -2,12 +2,9 @@
 
 namespace App\Presenters;
 
-use Nette, App\Model, Nextras\Forms\Rendering;
+use Nette;
+use Nextras\Forms\Rendering;
 
-
-/**
- * Sign in/out presenters.
- */
 class SignPresenter extends BasePresenter {
 
 	/** @persistent */
@@ -38,9 +35,9 @@ class SignPresenter extends BasePresenter {
 		$values = $form->getValues();
 
 		if ($values->remember) {
-			$this->getUser()->setExpiration('14 days', FALSE);
+			$this->getUser()->setExpiration('14 days', false);
 		} else {
-			$this->getUser()->setExpiration('20 minutes', TRUE);
+			$this->getUser()->setExpiration('20 minutes', true);
 		}
 
 		try {

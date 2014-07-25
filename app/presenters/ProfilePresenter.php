@@ -2,12 +2,8 @@
 
 namespace App\Presenters;
 
-use Nette, App\Model;
+use Nette;
 
-
-/**
- * Profile presenter.
- */
 class ProfilePresenter extends BasePresenter {
 	/** @var Nette\Database\Context @inject */
 	public $database;

@@ -2,23 +2,16 @@
 
 namespace App\Presenters;
 
-use Nette,
-	App\Model,
-	Nette\Diagnostics\Debugger;
+use Nette;
+use Nette\Diagnostics\Debugger;
 
-
-/**
- * Error presenter.
- */
-class ErrorPresenter extends BasePresenter
-{
+class ErrorPresenter extends BasePresenter {
 
 	/**
 	 * @param  Exception
 	 * @return void
 	 */
-	public function renderDefault($exception)
-	{
+	public function renderDefault($exception) {
 		if ($exception instanceof Nette\Application\BadRequestException) {
 			$code = $exception->getCode();
 			// load template 403.latte or 404.latte or ... 4xx.latte
@@ -32,7 +25,7 @@ class ErrorPresenter extends BasePresenter
 		}
 
 		if ($this->isAjax()) { // AJAX request? Note this error in payload.
-			$this->payload->error = TRUE;
+			$this->payload->error = true;
 			$this->terminate();
 		}
 	}

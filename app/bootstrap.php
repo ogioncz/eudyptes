@@ -22,10 +22,10 @@ $configurator->addConfig(__DIR__ . '/config/config.local.neon');
 
 $container = $configurator->createContainer();
 
-Container::extensionMethod('addDatePicker', function (Container $container, $name, $label = NULL) {
+Container::extensionMethod('addDatePicker', function (Container $container, $name, $label = null) {
 	return $container[$name] = new Controls\DatePicker($label);
 });
-Container::extensionMethod('addTimePicker', function (Container $container, $name, $label = NULL) {
+Container::extensionMethod('addTimePicker', function (Container $container, $name, $label = null) {
 	return $container[$name] = new App\Components\TimePicker($label);
 });
 Kdyby\Replicator\Container::register();

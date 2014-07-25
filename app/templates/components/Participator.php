@@ -2,22 +2,24 @@
 
 namespace App\Components;
 
-use Nette\Application\UI\Control, Nextras\Forms\Rendering;
+use Nette\Application\UI\Control;
+use Nextras\Forms\Rendering;
 
 class Participator extends Control {
 	/** @persistent */
-	public $youparticipate = false;
+	public $youParticipate = false;
+
 	/** @persistent */
-	public $meeting_id = null;
+	public $meetingId = null;
 
 	public function render($meeting) {
 		$this->template->getLatte()->addFilter(null, [new \App\Model\HelperLoader($this->presenter), 'loader']);
 		$this->template->setFile(__DIR__ . '/participator.latte');
 
-		$this->youparticipate = $this->template->youparticipate = $meeting->related('meeting_user')->where('user_id', $this->presenter->user->identity->id)->count();
+		$this->youParticipate = $this->template->youParticipate = $meeting->related('meeting_user')->where('user_id', $this->presenter->user->identity->id)->count();
 		$this->template->participants = $meeting->related('meeting_user');
 		$this->template->meeting = $meeting;
-		$this->meeting_id = $meeting->id;
+		$this->meetingId = $meeting->id;
 
 		$this->template->render();
 	}
@@ -27,9 +29,9 @@ class Participator extends Control {
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->form->getElementPrototype()->removeClass('form-horizontal');
 		$form->form->getElementPrototype()->addClass('form-inline');
-		$form->addHidden('action', $this->youparticipate ? 'unparticipate' : 'participate');
-		$form->addHidden('id', $this->meeting_id);
-		$form->addSubmit('send', $this->youparticipate ? 'Zrušit účast' : 'Zůčastnit se');
+		$form->addHidden('action', $this->youParticipate ? 'unparticipate' : 'participate');
+		$form->addHidden('id', $this->meetingId);
+		$form->addSubmit('send', $this->youParticipate ? 'Zrušit účast' : 'Zůčastnit se');
 		$form->onSuccess[] = $this->participateFormSucceeded;
 
 		return $form;

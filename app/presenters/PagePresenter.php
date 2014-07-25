@@ -1,8 +1,8 @@
 <?php
 namespace App\Presenters;
 
-use Nette, Nextras\Forms\Rendering;
-
+use Nette;
+use Nextras\Forms\Rendering;
 
 class PagePresenter extends BasePresenter {
 	/** @var \App\Model\Formatter @inject */
@@ -16,7 +16,7 @@ class PagePresenter extends BasePresenter {
 		if(!$page) {
 			$this->error('Stránka nenalezena');
 		}
-		$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch();
+		$last_revision = $page->related('page_revision')->order('timestamp DESC')->fetch();
 		if(!$last_revision) {
 			$this->error('Stránka nemá žádné revize.');
 		}
@@ -37,8 +37,10 @@ class PagePresenter extends BasePresenter {
 	public function renderLinks() {
 		$slugs = $this->database->table('page')->fetchPairs(null, 'slug');
 		$pages = $this->database->table('page');
+		$pagesJson = [];
+
 		foreach($pages as $page) {
-			$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch();
+			$last_revision = $page->related('page_revision')->order('timestamp DESC')->fetch();
 			preg_match_all('~<a[^>]* href="(?:http://(?:www\.)fan-club-penguin.cz)?/([^"]+)\.html(?:#[^"]+)?"[^>]*>~', $last_revision->content, $links, PREG_PATTERN_ORDER);
 			$links = array_unique($links[1]);
 			$links = array_filter($links, function($item) use ($slugs) {
@@ -48,6 +50,7 @@ class PagePresenter extends BasePresenter {
 			});
 			$pagesJson[] = array('slug' => $page->slug, 'title' => $page->title, 'links' => $links);
 		}
+
 		$this->template->pages = $pagesJson;
 	}
 

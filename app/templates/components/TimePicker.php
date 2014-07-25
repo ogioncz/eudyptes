@@ -11,7 +11,6 @@
 namespace App\Components;
 
 use Nette;
-use Nette\Forms\Controls\TextBase;
 
 class TimePicker extends \Nextras\Forms\Controls\DateTimePickerPrototype {
 	/** @link http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#valid-time-string */

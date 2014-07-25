@@ -28,11 +28,11 @@ class PurifierFactory extends \Nette\Object {
 		if($def = $config->maybeGetRawHTMLDefinition()) {
 			// http://developers.whatwg.org/sections.html
 			$def->addElement('section', 'Block', 'Flow', 'Common');
-			$def->addElement('nav',     'Block', 'Flow', 'Common');
+			$def->addElement('nav', 'Block', 'Flow', 'Common');
 			$def->addElement('article', 'Block', 'Flow', 'Common');
-			$def->addElement('aside',   'Block', 'Flow', 'Common');
-			$def->addElement('header',  'Block', 'Flow', 'Common');
-			$def->addElement('footer',  'Block', 'Flow', 'Common');
+			$def->addElement('aside', 'Block', 'Flow', 'Common');
+			$def->addElement('header', 'Block', 'Flow', 'Common');
+			$def->addElement('footer', 'Block', 'Flow', 'Common');
 
 			// Content model actually excludes several tags, not modelled here
 			$def->addElement('address', 'Block', 'Flow', 'Common');
@@ -58,12 +58,12 @@ class PurifierFactory extends \Nette\Object {
 			));
 
 			// http://developers.whatwg.org/text-level-semantics.html
-			$def->addElement('s',    'Inline', 'Inline', 'Common');
-			$def->addElement('var',  'Inline', 'Inline', 'Common');
-			$def->addElement('sub',  'Inline', 'Inline', 'Common');
-			$def->addElement('sup',  'Inline', 'Inline', 'Common');
+			$def->addElement('s', 'Inline', 'Inline', 'Common');
+			$def->addElement('var', 'Inline', 'Inline', 'Common');
+			$def->addElement('sub', 'Inline', 'Inline', 'Common');
+			$def->addElement('sup', 'Inline', 'Inline', 'Common');
 			$def->addElement('mark', 'Inline', 'Inline', 'Common');
-			$def->addElement('wbr',  'Inline', 'Empty', 'Core');
+			$def->addElement('wbr', 'Inline', 'Empty', 'Core');
 
 			// http://developers.whatwg.org/edits.html
 			$def->addElement('ins', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'CDATA'));

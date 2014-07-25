@@ -2,12 +2,10 @@
 
 namespace App\Presenters;
 
-use Nette, App\Model, Nextras\Forms\Rendering;
+use Nette;
+use App\Model;
+use Nextras\Forms\Rendering;
 
-
-/**
- * Mail presenter.
- */
 class MailPresenter extends BasePresenter {
 	/** @var \App\Model\Formatter @inject */
 	public $formatter;
@@ -15,7 +13,7 @@ class MailPresenter extends BasePresenter {
 	/** @var Nette\Database\Context @inject */
 	public $database;
 
-	private $items_per_page = 25;
+	private $itemsPerPage = 25;
 
 	public function renderList($sent = false) {
 		if(!$this->user->isLoggedIn()) {
@@ -23,8 +21,8 @@ class MailPresenter extends BasePresenter {
 		}
 
 		$this->template->sent = $sent;
-		$paginator = $this["paginator"]->getPaginator();
-		$paginator->itemsPerPage = $this->items_per_page;
+		$paginator = $this['paginator']->getPaginator();
+		$paginator->itemsPerPage = $this->itemsPerPage;
 		$paginator->itemCount = $this->database->table('mail')->count('*');
 		$this->template->mails = $this->database->table('mail')->where($sent ? 'from' : 'to', $this->user->identity->id)->order('timestamp DESC')->limit($paginator->itemsPerPage, $paginator->offset);
 	}

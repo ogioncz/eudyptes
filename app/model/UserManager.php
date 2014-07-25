@@ -2,12 +2,10 @@
 
 namespace App\Model;
 
-use Nette, Nette\Utils\Strings, Nette\Security\Passwords;
+use Nette;
+use Nette\Utils\Strings;
+use Nette\Security\Passwords;
 
-
-/**
- * Users management.
- */
 class UserManager extends Nette\Object implements Nette\Security\IAuthenticator {
 	const
 		TABLE_NAME = 'user',
@@ -38,9 +36,9 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator 
 
 		if(!$row) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi neexistující uživatelské jméno.', self::IDENTITY_NOT_FOUND);
-		} elseif (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
+		} else if (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi nesprávné heslo.', self::INVALID_CREDENTIAL);
-		} elseif (Passwords::needsRehash($row[self::COLUMN_PASSWORD_HASH])) {
+		} else if (Passwords::needsRehash($row[self::COLUMN_PASSWORD_HASH])) {
 			$row->update(array(
 				self::COLUMN_PASSWORD_HASH => Passwords::hash($password),
 			));

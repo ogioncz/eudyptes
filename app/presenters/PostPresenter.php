@@ -1,8 +1,8 @@
 <?php
 namespace App\Presenters;
 
-use Nette, Nextras\Forms\Rendering;
-
+use Nette;
+use Nextras\Forms\Rendering;
 
 class PostPresenter extends BasePresenter {
 	/** @var \App\Model\Formatter @inject */

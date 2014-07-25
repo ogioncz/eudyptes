@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
-use Nette,
-	Nette\Utils\Html;
+use Nette;
+use Nette\Utils\Html;
 
 class HelperLoader extends Nette\Object {
 	private $presenter;
@@ -37,7 +37,7 @@ class HelperLoader extends Nette\Object {
 		return '';
 	}
 
-	public function dateNA($time, $format = NULL) {
+	public function dateNA($time, $format = null) {
 		if($time) {
 			return \Latte\Runtime\Filters::date($time, $format);
 		} else {

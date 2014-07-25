@@ -33,13 +33,13 @@ class Formatter extends \Nette\Object {
 				if(in_array($match[1], Formatter::$OEMBED_WHITELIST) && !isset($this->replacements[$match[0]])) {
 					try {
 						$this->replacements[$match[0]] = '<figure>' . $this->oembed->request($match[0])->getHtml() . '</figure>';
-					} catch(\Exception $e) {}
+					} catch(\Exception $e) {} // can’t serve, link is better than nothing so let’s leave it at that
 				}
 			}
 		}
 		$text = strTr($text, $this->replacements);
 	
-		$text = $this->parsedown->parse($text);
+		$text = $this->parsedown->text($text);
 
 		$text = $this->purifier->purify($text);
 

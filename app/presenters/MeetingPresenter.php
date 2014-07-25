@@ -5,14 +5,10 @@ namespace App\Presenters;
 use Nette;
 use App;
 use Nextras\Forms\Rendering;
-use Nextras\Forms\Controls;
 use Nette\Utils\Json;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
 
-/**
- * Meeting presenter.
- */
 class MeetingPresenter extends BasePresenter {
 	/** @var \App\Model\Formatter @inject */
 	public $formatter;
@@ -20,7 +16,7 @@ class MeetingPresenter extends BasePresenter {
 	/** @var Nette\Database\Context @inject */
 	public $database;
 
-	public function renderList($sent = false) {
+	public function renderList() {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -46,7 +42,7 @@ class MeetingPresenter extends BasePresenter {
 
 			$time->addSubmit('remove', 'Odebrat')->setValidationScope(false)->onClick[] = function(SubmitButton $button) {
 				$form = $button->parent->parent;
-				$form->remove($button->parent, TRUE);
+				$form->remove($button->parent, true);
 			};
 		}, 1, true);
 
@@ -69,11 +65,13 @@ class MeetingPresenter extends BasePresenter {
 		}
 
 		$values = $submit->form->getValues();
-		$data['title'] = $values['title'];
-		$data['server'] = $values['server'];
-		$data['date'] = $values['date'];
-		$data['markdown'] = $values['markdown'];
-		$data['description'] = $this->formatter->format($values['markdown']);
+		$data = [
+		'title' => $values['title'],
+		'server' => $values['server'],
+		'date' => $values['date'],
+		'markdown' => $values['markdown'],
+		'description' => $this->formatter->format($values['markdown'])
+		];
 		
 		$program = [];
 		foreach($values['times'] as $time) {
@@ -85,7 +83,7 @@ class MeetingPresenter extends BasePresenter {
 		if($this->getAction() === 'create') {
 			$data['ip'] = $this->context->httpRequest->remoteAddress;
 			$data['user_id'] = $this->user->identity->id;
-			$meeting = $this->database->table('meeting')->insert($data);
+			$this->database->table('meeting')->insert($data);
 		} else {
 			$id = $this->getParameter('id');
 			$meeting = $this->database->table('meeting')->get($id);
@@ -122,7 +120,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$data = $meeting->toArray();
-		$data['times'] = Json::decode($data['program'], true);
+		$data['times'] = Json::decode($data['program'], Json::FORCE_ARRAY);
 		$this['meetingForm']->setDefaults($data);
 	}
 
@@ -137,7 +135,7 @@ class MeetingPresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function deleteFormSucceeded($form) {
+	public function deleteFormSucceeded() {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
