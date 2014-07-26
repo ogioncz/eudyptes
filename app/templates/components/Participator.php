@@ -31,7 +31,7 @@ class Participator extends Control {
 		$form->form->getElementPrototype()->addClass('form-inline');
 		$form->addHidden('action', $this->youParticipate ? 'unparticipate' : 'participate');
 		$form->addHidden('id', $this->meetingId);
-		$form->addSubmit('send', $this->youParticipate ? 'Zrušit účast' : 'Zůčastnit se');
+		$form->addSubmit('send', $this->youParticipate ? 'Zrušit účast' : 'Zúčastnit se');
 		$form->onSuccess[] = $this->participateFormSucceeded;
 
 		return $form;
