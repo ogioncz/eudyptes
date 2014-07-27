@@ -44,15 +44,13 @@ class SignPresenter extends BasePresenter {
 			$this->getUser()->login($values->username, $values->password);
 			$this->restoreRequest($this->backlink);
 			$this->redirect('Homepage:');
-
 		} catch (Nette\Security\AuthenticationException $e) {
 			$form->addError($e->getMessage());
 		}
 	}
 
 
-	public function actionOut()
-	{
+	public function actionOut() {
 		$this->getUser()->logout();
 		$this->flashMessage('Byl jsi odhlášen.', 'info');
 		$this->redirect('in');
