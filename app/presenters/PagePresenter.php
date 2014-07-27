@@ -91,10 +91,16 @@ class PagePresenter extends BasePresenter {
 				'user_id' => $this->user->identity->id
 			]);
 		}
+		$formatted = $this->formatter->format($values['markdown']);
+
+		if(count($formatted['errors'])) {
+			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
+		}
+
 		$this->database->table('page_revision')->insert([
 			'page_id' => $page['id'],
 			'markdown' => $values['markdown'],
-			'content' => $this->formatter->format($values['markdown']),
+			'content' => $formatted['text'],
 			'user_id' => $this->user->identity->id,
 			'ip' => $this->context->httpRequest->remoteAddress
 		]);

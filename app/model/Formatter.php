@@ -2,9 +2,11 @@
 
 namespace App\Model;
 
+use \Nette;
 use Alb\OEmbed;
+use Nette\Utils\Html;
 
-class Formatter extends \Nette\Object {
+class Formatter extends Nette\Object {
 	public static $OEMBED_WHITELIST = ['www.youtube.com'];
 
 	/** @var \Parsedown */
@@ -43,7 +45,14 @@ class Formatter extends \Nette\Object {
 
 		$text = $this->purifier->purify($text);
 
-		return $text;
+		return ['text' => $text, 'errors' => $this->purifier->context->get('ErrorCollector')->getRaw()];
 	}
-	
+
+	public function formatErrors($errors) {
+		$list = Html::el('ul');
+		foreach($errors as $error) {
+			$list->add(Html::el('li', 'Na řádku ' . $error[0] . ': ' . $error[2]));
+		}
+		return $list;
+	}
 }

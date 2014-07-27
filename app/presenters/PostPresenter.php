@@ -40,7 +40,13 @@ class PostPresenter extends BasePresenter {
 			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->getValues();
-		$values['content'] = $this->formatter->format($values['markdown']);
+		$formatted = $this->formatter->format($values['markdown']);
+
+		if(count($formatted['errors'])) {
+			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
+		}
+
+		$values['content'] = $formatted['text'];
 		$id = $this->getParameter('id');
 		
 		if($id) {

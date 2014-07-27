@@ -67,7 +67,13 @@ class MailPresenter extends BasePresenter {
 		}
 
 		$values = $form->getValues();
-		$values['content'] = $this->formatter->format($values['content']);
+		$formatted = $this->formatter->format($values['content']);
+
+		if(count($formatted['errors'])) {
+			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
+		}
+
+		$values['content'] = $formatted['text'];
 		$values['from'] = $this->user->identity->id;
 		$values['ip'] = $this->context->httpRequest->remoteAddress;
 		

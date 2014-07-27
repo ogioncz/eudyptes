@@ -65,12 +65,18 @@ class MeetingPresenter extends BasePresenter {
 		}
 
 		$values = $submit->form->getValues();
+		$formatted = $this->formatter->format($values['markdown']);
+
+		if(count($formatted['errors'])) {
+			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
+		}
+
 		$data = [
 		'title' => $values['title'],
 		'server' => $values['server'],
 		'date' => $values['date'],
 		'markdown' => $values['markdown'],
-		'description' => $this->formatter->format($values['markdown'])
+		'description' => $formatted['text']
 		];
 		
 		$program = [];
