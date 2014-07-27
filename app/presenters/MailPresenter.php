@@ -53,7 +53,7 @@ class MailPresenter extends BasePresenter {
 		$form = new Nette\Application\UI\Form;
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addText('subject', 'Předmět:')->setRequired()->getControlPrototype()->data['content'] = 'Předmět zprávy má výstižně charakerizovat, čeho se zpráva týká.';
-		$form->addTextArea('content', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15);
+		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15);
 
 		$form->addSubmit('send', 'Odeslat');
 		$form->onSuccess[] = $this->mailFormSucceeded;
@@ -67,12 +67,13 @@ class MailPresenter extends BasePresenter {
 		}
 
 		$values = $form->getValues();
-		$formatted = $this->formatter->format($values['content']);
+		$formatted = $this->formatter->format($values['markdown']);
 
 		if(count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
+		$values['markdown'] = $values['markdown'];
 		$values['content'] = $formatted['text'];
 		$values['from'] = $this->user->identity->id;
 		$values['ip'] = $this->context->httpRequest->remoteAddress;
