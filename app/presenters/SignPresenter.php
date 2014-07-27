@@ -10,10 +10,6 @@ class SignPresenter extends BasePresenter {
 	/** @persistent */
 	public $backlink = '';
 
-	/**
-	 * Sign-in form factory.
-	 * @return Nette\Application\UI\Form
-	 */
 	protected function createComponentSignInForm() {
 		$form = new Nette\Application\UI\Form;
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
@@ -25,11 +21,9 @@ class SignPresenter extends BasePresenter {
 
 		$form->addSubmit('send', 'Přihlásit se');
 
-		// call method signInFormSucceeded() on success
 		$form->onSuccess[] = $this->signInFormSucceeded;
 		return $form;
 	}
-
 
 	public function signInFormSucceeded($form) {
 		$values = $form->getValues();
@@ -48,7 +42,6 @@ class SignPresenter extends BasePresenter {
 			$form->addError($e->getMessage());
 		}
 	}
-
 
 	public function actionOut() {
 		$this->getUser()->logout();
