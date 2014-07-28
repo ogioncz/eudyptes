@@ -59,6 +59,10 @@ class PurifierFactory extends \Nette\Object {
 				'type' => 'Text',
 			));
 
+			// http://developers.whatwg.org/interactive-elements.html#the-details-element
+			$def->addElement('details', 'Block', 'Required: (summary, Flow)', 'Common', ['open' => 'Bool']);
+			$def->addElement('summary', 'Inline', 'Flow', 'Common');
+
 			// http://developers.whatwg.org/text-level-semantics.html
 			$def->addElement('s', 'Inline', 'Inline', 'Common');
 			$def->addElement('var', 'Inline', 'Inline', 'Common');
