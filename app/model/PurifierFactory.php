@@ -14,12 +14,14 @@ class PurifierFactory extends \Nette\Object {
 		$config->set('Cache.SerializerPath', $cacheDir);
 		$config->set('Cache.DefinitionImpl', null); // TODO: remove this later!
 		$config->set('Core.CollectErrors', true);
+		$config->set('Attr.EnableID', true);
 
 		// Allow iframes from:
 		// o YouTube.com
 		// o Vimeo.com
+		// o soundcloud.com
 		$config->set('HTML.SafeIframe', true);
-		$config->set('URI.SafeIframeRegexp', '%^(http:|https:)?//(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/)%');
+		$config->set('URI.SafeIframeRegexp', '%^(http:|https:)?//(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/|w.soundcloud.com/player/)%');
 
 		// Set some HTML5 properties
 		$config->set('HTML.DefinitionID', 'html5-definitions'); // unique id
@@ -72,6 +74,8 @@ class PurifierFactory extends \Nette\Object {
 			// Custom data attributes
 			$def->addAttribute('a', 'data-lightbox', 'Bool');
 			$def->addAttribute('blockquote', 'data-from', 'Text');
+
+			$def->addAttribute('a', 'rev', 'Enum#footnote');
 
 			// Others
 			$def->addAttribute('iframe', 'allowfullscreen', 'Bool');
