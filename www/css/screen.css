@@ -107,3 +107,7 @@ textarea {
 .nooverflow {
 	overflow: hidden;
 }
+
+figure {
+	text-align: center;
+}
