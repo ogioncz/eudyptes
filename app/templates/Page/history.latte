@@ -3,7 +3,7 @@
 <a n:if="$user->isInRole('editor')" class="pull-right link-icon" n:href="edit $page->id"><i class="glyphicon glyphicon-pencil"></i>Upravit</a>
 {if count($revisions)}
 <ul>
-<li n:foreach="$revisions as $revision"><a n:href="revision $revision->id">{$revision->timestamp|dateNA:'j. n. Y H:i:s'}</a> od uživatele {$revision->user|userLink}</li>
+<li n:foreach="$revisions as $revision"><a n:href="revision:show $revision->id">{$revision->timestamp|dateNA:'j. n. Y H:i:s'}</a> od uživatele {$revision->user|userLink}</li>
 </ul>
 {else}
 <p class="alert">Stránka nemá žádné revize.</p>

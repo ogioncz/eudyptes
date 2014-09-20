@@ -147,14 +147,4 @@ class PagePresenter extends BasePresenter {
 		$this->template->page = $page;
 		$this->template->revisions = $page->related('page_revision')->order('timestamp', 'desc');
 	}
-
-	public function renderRevision($id) {
-		$revision = $this->database->table('page_revision')->get($id);
-		if(!$revision) {
-			$this->error('Revize nenalezena.');
-		}
-		$page = $revision->ref('page');
-		$this->template->page = $page;
-		$this->template->revision = $revision;
-	}
 }
