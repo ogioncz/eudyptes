@@ -1,0 +1,6 @@
+{block content}
+<div class="post">
+	<h2 n:inner-block="title">Porovnání revizí stránky <a n:href="page:show $page['slug']">{$page['title']}</a></h2>
+	<div>{$diff|noescape}</div>
+	<div class="date"><a n:href="show $old->id">Stará</a>: {$old->user|userLink}, {$old->timestamp|dateNA:'j. n. Y H:i:s'} · <a n:href="show $new->id">Nová</a>: {$new->user|userLink}, {$new->timestamp|dateNA:'j. n. Y H:i:s'}</div>
+</div>

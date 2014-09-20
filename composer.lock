@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e2a9300a90604ed0f44a2b8ea829c642",
+    "hash": "de0b99d3a6b613d22bfaa5e5e7ab41fe",
     "packages": [
         {
             "name": "alb/oembed",
@@ -45,6 +45,48 @@
                 "oembed"
             ],
             "time": "2014-03-05 13:12:14"
+        },
+        {
+            "name": "caxy/php-htmldiff",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/caxy/php-htmldiff.git",
+                "reference": "2ce21c45b0dcbfd4851efd99f0551d9f3a88c243"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/caxy/php-htmldiff/zipball/2ce21c45b0dcbfd4851efd99f0551d9f3a88c243",
+                "reference": "2ce21c45b0dcbfd4851efd99f0551d9f3a88c243",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Caxy\\HtmlDiff": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Josh Schroeder",
+                    "email": "jschroeder@caxy.com",
+                    "homepage": "http://www.caxy.com"
+                }
+            ],
+            "description": "A library for comparing two HTML files/snippets and highlighting the differences using simple HTML.",
+            "homepage": "https://github.com/caxy/php-htmldiff",
+            "keywords": [
+                "diff",
+                "html"
+            ],
+            "time": "2014-08-12 18:11:18"
         },
         {
             "name": "erusev/parsedown",
@@ -1590,7 +1632,8 @@
         "nextras/forms": 20,
         "ezyang/htmlpurifier": 20,
         "alb/oembed": 20,
-        "kdyby/forms-replicator": 20
+        "kdyby/forms-replicator": 20,
+        "caxy/php-htmldiff": 20
     },
     "prefer-stable": false,
     "platform": {

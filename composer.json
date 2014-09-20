@@ -23,7 +23,8 @@
 		"nextras/forms": "dev-master",
 		"ezyang/htmlpurifier": "dev-master",
 		"alb/oembed": "dev-master",
-		"kdyby/forms-replicator": "@dev"
+		"kdyby/forms-replicator": "@dev",
+		"caxy/php-htmldiff": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "~1.1"
