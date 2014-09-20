@@ -112,24 +112,21 @@ figure {
 	text-align: center;
 }
 
-.diffmod, .diffadd, .diffdel {
+.diffmod {
 	padding: 2px;
 	margin: 2px;
 	display: inline-block;
-}
-
-.diffmod {
 	background-color: #fcf8e3;
 	border: 1px solid #fbeed5;
 }
 
-.diffadd {
+ins.diffmod, ins.mod, ins.diffins {
 	background-color: #dff0d8;
 	border: 1px solid #d6e9c6;
 	text-decoration: none;
 }
 
-.diffdel {
+del.diffmod {
 	background-color: #f2dede;
 	border: 1px solid #eed3d7;
 }
