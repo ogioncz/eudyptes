@@ -20,7 +20,7 @@ nette:
 
 	session:
 		save_path: "%tempDir%/sessions"
-		expiration: 14 days
+		expiration: 31 days
 
 
 services:
