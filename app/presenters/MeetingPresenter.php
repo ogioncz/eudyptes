@@ -4,17 +4,16 @@ namespace App\Presenters;
 
 use Nette;
 use App;
+use App\Model\Meeting;
 use Nextras\Forms\Rendering;
 use Nette\Utils\Json;
+use Nette\Utils\DateTime;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
 
 class MeetingPresenter extends BasePresenter {
 	/** @var App\Model\Formatter @inject */
 	public $formatter;
-
-	/** @var Nette\Database\Context @inject */
-	public $database;
 
 	/** @var App\Model\MeetingRepository @inject */
 	public $meetings;
@@ -70,45 +69,48 @@ class MeetingPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $submit->form->getValues();
-		$formatted = $this->formatter->format($values['markdown']);
+		$values = $submit->form->values;
+		$formatted = $this->formatter->format($values->markdown);
 
 		if(count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		$data = [
-		'title' => $values['title'],
-		'server' => $values['server'],
-		'date' => $values['date'],
-		'markdown' => $values['markdown'],
-		'description' => $formatted['text']
-		];
-		
-		$program = [];
-		foreach($values['times'] as $time) {
-			$program[] = ['time' => $time['time']->format('H:i'), 'event' => $time['event']];
-		}
-		$data['start'] = $program[0]['time'];
-		$data['program'] = Json::encode($program);
-
+		/** @var Meeting $meeting */
+		$meeting = null;
 		if($this->getAction() === 'create') {
-			$data['ip'] = $this->context->httpRequest->remoteAddress;
-			$data['user_id'] = $this->user->identity->id;
-			$this->database->table('meeting')->insert($data);
+			$meeting = new Meeting();
 		} else {
 			$id = $this->getParameter('id');
-			$meeting = $this->database->table('meeting')->get($id);
+			$meeting = $this->meetings->getById($id);
 			if(!$meeting) {
 				$this->error('Sraz nenalezen.');
 			}
-
 			if(!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
 				$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
-
-			$meeting->update($data);
 		}
+
+		$meeting->title = $values->title;
+		$meeting->server = $values->server;
+		$meeting->date = $values->date;
+		$meeting->markdown = $values->markdown;
+		$meeting->description = $formatted['text'];
+		
+		$program = [];
+		foreach($values->times as $time) {
+			$program[] = ['time' => $time['time']->format('H:i'), 'event' => $time['event']];
+		}
+
+		list($hour, $minute) = explode(':', $program[0]['time']);
+		$meeting->start = $values->date->setTime($hour, $minute);
+		$meeting->program = Json::encode($program);
+
+		if($this->getAction() === 'create') {
+			$meeting->ip = $this->context->httpRequest->remoteAddress;
+			$meeting->user = $this->users->getById($this->user->identity->id);
+		}
+		$this->meetings->persistAndFlush($meeting);
 
 		$this->flashMessage('Sraz byl odeslán.', 'success');
 		$this->redirect('list');
@@ -124,7 +126,8 @@ class MeetingPresenter extends BasePresenter {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		$meeting = $this->database->table('meeting')->get($id);
+		/** @var Meeting $meeting */
+		$meeting = $this->meetings->getById($id);
 		if(!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
@@ -132,7 +135,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$data = $meeting->toArray();
-		$data['times'] = Json::decode($data['program'], Json::FORCE_ARRAY);
+		$data['times'] = Json::decode($meeting->program, Json::FORCE_ARRAY);
 		$this['meetingForm']->setDefaults($data);
 	}
 
@@ -151,7 +154,7 @@ class MeetingPresenter extends BasePresenter {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		$meeting = $this->database->table('meeting')->get($this->getParameter('id'));
+		$meeting = $this->meetings->getById($this->getParameter('id'));
 		if(!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
@@ -159,7 +162,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		$meeting->delete();
+		$this->meetings->removeAndFlush($meeting);
 
 		$this->flashMessage('Sraz byl odstraněn.', 'success');
 		$this->redirect('list');
@@ -169,7 +172,7 @@ class MeetingPresenter extends BasePresenter {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		$meeting = $this->database->table('meeting')->get($id);
+		$meeting = $this->meetings->getById($id);
 		if(!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
