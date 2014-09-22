@@ -3,17 +3,21 @@
 namespace App\Presenters;
 
 use Nette;
+use App;
 
 class ProfilePresenter extends BasePresenter {
 	/** @var Nette\Database\Context @inject */
 	public $database;
 
+	/** @var App\Model\UserRepository @inject */
+	public $users;
+
 	public function renderList() {
-		$this->template->profiles = $this->database->table('user')->order('username');
+		$this->template->profiles = $this->users->findAll()->orderBy('username');
 	}
 
 	public function renderShow($id) {
-		$profile = $this->database->table('user')->get($id);
+		$profile = $this->users->getById($id);
 		if(!$profile) {
 			$this->error('Uživatel nenalezen');
 		}

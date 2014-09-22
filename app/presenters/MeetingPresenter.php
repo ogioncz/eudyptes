@@ -10,17 +10,23 @@ use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
 
 class MeetingPresenter extends BasePresenter {
-	/** @var \App\Model\Formatter @inject */
+	/** @var App\Model\Formatter @inject */
 	public $formatter;
 
 	/** @var Nette\Database\Context @inject */
 	public $database;
 
+	/** @var App\Model\MeetingRepository @inject */
+	public $meetings;
+
+	/** @var App\Model\UserRepository @inject */
+	public $users;
+
 	public function renderList() {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		$this->template->meetings = $this->database->table('meeting')->where('date >= CURDATE()')->order('date, start');	
+		$this->template->meetings = $this->meetings->findUpcoming();
 	}
 
 	protected function createComponentMeetingForm() {
@@ -179,7 +185,7 @@ class MeetingPresenter extends BasePresenter {
 	* @return App\Components\Participator
 	*/
 	protected function createComponentParticipator() {
-		$participator = new App\Components\Participator;
+		$participator = new App\Components\Participator($this->meetings, $this->users);
 		return $participator;
 	}
 }

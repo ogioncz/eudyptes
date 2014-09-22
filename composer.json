@@ -17,14 +17,16 @@
 	],
 	"require": {
 		"php": ">= 5.3.7",
-		"nette/nette": "~2.3.0@dev",
+		"nette/nette": "@dev",
 		"erusev/parsedown-extra": "dev-master",
 		"flaptor/indextank-php": "dev-master",
 		"nextras/forms": "dev-master",
 		"ezyang/htmlpurifier": "dev-master",
 		"alb/oembed": "dev-master",
 		"kdyby/forms-replicator": "@dev",
-		"caxy/php-htmldiff": "@dev"
+		"caxy/php-htmldiff": "@dev",
+		"nette/database": "~2.3@dev",
+		"nextras/orm": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "~1.1"

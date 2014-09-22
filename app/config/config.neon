@@ -22,6 +22,11 @@ nette:
 		save_path: "%tempDir%/sessions"
 		expiration: 31 days
 
+extensions:
+	orm: Nextras\Orm\DI\OrmExtension
+
+orm:
+	model: App\Model\Orm
 
 services:
 	- App\Model\UserManager
