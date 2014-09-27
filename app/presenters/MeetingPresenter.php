@@ -22,7 +22,7 @@ class MeetingPresenter extends BasePresenter {
 	public $users;
 
 	public function renderList() {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		$this->template->meetings = $this->meetings->findUpcoming();
@@ -65,28 +65,28 @@ class MeetingPresenter extends BasePresenter {
 	}
 	
 	public function meetingFormSucceeded(SubmitButton $submit) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
 		$values = $submit->form->values;
 		$formatted = $this->formatter->format($values->markdown);
 
-		if(count($formatted['errors'])) {
+		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
 		/** @var Meeting $meeting */
 		$meeting = null;
-		if($this->action === 'create') {
+		if ($this->action === 'create') {
 			$meeting = new Meeting();
 		} else {
 			$id = $this->getParameter('id');
 			$meeting = $this->meetings->getById($id);
-			if(!$meeting) {
+			if (!$meeting) {
 				$this->error('Sraz nenalezen.');
 			}
-			if(!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
+			if (!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
 				$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
 		}
@@ -106,7 +106,7 @@ class MeetingPresenter extends BasePresenter {
 		$meeting->start = $values->date->setTime($hour, $minute);
 		$meeting->program = Json::encode($program);
 
-		if($this->action === 'create') {
+		if ($this->action === 'create') {
 			$meeting->ip = $this->context->httpRequest->remoteAddress;
 			$meeting->user = $this->users->getById($this->user->identity->id);
 		}
@@ -117,21 +117,21 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function actionCreate() {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 	}
 	
 	public function actionEdit($id) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		/** @var Meeting $meeting */
 		$meeting = $this->meetings->getById($id);
-		if(!$meeting) {
+		if (!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
-		if(!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
+		if (!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
 			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$data = $meeting->toArray();
@@ -151,14 +151,14 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function deleteFormSucceeded() {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		$meeting = $this->meetings->getById($this->getParameter('id'));
-		if(!$meeting) {
+		if (!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
-		if(!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
+		if (!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
 			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
@@ -169,14 +169,14 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function actionDelete($id) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		$meeting = $this->meetings->getById($id);
-		if(!$meeting) {
+		if (!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
-		if(!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
+		if (!$this->user->isInRole('admin') && $meeting->user->id !== $this->user->identity->id) {
 			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 

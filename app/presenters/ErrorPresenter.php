@@ -6,7 +6,6 @@ use Nette;
 use Nette\Diagnostics\Debugger;
 
 class ErrorPresenter extends BasePresenter {
-
 	/**
 	 * @param  Exception
 	 * @return void

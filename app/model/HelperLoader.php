@@ -17,7 +17,7 @@ class HelperLoader extends Nette\Object {
 		$func = $args[0];
 		unset($args[0]);
 
-		if(method_exists($this, $func)) {
+		if (method_exists($this, $func)) {
 			return call_user_func_array(array($this, $func), $args);
 		} else {
 			return null;

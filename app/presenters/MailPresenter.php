@@ -3,11 +3,12 @@
 namespace App\Presenters;
 
 use Nette;
-use App\Model;
 use Nextras\Forms\Rendering;
+use App;
+use App\Model\Post;
 
 class MailPresenter extends BasePresenter {
-	/** @var \App\Model\Formatter @inject */
+	/** @var App\Model\Formatter @inject */
 	public $formatter;
 
 	/** @var Nette\Database\Context @inject */
@@ -16,7 +17,7 @@ class MailPresenter extends BasePresenter {
 	private $itemsPerPage = 25;
 
 	public function renderList($sent = false) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
@@ -28,21 +29,21 @@ class MailPresenter extends BasePresenter {
 	}
 
 	public function renderShow($id) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
 		$mail = $this->database->table('mail')->get($id);
 
-		if(!$mail) {
+		if (!$mail) {
 			$this->error('Tato zpráva neexistuje');
 		}
 
-		if($mail->ref('user', 'from')->id !== $this->user->identity->id && $mail->ref('user', 'to')->id !== $this->user->identity->id) {
+		if ($mail->ref('user', 'from')->id !== $this->user->identity->id && $mail->ref('user', 'to')->id !== $this->user->identity->id) {
 			$this->error('Toto není tvá zpráva', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		if(!$mail->read && $mail->to === $this->user->identity->id) {
+		if (!$mail->read && $mail->to === $this->user->identity->id) {
 			$mail->update(['read' => true]);
 		}
 
@@ -60,36 +61,36 @@ class MailPresenter extends BasePresenter {
 
 		return $form;
 	}
-	
+
 	public function mailFormSucceeded(Nette\Application\UI\Form $form) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $form->getValues();
+		$values = $form->values;
 		$formatted = $this->formatter->format($values['markdown']);
 
-		if(count($formatted['errors'])) {
+		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
 		$values['markdown'] = $values['markdown'];
 		$values['content'] = $formatted['text'];
-		$values['from'] = $this->user->identity->id;
+		$values['sender'] = $this->user->identity->id;
 		$values['ip'] = $this->context->httpRequest->remoteAddress;
 		
-		if($this->getAction() === 'reply') {
+		if ($this->action === 'reply') {
 			$original_id = $this->getParameter('id');
-			if(!$original_id) {
+			if (!$original_id) {
 				$this->error('Zadej id zprávy, na kterou chceš odpovědět.');
 			}
 
 			$original = $this->database->table('mail')->get($original_id);
-			if(!$original) {
+			if (!$original) {
 				$this->error('Zpráva s tímto id neexistuje.');
 			}
 
-			if($original->to !== $this->user->identity->id) {
+			if ($original->to !== $this->user->identity->id) {
 				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
 		
@@ -98,12 +99,12 @@ class MailPresenter extends BasePresenter {
 		} else {
 			$to = $this->getParameter('to');
 
-			if(!$to) {
+			if (!$to) {
 				$this->error('Zadej id uživatele, kterému chceš napsat.');
 			}
 
 			$addressee = $this->database->table('user')->get($to);
-			if(!$addressee) {
+			if (!$addressee) {
 				$this->error('Uživatel s tímto id neexistuje.');
 			}
 
@@ -119,16 +120,16 @@ class MailPresenter extends BasePresenter {
 	}
 
 	public function actionCreate($to) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		if(!$to) {
+		if (!$to) {
 			$this->error('Zadej id uživatele, kterému chceš napsat.');
 		}
 
 		$addressee = $this->database->table('user')->get($to);
-		if(!$addressee) {
+		if (!$addressee) {
 			$this->error('Uživatel s tímto id neexistuje.');
 		}
 
@@ -137,20 +138,20 @@ class MailPresenter extends BasePresenter {
 	}
 
 	public function actionReply($id) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		if(!$id) {
+		if (!$id) {
 			$this->error('Zadej id zprávy, na kterou chceš odpovědět.');
 		}
 
 		$original = $this->database->table('mail')->get($id);
-		if(!$original) {
+		if (!$original) {
 			$this->error('Zpráva s tímto id neexistuje.');
 		}
 
-		if($original->to !== $this->user->identity->id) {
+		if ($original->to !== $this->user->identity->id) {
 			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$this->template->original = $original;

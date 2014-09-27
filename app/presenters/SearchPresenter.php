@@ -23,7 +23,7 @@ class SearchPresenter extends BasePresenter {
 			$snippet_fields = 'text';
 			$response = $index->search($query, ($page - 1) * $this->itemsPerPage, $this->itemsPerPage, null, $snippet_fields, $fetch_fields);
 			
-			if($response->matches == 0) {
+			if ($response->matches == 0) {
 				$this->flashMessage('Nebyl nalezen žádný výsledek.', 'danger');
 			} else if($response->matches == 1) {
 				$this->flashMessage('Byl nalezen jeden výsledek.', 'success');

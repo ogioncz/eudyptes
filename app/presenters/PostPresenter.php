@@ -38,7 +38,7 @@ class PostPresenter extends BasePresenter {
 	}
 	
 	public function postFormSucceeded(Nette\Application\UI\Form $form) {
-		if(!$this->user->isLoggedIn()) {
+		if(!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if(!$this->user->isInRole('admin')) {
@@ -78,7 +78,7 @@ class PostPresenter extends BasePresenter {
 	}
 
 	public function actionCreate() {
-		if(!$this->user->isLoggedIn()) {
+		if(!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if(!$this->user->isInRole('admin')) {
@@ -87,7 +87,7 @@ class PostPresenter extends BasePresenter {
 	}
 	
 	public function actionEdit($id) {
-		if(!$this->user->isLoggedIn()) {
+		if(!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if(!$this->user->isInRole('admin')) {

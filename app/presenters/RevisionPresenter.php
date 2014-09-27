@@ -10,7 +10,7 @@ class RevisionPresenter extends BasePresenter {
 
 	public function renderShow($id) {
 		$revision = $this->database->table('page_revision')->get($id);
-		if(!$revision) {
+		if (!$revision) {
 			$this->error('Revize nenalezena.');
 		}
 		$page = $revision->ref('page');
@@ -20,11 +20,11 @@ class RevisionPresenter extends BasePresenter {
 
 	public function renderDiff($id, $and) {
 		$old = $this->database->table('page_revision')->get($id);
-		if(!$old) {
+		if (!$old) {
 			$this->error('Revize nenalezena.');
 		}
 		$new = $this->database->table('page_revision')->get($and);
-		if(!$new) {
+		if (!$new) {
 			$this->error('Revize nenalezena.');
 		}
 

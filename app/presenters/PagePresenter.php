@@ -13,11 +13,11 @@ class PagePresenter extends BasePresenter {
 
 	public function renderShow($slug) {
 		$page = $this->database->table('page')->where('slug', $slug)->fetch();
-		if(!$page) {
+		if (!$page) {
 			$this->error('Stránka nenalezena');
 		}
 		$last_revision = $page->related('page_revision')->order('timestamp DESC')->fetch();
-		if(!$last_revision) {
+		if (!$last_revision) {
 			$this->error('Stránka nemá žádné revize.');
 		}
 
@@ -39,12 +39,12 @@ class PagePresenter extends BasePresenter {
 		$pages = $this->database->table('page');
 		$pagesJson = [];
 
-		foreach($pages as $page) {
+		foreach ($pages as $page) {
 			$last_revision = $page->related('page_revision')->order('timestamp DESC')->fetch();
 			preg_match_all('~<a[^>]* href="(?:http://(?:www\.)fan-club-penguin.cz)?/([^"]+)\.html(?:#[^"]+)?"[^>]*>~', $last_revision->content, $links, PREG_PATTERN_ORDER);
 			$links = array_unique($links[1]);
 			$links = array_filter($links, function($item) use ($slugs) {
-				if(in_array($item, $slugs)) {
+				if (in_array($item, $slugs)) {
 					return true;
 				}
 			});
@@ -68,16 +68,16 @@ class PagePresenter extends BasePresenter {
 	}
 	
 	public function pageFormSucceeded(Nette\Application\UI\Form $form) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isInRole('admin')) {
+		if (!$this->user->isInRole('admin')) {
 			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
-		$values = $form->getValues();
+		$values = $form->values;
 		$id = $this->getParameter('id');
 		
-		if($id) {
+		if ($id) {
 			$page = $this->database->table('page')->get($id);
 			$page->update([
 				'slug' => $values['slug'],
@@ -93,7 +93,7 @@ class PagePresenter extends BasePresenter {
 		}
 		$formatted = $this->formatter->format($values['markdown']);
 
-		if(count($formatted['errors'])) {
+		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
@@ -110,27 +110,27 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionCreate() {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isInRole('admin')) {
+		if (!$this->user->isInRole('admin')) {
 			$this->error('Pro vytváření stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
 	
 	public function actionEdit($id) {
-		if(!$this->user->isLoggedIn()) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isInRole('admin')) {
+		if (!$this->user->isInRole('admin')) {
 			$this->error('Pro úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$page = $this->database->table('page')->get($id);
-		if(!$page) {
+		if (!$page) {
 			$this->error('Stránka nenalezena');
 		}
 		$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch();
-		if(!$last_revision) {
+		if (!$last_revision) {
 			$this->error('Stránka nemá žádné revize.');
 		}
 
@@ -141,7 +141,7 @@ class PagePresenter extends BasePresenter {
 
 	public function renderHistory($id) {
 		$page = $this->database->table('page')->get($id);
-		if(!$page) {
+		if (!$page) {
 			$this->error('Stránka nenalezena.');
 		}
 		$this->template->page = $page;

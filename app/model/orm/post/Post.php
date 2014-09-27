@@ -5,7 +5,6 @@ namespace App\Model;
 use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 
-
 /**
  * Post
  * @property User $user {m:1 UserRepository $createdPosts}

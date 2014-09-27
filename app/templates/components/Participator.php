@@ -57,11 +57,11 @@ class Participator extends Control {
 	}
 
 	public function participateFormSucceeded($form) {
-		if(!$this->presenter->user->isLoggedIn()) {
+		if(!$this->presenter->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		
-		$values = $form->getValues();
+		$values = $form->values;
 		$userId = $this->presenter->user->identity->id;
 		$meeting = $this->meetings->getById($values->id);
 

@@ -7,12 +7,11 @@ use Nette\Utils\Strings;
 use Nette\Security\Passwords;
 
 class UserManager extends Nette\Object implements Nette\Security\IAuthenticator {
-	const
-		TABLE_NAME = 'user',
-		COLUMN_ID = 'id',
-		COLUMN_NAME = 'username',
-		COLUMN_PASSWORD_HASH = 'password',
-		COLUMN_ROLE = 'role';
+	const TABLE_NAME = 'user';
+	const COLUMN_ID = 'id';
+	const COLUMN_NAME = 'username';
+	const COLUMN_PASSWORD_HASH = 'password';
+	const COLUMN_ROLE = 'role';
 
 
 	/** @var Nette\Database\Context */
@@ -34,7 +33,7 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator 
 
 		$row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_NAME, $username)->fetch();
 
-		if(!$row) {
+		if (!$row) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi neexistující uživatelské jméno.', self::IDENTITY_NOT_FOUND);
 		} else if (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi nesprávné heslo.', self::INVALID_CREDENTIAL);

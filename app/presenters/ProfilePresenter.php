@@ -15,10 +15,10 @@ class ProfilePresenter extends BasePresenter {
 
 	public function renderShow($id) {
 		$profile = $this->users->getById($id);
-		if(!$profile) {
+		if (!$profile) {
 			$this->error('Uživatel nenalezen');
 		}
-		if(file_exists($this->context->parameters['avatarStorage'] . '/' . $profile->id . 'm.png')) {
+		if (file_exists($this->context->parameters['avatarStorage'] . '/' . $profile->id . 'm.png')) {
 			$this->template->avatar = str_replace('♥basePath♥', $this->context->httpRequest->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $profile->id . 'm.png';
 		}
 

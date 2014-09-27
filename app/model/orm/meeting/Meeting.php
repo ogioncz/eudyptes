@@ -6,7 +6,6 @@ use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
 
-
 /**
  * Meeting
  * @property User $user {m:1 UserRepository $createdMeetings}

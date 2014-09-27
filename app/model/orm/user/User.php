@@ -7,7 +7,6 @@ use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\ManyHasMany;
 
-
 /**
  * User
  * @property string $username

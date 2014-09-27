@@ -2,13 +2,16 @@
 
 namespace App\Model;
 
-class PurifierFactory extends \Nette\Object {
+use Nette;
+use HTMLPurifier;
+use HTMLPurifier_Config;
 
+class PurifierFactory extends Nette\Object {
 	/**
-	 * @return \HTMLPurifier
+	 * @return HTMLPurifier
 	 */
 	public function createPurifier($cacheDir) {
-		$config = \HTMLPurifier_Config::createDefault();
+		$config = HTMLPurifier_Config::createDefault();
 		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
 		$config->set('CSS.AllowTricky', true);
 		$config->set('Cache.SerializerPath', $cacheDir);
@@ -85,6 +88,6 @@ class PurifierFactory extends \Nette\Object {
 			$def->addAttribute('iframe', 'allowfullscreen', 'Bool');
 		}
 
-		return new \HTMLPurifier($config);	
+		return new HTMLPurifier($config);
 	}
 }
