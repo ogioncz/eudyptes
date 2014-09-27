@@ -50,7 +50,7 @@ class Participator extends Control {
 			$form->addHidden('action', $youParticipate ? 'unparticipate' : 'participate');
 			$form->addHidden('id', $meetingId);
 			$form->addSubmit('send', $youParticipate ? 'Zrušit účast' : 'Zúčastnit se');
-			$form->onSuccess[] = $this->participateFormSucceeded;
+			$form->onSuccess[] = $cb;
 
 			return $form;
 		});
