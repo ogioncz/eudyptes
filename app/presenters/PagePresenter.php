@@ -67,7 +67,7 @@ class PagePresenter extends BasePresenter {
 		return $form;
 	}
 	
-	public function pageFormSucceeded($form) {
+	public function pageFormSucceeded(Nette\Application\UI\Form $form) {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}

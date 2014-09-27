@@ -37,7 +37,7 @@ class PostPresenter extends BasePresenter {
 		return $form;
 	}
 	
-	public function postFormSucceeded($form) {
+	public function postFormSucceeded(Nette\Application\UI\Form $form) {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -48,7 +48,7 @@ class PostPresenter extends BasePresenter {
 		
 		/** @var Post $post */
 		$post = null;
-		if($this->getAction() === 'create') {
+		if($this->action === 'create') {
 			$post = new Post;
 		} else {
 			$id = $this->getParameter('id');
@@ -68,7 +68,7 @@ class PostPresenter extends BasePresenter {
 		$post->content = $formatted['text'];
 		
 
-		if($this->getAction() === 'create') {
+		if($this->action === 'create') {
 			$post->user = $this->users->getById($this->user->identity->id);
 		}
 

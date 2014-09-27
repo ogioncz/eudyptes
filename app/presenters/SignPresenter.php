@@ -25,17 +25,17 @@ class SignPresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function signInFormSucceeded($form) {
-		$values = $form->getValues();
+	public function signInFormSucceeded(Nette\Application\UI\Form $form) {
+		$values = $form->values;
 
 		if ($values->remember) {
-			$this->getUser()->setExpiration('14 days', false);
+			$this->user->setExpiration('14 days', false);
 		} else {
-			$this->getUser()->setExpiration('20 minutes', true);
+			$this->user->setExpiration('20 minutes', true);
 		}
 
 		try {
-			$this->getUser()->login($values->username, $values->password);
+			$this->user->login($values->username, $values->password);
 			$this->restoreRequest($this->backlink);
 			$this->redirect('Homepage:');
 		} catch (Nette\Security\AuthenticationException $e) {
@@ -44,7 +44,7 @@ class SignPresenter extends BasePresenter {
 	}
 
 	public function actionOut() {
-		$this->getUser()->logout();
+		$this->user->logout();
 		$this->flashMessage('Byl jsi odhlášen.', 'info');
 		$this->redirect('in');
 	}

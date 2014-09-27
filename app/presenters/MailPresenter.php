@@ -61,7 +61,7 @@ class MailPresenter extends BasePresenter {
 		return $form;
 	}
 	
-	public function mailFormSucceeded($form) {
+	public function mailFormSucceeded(Nette\Application\UI\Form $form) {
 		if(!$this->user->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}

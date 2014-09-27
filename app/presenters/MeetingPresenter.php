@@ -78,7 +78,7 @@ class MeetingPresenter extends BasePresenter {
 
 		/** @var Meeting $meeting */
 		$meeting = null;
-		if($this->getAction() === 'create') {
+		if($this->action === 'create') {
 			$meeting = new Meeting();
 		} else {
 			$id = $this->getParameter('id');
@@ -106,7 +106,7 @@ class MeetingPresenter extends BasePresenter {
 		$meeting->start = $values->date->setTime($hour, $minute);
 		$meeting->program = Json::encode($program);
 
-		if($this->getAction() === 'create') {
+		if($this->action === 'create') {
 			$meeting->ip = $this->context->httpRequest->remoteAddress;
 			$meeting->user = $this->users->getById($this->user->identity->id);
 		}
