@@ -6,9 +6,6 @@ use Nette;
 use App;
 
 class ProfilePresenter extends BasePresenter {
-	/** @var Nette\Database\Context @inject */
-	public $database;
-
 	/** @var App\Model\UserRepository @inject */
 	public $users;
 
