@@ -5,21 +5,15 @@ namespace App\Model;
 use Nette;
 use Nette\Utils\Strings;
 use Nette\Security\Passwords;
+use App;
 
 class UserManager extends Nette\Object implements Nette\Security\IAuthenticator {
-	const TABLE_NAME = 'user';
-	const COLUMN_ID = 'id';
-	const COLUMN_NAME = 'username';
-	const COLUMN_PASSWORD_HASH = 'password';
-	const COLUMN_ROLE = 'role';
+	/** @var App\Model\UserRepository */
+	private $users;
 
 
-	/** @var Nette\Database\Context */
-	private $database;
-
-
-	public function __construct(Nette\Database\Context $database) {
-		$this->database = $database;
+	public function __construct(App\Model\UserRepository $users) {
+		$this->users = $users;
 	}
 
 
@@ -31,34 +25,17 @@ class UserManager extends Nette\Object implements Nette\Security\IAuthenticator 
 	public function authenticate(array $credentials) {
 		list($username, $password) = $credentials;
 
-		$row = $this->database->table(self::TABLE_NAME)->where(self::COLUMN_NAME, $username)->fetch();
+		$user = $this->users->getBy(['username' => $username]);
 
-		if (!$row) {
+		if (!$user) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi neexistující uživatelské jméno.', self::IDENTITY_NOT_FOUND);
-		} else if (!Passwords::verify($password, $row[self::COLUMN_PASSWORD_HASH])) {
+		} else if (!Passwords::verify($password, $user->password)) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi nesprávné heslo.', self::INVALID_CREDENTIAL);
-		} else if (Passwords::needsRehash($row[self::COLUMN_PASSWORD_HASH])) {
-			$row->update(array(
-				self::COLUMN_PASSWORD_HASH => Passwords::hash($password),
-			));
+		} else if (Passwords::needsRehash($user->password)) {
+			$user->password = Passwords::hash($password);
+			$this->users->persistAndFlush($user);
 		}
 
-		$arr = $row->toArray();
-		unset($arr[self::COLUMN_PASSWORD_HASH]);
-		return new Nette\Security\Identity($row[self::COLUMN_ID], $row[self::COLUMN_ROLE], $arr);
-	}
-
-
-	/**
-	 * Adds new user.
-	 * @param  string
-	 * @param  string
-	 * @return void
-	 */
-	public function add($username, $password) {
-		$this->database->table(self::TABLE_NAME)->insert(array(
-			self::COLUMN_NAME => $username,
-			self::COLUMN_PASSWORD_HASH => Passwords::hash($password),
-		));
+		return new Nette\Security\Identity($user->id, $user->role, ['username' => $user->username, 'registered' => $user->registered]);
 	}
 }
