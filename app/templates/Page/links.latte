@@ -20,7 +20,11 @@ for(var page in pages) {
 	if(pages.hasOwnProperty(page)) {
 		var page = pages[page];
 		
-		elements[page.slug] = graph.newNode({ slug: page.slug, label: page.title, ondoubleclick: function() { window.open('/page/show?slug='+this.slug); } });
+		elements[page.slug] = graph.newNode({ slug: page.slug, label: page.title, ondoubleclick: (function(path) {
+			return function() {
+				window.open(path);
+			};
+		})(page.path) });
 
 		for(var href in page.links) {
 			if(page.links.hasOwnProperty(href)) {

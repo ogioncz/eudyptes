@@ -48,7 +48,7 @@ class PagePresenter extends BasePresenter {
 					return true;
 				}
 			});
-			$pagesJson[] = array('slug' => $page->slug, 'title' => $page->title, 'links' => $links);
+			$pagesJson[] = array('slug' => $page->slug, 'title' => $page->title, 'links' => $links, 'path' => $this->link('show', ['slug' => $page->slug]));
 		}
 
 		$this->template->pages = $pagesJson;
