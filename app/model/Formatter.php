@@ -7,7 +7,7 @@ use Alb\OEmbed;
 use Nette\Utils\Html;
 
 class Formatter extends Nette\Object {
-	public static $OEMBED_WHITELIST = ['www.youtube.com'];
+	public static $OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be'];
 
 	/** @var \Parsedown */
 	public $parsedown;
