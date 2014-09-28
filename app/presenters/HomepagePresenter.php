@@ -3,14 +3,15 @@
 namespace App\Presenters;
 
 use Nette;
+use App;
 
 class HomepagePresenter extends BasePresenter {
-	/** @var Nette\Database\Context @inject */
-	public $database;
+	/** @var App\Model\PostRepository @inject */
+	public $posts;
 
 	public function renderDefault() {
 		$paginator = $this['paginator']->getPaginator();
-		$paginator->itemCount = $this->database->table('post')->count('*');
-		$this->template->posts = $this->database->table('post')->order('timestamp DESC')->limit($paginator->itemsPerPage, $paginator->offset);
+		$paginator->itemCount = $this->posts->findAll()->count();
+		$this->template->posts = $this->posts->findAll()->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 }
