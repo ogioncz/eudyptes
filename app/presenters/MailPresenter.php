@@ -5,14 +5,17 @@ namespace App\Presenters;
 use Nette;
 use Nextras\Forms\Rendering;
 use App;
-use App\Model\Post;
+use App\Model\Mail;
 
 class MailPresenter extends BasePresenter {
 	/** @var App\Model\Formatter @inject */
 	public $formatter;
 
-	/** @var Nette\Database\Context @inject */
-	public $database;
+	/** @var App\Model\MailRepository @inject */
+	public $mails;
+
+	/** @var App\Model\UserRepository @inject */
+	public $users;
 
 	private $itemsPerPage = 25;
 
@@ -24,8 +27,8 @@ class MailPresenter extends BasePresenter {
 		$this->template->sent = $sent;
 		$paginator = $this['paginator']->getPaginator();
 		$paginator->itemsPerPage = $this->itemsPerPage;
-		$paginator->itemCount = $this->database->table('mail')->count('*');
-		$this->template->mails = $this->database->table('mail')->where($sent ? 'from' : 'to', $this->user->identity->id)->order('timestamp DESC')->limit($paginator->itemsPerPage, $paginator->offset);
+		$paginator->itemCount = $this->mails->findAll()->count();
+		$this->template->mails = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->user->identity->id])->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 
 	public function renderShow($id) {
@@ -33,18 +36,19 @@ class MailPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$mail = $this->database->table('mail')->get($id);
+		$mail = $this->mails->getById($id);
 
 		if (!$mail) {
 			$this->error('Tato zpráva neexistuje');
 		}
 
-		if ($mail->ref('user', 'from')->id !== $this->user->identity->id && $mail->ref('user', 'to')->id !== $this->user->identity->id) {
+		if ($mail->sender->id !== $this->user->identity->id && $mail->recipient->id !== $this->user->identity->id) {
 			$this->error('Toto není tvá zpráva', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		if (!$mail->read && $mail->to === $this->user->identity->id) {
-			$mail->update(['read' => true]);
+		if (!$mail->read && $mail->recipient->id === $this->user->identity->id) {
+			$mail->read = true;
+			$this->mails->persistAndFlush($mail);
 		}
 
 		$this->template->mail = $mail;
@@ -68,16 +72,18 @@ class MailPresenter extends BasePresenter {
 		}
 
 		$values = $form->values;
-		$formatted = $this->formatter->format($values['markdown']);
+		$formatted = $this->formatter->format($values->markdown);
 
 		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		$values['markdown'] = $values['markdown'];
-		$values['content'] = $formatted['text'];
-		$values['sender'] = $this->user->identity->id;
-		$values['ip'] = $this->context->httpRequest->remoteAddress;
+		$mail = new Mail;
+		$mail->subject = $values->subject;
+		$mail->markdown = $values->markdown;
+		$mail->content = $formatted['text'];
+		$mail->sender = $this->users->getById($this->user->identity->id);
+		$mail->ip = $this->context->httpRequest->remoteAddress;
 		
 		if ($this->action === 'reply') {
 			$original_id = $this->getParameter('id');
@@ -85,50 +91,50 @@ class MailPresenter extends BasePresenter {
 				$this->error('Zadej id zprávy, na kterou chceš odpovědět.');
 			}
 
-			$original = $this->database->table('mail')->get($original_id);
+			$original = $this->mails->getById($original_id);
 			if (!$original) {
 				$this->error('Zpráva s tímto id neexistuje.');
 			}
 
-			if ($original->to !== $this->user->identity->id) {
+			if ($original->recipient->id !== $this->user->identity->id) {
 				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
 		
-			$values['to'] = $original->from;
-			$values['reaction'] = $original->id;
+			$mail->recipient = $this->users->getById($original->sender);
+			$mail->reaction = $this->mails->getById($original->id);
 		} else {
-			$to = $this->getParameter('to');
+			$recipient = $this->getParameter('recipient');
 
-			if (!$to) {
+			if (!$recipient) {
 				$this->error('Zadej id uživatele, kterému chceš napsat.');
 			}
 
-			$addressee = $this->database->table('user')->get($to);
+			$addressee = $this->users->getById($recipient);
 			if (!$addressee) {
 				$this->error('Uživatel s tímto id neexistuje.');
 			}
 
 			/** @TODO: blocking */
 
-			$values['to'] = $to;
+			$mail->recipient = $addressee;
 		}
 
-		$mail = $this->database->table('mail')->insert($values);
+		$mail = $this->mails->persistAndFlush($mail);
 
 		$this->flashMessage('Zpráva byla odeslána.', 'success');
 		$this->redirect('show', $mail->id);
 	}
 
-	public function actionCreate($to) {
+	public function actionCreate($recipient) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		if (!$to) {
+		if (!$recipient) {
 			$this->error('Zadej id uživatele, kterému chceš napsat.');
 		}
 
-		$addressee = $this->database->table('user')->get($to);
+		$addressee = $this->users->getById($recipient);
 		if (!$addressee) {
 			$this->error('Uživatel s tímto id neexistuje.');
 		}
@@ -146,12 +152,12 @@ class MailPresenter extends BasePresenter {
 			$this->error('Zadej id zprávy, na kterou chceš odpovědět.');
 		}
 
-		$original = $this->database->table('mail')->get($id);
+		$original = $this->mails->getById($id);
 		if (!$original) {
 			$this->error('Zpráva s tímto id neexistuje.');
 		}
 
-		if ($original->to !== $this->user->identity->id) {
+		if ($original->recipient->id !== $this->user->identity->id) {
 			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$this->template->original = $original;

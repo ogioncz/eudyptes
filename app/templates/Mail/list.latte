@@ -17,7 +17,7 @@
 <tbody>
 <tr n:foreach="$mails as $mail">
 <td><a n:href="show $mail->id">{$mail->subject}</a>{if !$mail->read} (<strong>nepřečtené</strong>){/if}</td>
-<td>{$sent ? $mail->ref('user', 'to') : $mail->ref('user', 'from')|userLink}</td>
+<td>{$sent ? $mail->recipient : $mail->sender|userLink}</td>
 <td>{$mail->timestamp|date:'j. n. Y H:i:s'}</td>
 </tr>
 </tbody>

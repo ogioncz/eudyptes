@@ -2,9 +2,9 @@
 <div class="post">
 	<h2 n:inner-block="title"><a n:href="show $mail->id">{$mail->subject}</a></h2>
 	<div>{$mail->content|noescape}</div>
-	<div class="date">{$mail->ref('user', 'from')|userLink} → {$mail->ref('user', 'to')|userLink} · {$mail->timestamp|date:'j. n. Y H:i:s'}{if $mail->to === $user->identity->id} · <a n:href="reply $mail->id">Odpovědět</a>{/if}</div>
+	<div class="date">{$mail->sender|userLink} → {$mail->recipient|userLink} · {$mail->timestamp|date:'j. n. Y H:i:s'}{if $mail->recipient->id === $user->identity->id} · <a n:href="reply $mail->id">Odpovědět</a>{/if}</div>
 	<ul class="pager">
-		<li class="previous" n:if="$mail->reaction !== null"><a n:href="show $mail->reaction">« Předchozí zpráva</a></li>
-		<li class="next" n:foreach="$mail->related('mail', 'reaction') as $reaction"><a n:href="show $reaction->id">Reagující zpráva »</a></li>
+		<li class="previous" n:if="$mail->reaction"><a n:href="show $mail->reaction->id">« Předchozí zpráva</a></li>
+		<li class="next" n:foreach="$mail->replies as $reaction"><a n:href="show $reaction->id">Reagující zpráva »</a></li>
 	</ul>
 </div>

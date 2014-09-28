@@ -19,6 +19,8 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property string|NULL $profile
  *
  * @property OneHasMany|Post[] $createdPosts {1:m PostRepository order:date,DESC}
+ * @property OneHasMany|Mail[] $receivedMail {1:m MailRepository $recipient order:timestamp,DESC}
+ * @property OneHasMany|Mail[] $sentMail {1:m MailRepository $sender order:timestamp,DESC}
  * @property OneHasMany|Meeting[] $createdMeetings {1:m MeetingRepository order:date,DESC}
  * @property ManyHasMany|Meeting[] $visitedMeetings {m:n MeetingRepository $visitors}
  */

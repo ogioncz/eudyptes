@@ -9,6 +9,7 @@ use Nextras\Orm\Model\DIModel;
  * @property-read MeetingRepository $meetings
  * @property-read UserRepository $users
  * @property-read PostRepository $posts
+ * @property-read MailRepository $mails
  */
 class Orm extends DIModel {
 }
