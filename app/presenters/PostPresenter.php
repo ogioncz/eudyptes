@@ -100,4 +100,9 @@ class PostPresenter extends BasePresenter {
 		$data = $post->toArray();
 		$this['postForm']->setDefaults($data);
 	}
+
+	public function renderRss() {
+		$posts = $this->posts->findAll()->orderBy(['timestamp' => 'DESC'])->limitBy(15);
+		$this->template->posts = $posts;
+	}
 }

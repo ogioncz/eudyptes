@@ -1,0 +1,20 @@
+{layout none}
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+<channel>
+	<atom:link href="{link //this}" rel="self" type="application/rss+xml" />
+	<title>Fan Club Penguin.cz</title>
+	<description>Český fan-web o Clubu Penguin</description>
+	<lastBuildDate>{$posts->fetch()->timestamp|date:'r'}</lastBuildDate>
+	<link>{link //homepage:}</link>
+	{foreach $posts as $post}
+	<item>
+		<title>{$post->title}</title>
+		<link>{link //show $post->id}</link>
+		<guid>{link //show $post->id}</guid>
+		<pubDate>{$post->timestamp|date:'r'}</pubDate>
+		<dc:creator>{$post->user->username}</dc:creator>
+		<description>{$post->content|htmlTruncate:200}</description>
+	</item>
+	{/foreach}
+</channel>
+</rss>
