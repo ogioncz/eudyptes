@@ -7,7 +7,6 @@ use App;
 use App\Model\Meeting;
 use Nextras\Forms\Rendering;
 use Nette\Utils\Json;
-use Nette\Utils\DateTime;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
 
@@ -76,8 +75,6 @@ class MeetingPresenter extends BasePresenter {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		/** @var Meeting $meeting */
-		$meeting = null;
 		if ($this->action === 'create') {
 			$meeting = new Meeting();
 		} else {

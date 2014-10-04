@@ -77,10 +77,7 @@ class PagePresenter extends BasePresenter {
 			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->values;
-		$id = $this->getParameter('id');
 
-		/** @var Model\Page $page */
-		$page = null;
 		if($this->action === 'create') {
 			$page = new Model\Page;
 		} else {

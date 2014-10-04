@@ -8,7 +8,7 @@ use Nette\Utils\Html;
 class HelperLoader extends Nette\Object {
 	private $presenter;
 
-	public function __construct($presenter) {
+	public function __construct(Nette\Application\UI\Presenter $presenter) {
 		$this->presenter = $presenter;
 	}
 
@@ -24,11 +24,11 @@ class HelperLoader extends Nette\Object {
 		}
 	}
 
-	public function userLink($user) {
+	public function userLink(User $user) {
 		return Html::el('a', $user->username)->href($this->presenter->link('profile:show', $user->id));
 	}
 
-	public function relDate($date) {
+	public function relDate(\DateTime $date) {
 		if($date == (new \DateTime('today'))) {
 			return '(dnes)';
 		} else if($date == (new \DateTime('tomorrow'))) {
@@ -37,7 +37,7 @@ class HelperLoader extends Nette\Object {
 		return '';
 	}
 
-	public function dateNA($time, $format = null) {
+	public function dateNA(\DateTime $time, $format = null) {
 		if($time) {
 			return \Latte\Runtime\Filters::date($time, $format);
 		} else {
@@ -46,43 +46,44 @@ class HelperLoader extends Nette\Object {
 	}
 
 	/** Truncate text with HTML tags
-	* @param string $s string to be shortened, without comments and script blocks
+	* @param string $text string to be shortened, without comments and script blocks
 	* @param int $limit number of returned characters
 	* @return string shortened string with properly closed tags
 	* @copyright Jakub Vrána, http://php.vrana.cz
 	*/
-	public function htmlTruncate($s, $limit) {
+	public function htmlTruncate($text, $limit) {
 		static $empty_tags = array('area', 'base', 'basefont', 'br', 'col', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param');
 		$length = 0;
-		$tags = array(); // dosud neuzavřené značky
-		for($i=0; $i < strlen($s) && $length < $limit; $i++) {
-			switch($s{$i}) {
+		$textLength = strLen($text);
+		$tags = array(); // not yet closed tags
+		for ($i = 0; $i < $textLength && $length < $limit; $i++) {
+			switch ($text{$i}) {
 			case '<':
-				// načtení značky
-				$start = $i+1;
-				while($i < strlen($s) && $s{$i} != '>' && !ctype_space($s{$i})) {
+				// load tag
+				$start = $i + 1;
+				while($i < $textLength && $text{$i} !== '>' && !ctype_space($text{$i})) {
 					$i++;
 				}
-				$tag = strtolower(substr($s, $start, $i - $start));
-				// přeskočení případných atributů
+				$tag = strToLower(subStr($text, $start, $i - $start));
+				// skip potential attributes
 				$in_quote = '';
-				while($i < strlen($s) && ($in_quote || $s{$i} != '>')) {
-					if(($s{$i} === '"' || $s{$i} === "'") && !$in_quote) {
-						$in_quote = $s{$i};
-					} elseif($in_quote === $s{$i}) {
+				while ($i < $textLength && ($in_quote || $text{$i} !== '>')) {
+					if (($text{$i} === '"' || $text{$i} === "'") && !$in_quote) {
+						$in_quote = $text{$i};
+					} else if ($in_quote === $text{$i}) {
 						$in_quote = '';
 					}
 					$i++;
 				}
-				if($s{$start} === '/') { // uzavírací značka
-					$tags = array_slice($tags, array_search(substr($tag, 1), $tags) + 1);
-				} elseif($s{$i-1} != '/' && !in_array($tag, $empty_tags)) { // otevírací značka
+				if ($text{$start} === '/') { // closing tag
+					$tags = array_slice($tags, array_search(subStr($tag, 1), $tags) + 1);
+				} else if ($text{$i - 1} != '/' && !in_array($tag, $empty_tags)) { // opening tag
 					array_unshift($tags, $tag);
 				}
 				break;
 			case '&':
 				$length++;
-				while ($i < strlen($s) && $s{$i} != ';') {
+				while ($i < $textLength && $text{$i} != ';') {
 					$i++;
 				}
 				break;
@@ -90,10 +91,10 @@ class HelperLoader extends Nette\Object {
 				$length++;
 			}
 		}
-		$s = substr($s, 0, $i);
+		$text = subStr($text, 0, $i);
 		if($tags) {
-			$s .= "…</" . implode("></", $tags) . ">";
+			$text .= '…</' . implode('></', $tags) . '>';
 		}
-		return $s;
+		return $text;
 	}
 }

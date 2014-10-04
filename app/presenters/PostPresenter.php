@@ -46,8 +46,6 @@ class PostPresenter extends BasePresenter {
 		}
 		$values = $form->values;
 		
-		/** @var Post $post */
-		$post = null;
 		if($this->action === 'create') {
 			$post = new Post;
 		} else {

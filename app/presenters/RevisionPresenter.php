@@ -1,7 +1,6 @@
 <?php
 namespace App\Presenters;
 
-use Nette;
 use Caxy\HtmlDiff\HtmlDiff;
 use App;
 
