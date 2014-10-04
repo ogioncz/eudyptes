@@ -13,7 +13,7 @@
 </thead>
 <tbody>
 <tr n:foreach="$pages as $page">
-{?$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch()}
+{?$last_revision = $page->getLastRevision()}
 <td><a n:href="show $page->slug">{$page->title}</a></td>
 <td>{$last_revision->timestamp|dateNA:'j. n. Y H:i:s'}</td>
 <td>{$last_revision->user|userLink}</td>

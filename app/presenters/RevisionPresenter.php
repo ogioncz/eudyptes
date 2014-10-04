@@ -3,27 +3,27 @@ namespace App\Presenters;
 
 use Nette;
 use Caxy\HtmlDiff\HtmlDiff;
+use App;
 
 class RevisionPresenter extends BasePresenter {
-	/** @var Nette\Database\Context @inject */
-	public $database;
+	/** @var App\Model\RevisionRepository @inject */
+	public $revisions;
 
 	public function renderShow($id) {
-		$revision = $this->database->table('page_revision')->get($id);
+		$revision = $this->revisions->getById($id);
 		if (!$revision) {
 			$this->error('Revize nenalezena.');
 		}
-		$page = $revision->ref('page');
-		$this->template->page = $page;
+		$this->template->page = $revision->page;
 		$this->template->revision = $revision;
 	}
 
 	public function renderDiff($id, $and) {
-		$old = $this->database->table('page_revision')->get($id);
+		$old = $this->revisions->getById($id);
 		if (!$old) {
 			$this->error('Revize nenalezena.');
 		}
-		$new = $this->database->table('page_revision')->get($and);
+		$new = $this->revisions->getById($and);
 		if (!$new) {
 			$this->error('Revize nenalezena.');
 		}
@@ -32,8 +32,7 @@ class RevisionPresenter extends BasePresenter {
 		$differ->build();
 		$diff = $differ->getDifference();
 
-		$page = $old->ref('page');
-		$this->template->page = $page;
+		$this->template->page = $old->page;
 		$this->template->diff = $diff;
 		$this->template->old = $old;
 		$this->template->new = $new;

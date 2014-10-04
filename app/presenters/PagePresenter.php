@@ -3,44 +3,46 @@ namespace App\Presenters;
 
 use Nette;
 use Nextras\Forms\Rendering;
+use App;
+use App\Model;
 
 class PagePresenter extends BasePresenter {
-	/** @var \App\Model\Formatter @inject */
+	/** @var Model\Formatter @inject */
 	public $formatter;
 
-	/** @var Nette\Database\Context @inject */
-	public $database;
+	/** @var Model\PageRepository @inject */
+	public $pages;
+
+	/** @var Model\UserRepository @inject */
+	public $users;
 
 	public function renderShow($slug) {
-		$page = $this->database->table('page')->where('slug', $slug)->fetch();
+		$page = $this->pages->getBy(['slug' => $slug]);
 		if (!$page) {
 			$this->error('Stránka nenalezena');
 		}
-		$last_revision = $page->related('page_revision')->order('timestamp DESC')->fetch();
+
+		$last_revision = $page->lastRevision;
 		if (!$last_revision) {
 			$this->error('Stránka nemá žádné revize.');
 		}
 
-		$page = $page->toArray();
-		$page['content'] = $last_revision->content;
-		$page['user'] = $last_revision->user;
-		$page['timestamp'] = $last_revision->timestamp;
-
 		$this->template->page = $page;
+		$this->template->last_revision = $last_revision;
 	}
 
 	public function renderList() {
-		$pages = $this->database->table('page');
+		$pages = $this->pages->findAll();
 		$this->template->pages = $pages;
 	}
 
 	public function renderLinks() {
-		$slugs = $this->database->table('page')->fetchPairs(null, 'slug');
-		$pages = $this->database->table('page');
+		$slugs = $this->pages->findAll()->fetchPairs(null, 'slug');
+		$pages = $this->pages->findAll();
 		$pagesJson = [];
 
 		foreach ($pages as $page) {
-			$last_revision = $page->related('page_revision')->order('timestamp DESC')->fetch();
+			$last_revision = $page->lastRevision;
 			preg_match_all('~<a[^>]* href="(?:http://(?:www\.)fan-club-penguin.cz)?/([^"]+)\.html(?:#[^"]+)?"[^>]*>~', $last_revision->content, $links, PREG_PATTERN_ORDER);
 			$links = array_unique($links[1]);
 			$links = array_filter($links, function($item) use ($slugs) {
@@ -76,34 +78,41 @@ class PagePresenter extends BasePresenter {
 		}
 		$values = $form->values;
 		$id = $this->getParameter('id');
-		
-		if ($id) {
-			$page = $this->database->table('page')->get($id);
-			$page->update([
-				'slug' => $values['slug'],
-				'title' => $values['title']
-			]);
+
+		/** @var Model\Page $page */
+		$page = null;
+		if($this->action === 'create') {
+			$page = new Model\Page;
 		} else {
-			$values['user_id'] = $this->user->identity->id;
-			$page = $this->database->table('page')->insert([
-				'slug' => $values['slug'],
-				'title' => $values['title'],
-				'user_id' => $this->user->identity->id
-			]);
+			$id = $this->getParameter('id');
+			$page = $this->pages->getById($id);
+			if(!$page) {
+				$this->error('Stránka nenalezena.');
+			}
 		}
+
+		$page->slug = $values->slug;
+		$page->title = $values->title;
 		$formatted = $this->formatter->format($values['markdown']);
 
 		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		$this->database->table('page_revision')->insert([
-			'page_id' => $page['id'],
-			'markdown' => $values['markdown'],
-			'content' => $formatted['text'],
-			'user_id' => $this->user->identity->id,
-			'ip' => $this->context->httpRequest->remoteAddress
-		]);
+		if($this->action === 'create') {
+			$page->user = $this->users->getById($this->user->identity->id);
+		}
+		$this->pages->persist($page);
+
+		$revision = new Model\Revision;
+		$revision->markdown = $values->markdown;
+		$revision->page = $page;
+		$revision->content = $formatted['text'];
+		$revision->user = $this->users->getById($this->user->identity->id);
+		$revision->ip = $this->context->httpRequest->remoteAddress;
+		$page->revisions->add($revision);
+
+		$this->pages->persistAndFlush($page);
 
 		$this->flashMessage('Stránka byla odeslána.', 'success');
 		$this->redirect('show', $values->slug);
@@ -125,11 +134,11 @@ class PagePresenter extends BasePresenter {
 		if (!$this->user->isInRole('admin')) {
 			$this->error('Pro úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
-		$page = $this->database->table('page')->get($id);
+		$page = $this->pages->getById($id);
 		if (!$page) {
 			$this->error('Stránka nenalezena');
 		}
-		$last_revision = $page->related('page_revision')->order('timestamp', 'desc')->fetch();
+		$last_revision = $page->lastRevision;
 		if (!$last_revision) {
 			$this->error('Stránka nemá žádné revize.');
 		}
@@ -140,11 +149,11 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function renderHistory($id) {
-		$page = $this->database->table('page')->get($id);
+		$page = $this->pages->getById($id);
 		if (!$page) {
 			$this->error('Stránka nenalezena.');
 		}
 		$this->template->page = $page;
-		$this->template->revisions = $page->related('page_revision')->order('timestamp', 'desc');
+		$this->template->revisions = $page->revisions->get()->orderBy(['timestamp' => 'DESC']);
 	}
 }
