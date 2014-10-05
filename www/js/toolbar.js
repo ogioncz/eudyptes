@@ -8,19 +8,20 @@ $(function() {
 
 	var buttons = [
 		[
-			{opening: '**', closing: '**', title: 'důležitý text (ctrl+b)', body: '<i class="glyphicon glyphicon-bold"></i>', shortcut: 66},
-			{opening: '*', closing: '*', title: 'zvýrazněný text (ctrl+i)', body: '<i class="glyphicon glyphicon-italic"></i>', shortcut: 73},
-			{opening: '[', closing: ']()', title: 'odkaz (ctrl+l)', body: '<i class="glyphicon glyphicon-globe"></i>', shortcut: 76},
-			{opening: '<spoiler>', closing: '</spoiler>', title: 'spoiler', body: '<i class="glyphicon glyphicon-eye-close"></i>'}
+			{opening: '**', closing: '**', title: 'důležitý text (ctrl+b)', body: '<span class="glyphicon glyphicon-bold"></span>', shortcut: 66},
+			{opening: '*', closing: '*', title: 'zvýrazněný text (ctrl+i)', body: '<span class="glyphicon glyphicon-italic"></span>', shortcut: 73},
+			{opening: '[', closing: ']()', title: 'odkaz (ctrl+l)', body: '<span class="glyphicon glyphicon-globe"></span>', shortcut: 76},
+			{opening: '<spoiler>', closing: '</spoiler>', title: 'spoiler', body: '<span class="glyphicon glyphicon-eye-close"></span>'}
 		],
 		[
 			{opening: '„', closing: '“', title: 'české uvozovky (ctrl+q)', body: '„“', shortcut: 81},
 			{title: 'pomlčka', body: '–', shortcut: 189},
 			{title: 'trojtečka (ctrl+.)', body: '…', shortcut: 190},
 			{opening: ' ', title: 'pevná mezera (ctrl+␣)', body: '␣', shortcut: 32},
+			{opening: '<mark>', closing: '</mark>', title: 'zvýraznění', body: '<span class="icon-marker"></span>'},
 		],
 		[
-			{title: 'Celá obrazovka', body: '<i class="glyphicon glyphicon-fullscreen"></i>', action: 'fullscreen'},
+			{title: 'Celá obrazovka', body: '<span class="glyphicon glyphicon-fullscreen"></span>', action: 'fullscreen'},
 		]
 	];
 

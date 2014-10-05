@@ -131,3 +131,10 @@ del.diffmod {
 	border: 1px solid #eed3d7;
 }
 
+.icon-marker {
+	display: inline-block;
+	background-image: url(../icons/marker.svg);
+	width: 14px;
+	height: 14px;
+	background-size: 14px 14px;
+}
