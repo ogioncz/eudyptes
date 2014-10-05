@@ -12,9 +12,9 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property string $username
  * @property string $password
  * @property string $email
- * @property string $role
- * @property bool $member
- * @property string $skype
+ * @property string $role {default basic}
+ * @property bool $member {default false}
+ * @property string $skype {default ''}
  * @property DateTime $registered {default now}
  * @property string|NULL $profile
  *
