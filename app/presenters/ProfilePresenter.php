@@ -30,6 +30,70 @@ class ProfilePresenter extends BasePresenter {
 		$this->template->profile = $profile;
 	}
 
+	public function actionEdit() {
+		if (!$this->user->loggedIn) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+		$user = $this->users->getById($this->user->identity->id);
+		if (!$user) {
+			$this->error('Uživatel nenalezen');
+		}
+
+		$data = $user->toArray();
+		$this['profileForm']->setDefaults($data);
+	}
+
+	protected function createComponentProfileForm() {
+		$form = new Form;
+		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$username = $form->addText('username', 'Přezdívka:')->disabled = true;
+		
+		$email = $form->addText('email', 'E-Mail:')->setType('email');
+		$email->setOption('description', 'Slouží k upozorňování na zprávy a obnovu hesla. Bez tvého souhlasu ti nebudeme nic posílat.');
+		$email->setRequired('Zadej prosím svůj e-mail.');
+		$email->addRule($form::EMAIL, 'Zadej prosím platný e-mail.');
+
+		$form->addText('skype', 'Skype:');
+
+		$form->addRadioList('member', 'Member:', [(string) true => 'Ano', (string) false => 'Ne']);
+
+		$form->addCheckbox('notifyByMail', 'Zasílat oznámení o nové zprávě na e-mail');
+
+		$password = $form->addPassword('password', 'Heslo:');
+		$password->setOption('description', 'Pokud chceš změnit heslo, zadej nové.');
+
+		$form->addSubmit('send', 'Zaregistrovat se');
+
+		$form->onSuccess[] = $this->profileFormSucceeded;
+		return $form;
+	}
+
+	public function profileFormSucceeded(Form $form) {
+		$values = $form->values;
+
+		$user = $this->users->getById($this->user->identity->id);
+		$user->email = $values->email;
+		$user->skype = $values->skype;
+		$user->member = (bool) $values->member;
+		$user->notifyByMail = $values->notifyByMail;
+
+		if($values->password) {
+			$user->password = Passwords::hash($values->password);
+		}
+
+		try {
+			$this->users->persistAndFlush($user);
+			$this->flashMessage('Profil byl úspěšně upraven.', 'success');
+			$this->redirect('show', $user->id);
+		} catch (\PDOException $e) {
+			if (intVal($e->getCode()) === 23000) {
+				$form->addError('Tento e-mail je již obsazen.');
+			} else {
+				$form->addError($e->getMessage());
+			}
+		}
+	}
+
 	protected function createComponentSignUpForm() {
 		$form = new Form;
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
