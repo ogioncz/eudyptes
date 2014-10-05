@@ -55,7 +55,7 @@
 					<li n:class="$presenter->isLinkCurrent('meeting:list') ? active"><a n:href="meeting:list"><span class="glyphicon glyphicon-calendar"></span> Srazy <span class="badge">TBD</span></a></li>
 					<li n:class="$presenter->isLinkCurrent('profile:list') ? active"><a n:href="profile:list">Uživatelé</a></li>
 				{else}
-					<li n:class="$presenter->isLinkCurrent('Sign:up') ? active"><a n:href="Sign:up">Registrovat se</a></li>
+					<li n:class="$presenter->isLinkCurrent('profile:create') ? active"><a n:href="profile:create">Registrovat se</a></li>
 				{/if}
 				</ul>
 				<form class="navbar-form navbar-left" role="search" action="{link search:result}" method="get">
