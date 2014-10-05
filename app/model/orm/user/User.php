@@ -14,9 +14,9 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property string $email
  * @property string $role {default basic}
  * @property bool $member {default false}
- * @property string $skype {default ''}
+ * @property string|null $skype
  * @property DateTime $registered {default now}
- * @property string|NULL $profile
+ * @property string|null $profile
  *
  * @property OneHasMany|Post[] $createdPosts {1:m PostRepository order:timestamp,DESC}
  * @property OneHasMany|Page[] $createdPages {1:m PageRepository order:title,DESC}
