@@ -79,7 +79,7 @@ class PurifierFactory extends Nette\Object {
 			$def->addElement('del', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'CDATA'));
 
 			// Custom data attributes
-			$def->addAttribute('a', 'data-lightbox', 'Bool');
+			$def->addAttribute('a', 'data-lightbox', 'Enum#true');
 			$def->addAttribute('blockquote', 'data-from', 'Text');
 
 			$def->addAttribute('a', 'rev', 'Enum#footnote');
