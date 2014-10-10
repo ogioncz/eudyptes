@@ -57,7 +57,13 @@ class MailPresenter extends BasePresenter {
 	protected function createComponentMailForm() {
 		$form = new Nette\Application\UI\Form;
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
-		$form->addText('subject', 'Předmět:')->setRequired()->getControlPrototype()->data['content'] = 'Předmět zprávy má výstižně charakerizovat, čeho se zpráva týká.';
+
+		$subject = $form->addText('subject', 'Předmět:')->setRequired();
+		$subject->getControlPrototype()->data['content'] = 'Předmět zprávy má výstižně charakerizovat, čeho se zpráva týká.';
+		if($this->action === 'reply') {
+			$subject->setDefaultValue('re: ' . preg_replace('/^(?:re: )+/i', '', $this->template->original->subject));
+		}
+
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15);
 
 		$form->addSubmit('send', 'Odeslat');
