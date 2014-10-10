@@ -62,7 +62,7 @@ class ProfilePresenter extends BasePresenter {
 		$password = $form->addPassword('password', 'Heslo:');
 		$password->setOption('description', 'Pokud chceš změnit heslo, zadej nové.');
 
-		$form->addSubmit('send', 'Zaregistrovat se');
+		$form->addSubmit('send', 'Uložit změny');
 
 		$form->onSuccess[] = $this->profileFormSucceeded;
 		return $form;
