@@ -3,6 +3,8 @@
 namespace App\Presenters;
 
 use Nette;
+use Nette\Mail\Message;
+use Nette\Mail\SendmailMailer;
 use Nextras\Forms\Rendering;
 use App;
 use App\Model\Mail;
@@ -127,8 +129,28 @@ class MailPresenter extends BasePresenter {
 
 		$mail = $this->mails->persistAndFlush($mail);
 
+		if($mail->recipient->notifyByMail) {
+			$this->notifyByMail($mail);
+		}
+
 		$this->flashMessage('Zpráva byla odeslána.', 'success');
 		$this->redirect('show', $mail->id);
+	}
+
+	protected function notifyByMail(Mail $mail) {
+		$messageTemplate = $this->createTemplate();
+		$messageTemplate->sentMail = $mail;
+		$messageTemplate->sender = $mail->sender->username;
+		$messageTemplate->setFile($this->context->parameters['appDir'] . '/templates/Mail/@notification.latte');
+
+		$message = new Message;
+		$message->setFrom($messageTemplate->sender . ' <neodpovidat@fan-club-penguin.cz>');
+		$message->subject = 'Nová zpráva ' . $mail->subject . ' (fan-club-penguin.cz)';
+		$message->addTo($mail->recipient->email);
+		$message->setBody($messageTemplate);
+
+		$mailer = new SendmailMailer;
+		$mailer->send($message);
 	}
 
 	public function actionCreate($recipient) {
