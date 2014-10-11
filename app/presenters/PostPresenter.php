@@ -25,6 +25,11 @@ class PostPresenter extends BasePresenter {
 		$this->template->post = $post;
 	}
 
+	public function renderList() {
+		$posts = $this->posts->findAll()->orderBy(['timestamp' => 'DESC']);
+		$this->template->posts = $posts;
+	}
+
 	protected function createComponentPostForm() {
 		$form = new Nette\Application\UI\Form;
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
