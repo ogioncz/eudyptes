@@ -4,14 +4,14 @@
 <thead>
 <tr>
 <th>Jméno</th>
-<th>E-Mail</th>
+<th n:if="$user->isAllowed('profile', 'seeMail')">E-Mail</th>
 <th>Akce</th>
 </tr>
 </thead>
 <tbody>
 <tr n:foreach="$profiles as $profile">
 <td>{$profile|userLink}</td>
-<td>{$user->isAllowed('profile', 'seeMail') || ($user->loggedIn && $profile->id === $user->identity->id) ? $profile->email : 'tajné'}</td>
+<td n:if="$user->isAllowed('profile', 'seeMail')">{$profile->email}</td>
 <td>{if $user->loggedIn && $profile->id !== $user->identity->id}<a n:href="mail:create $profile->id">Poslat zprávu</a>{/if}</td>
 </tr>
 </tbody>
