@@ -98,7 +98,7 @@ class ProfilePresenter extends BasePresenter {
 			try {
 				$img = new SimpleImage($original);
 				$img->best_fit(100, 100, true)->save($medium);
-			} catch (Exception $e) {
+			} catch (\Exception $e) {
 				$form->addError('Chyba při zpracování avataru.');
 				\Tracy\Debugger::log($e);
 			}
