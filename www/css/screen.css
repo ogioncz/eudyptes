@@ -138,3 +138,11 @@ del.diffmod {
 	height: 14px;
 	background-size: 14px 14px;
 }
+
+header > a {
+	display: block;
+	padding-top: 35.0877192982%; /* 400 / 1140 * 100 */
+	background: #3a9efc;
+	background-image: url(../images/header.png);
+	margin-bottom: 1em;
+}
