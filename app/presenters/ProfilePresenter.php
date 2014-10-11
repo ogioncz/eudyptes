@@ -7,6 +7,7 @@ use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\Passwords;
 use Nextras\Forms\Rendering;
+use abeautifulsite\SimpleImage;
 
 class ProfilePresenter extends BasePresenter {
 	/** @var App\Model\UserRepository @inject */
@@ -47,7 +48,14 @@ class ProfilePresenter extends BasePresenter {
 		$form = new Form;
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$username = $form->addText('username', 'Přezdívka:')->disabled = true;
+
+		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::FILLED)->addRule(Form::MIME_TYPE, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
 		
+		$medium = $this->context->parameters['avatarStorage'] . '/' . $this->user->identity->id . 'm.png';
+		if(file_exists($medium)) {
+			$form->addCheckbox('removeAvatar', 'Odstranit avatar');
+		}
+
 		$email = $form->addText('email', 'E-Mail:')->setType('email');
 		$email->setOption('description', 'Slouží k upozorňování na zprávy a obnovu hesla. Bez tvého souhlasu ti nebudeme nic posílat.');
 		$email->setRequired('Zadej prosím svůj e-mail.');
@@ -76,6 +84,25 @@ class ProfilePresenter extends BasePresenter {
 		$user->skype = $values->skype;
 		$user->member = (bool) $values->member;
 		$user->notifyByMail = $values->notifyByMail;
+
+		$original = $this->context->parameters['avatarStorage'] . '/' . $user->id . '.png';
+		$medium = $this->context->parameters['avatarStorage'] . '/' . $user->id . 'm.png';
+
+		if(isset($values->removeAvatar) && $values->removeAvatar) {
+			@unlink($original);
+			@unlink($medium);
+		}
+
+		if($values->avatar->isOk()) {
+			$values->avatar->move($original);
+			try {
+				$img = new SimpleImage($original);
+				$img->best_fit(100, 100, true)->save($medium);
+			} catch (Exception $e) {
+				$form->addError('Chyba při zpracování avataru.');
+				\Tracy\Debugger::log($e);
+			}
+		}
 
 		if($values->password) {
 			$user->password = Passwords::hash($values->password);

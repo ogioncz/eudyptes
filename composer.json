@@ -26,7 +26,8 @@
 		"kdyby/forms-replicator": "@dev",
 		"caxy/php-htmldiff": "@dev",
 		"nette/database": "~2.3@dev",
-		"nextras/orm": "@dev"
+		"nextras/orm": "@dev",
+		"abeautifulsite/simpleimage": "~2.5"
 	},
 	"require-dev": {
 		"nette/tester": "~1.1"
