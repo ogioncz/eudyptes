@@ -11,7 +11,7 @@
 <tbody>
 <tr n:foreach="$profiles as $profile">
 <td>{$profile|userLink}</td>
-<td>{$user->isInRole('moderator') || ($user->loggedIn && $profile->id === $user->identity->id) ? $profile->email : 'tajné'}</td>
+<td>{$user->isAllowed('profile', 'seeMail') || ($user->loggedIn && $profile->id === $user->identity->id) ? $profile->email : 'tajné'}</td>
 <td>{if $user->loggedIn && $profile->id !== $user->identity->id}<a n:href="mail:create $profile->id">Poslat zprávu</a>{/if}</td>
 </tr>
 </tbody>

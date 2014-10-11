@@ -1,6 +1,6 @@
 {block content}
 <h2 n:inner-block="title">Stránky</h2>
-<a n:if="$user->isInRole('editor')" class="pull-right link-icon" n:href="create"><i class="glyphicon glyphicon-plus"></i>Nová stránka</a>
+<a n:if="$user->isAllowed('page', 'create')" class="pull-right link-icon" n:href="create"><i class="glyphicon glyphicon-plus"></i>Nová stránka</a>
 <table class="table table-striped table-condensed">
 <thead>
 <tr>
@@ -18,7 +18,7 @@
 <td>{$last_revision->timestamp|dateNA:'j. n. Y H:i:s'}</td>
 <td>{$last_revision->user|userLink}</td>
 <td>{$page->menu ? 'ano' : 'ne'}</td>
-<td>{if $user->isInRole('editor')}<a n:href="edit $page->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>{/if} <a n:href="history $page->id"><span class="glyphicon glyphicon-time"></span>Historie</a></td>
+<td>{if $user->isAllowed('page', 'edit')}<a n:href="edit $page->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>{/if} <a n:href="history $page->id"><span class="glyphicon glyphicon-time"></span>Historie</a></td>
 </tr>
 </tbody>
 </table>

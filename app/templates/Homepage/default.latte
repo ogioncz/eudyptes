@@ -5,7 +5,7 @@
 <div class="post">
 	<h2><a n:href="Post:show $post->id">{$post->title}</a></h2>
 	<div>{$post->content|noescape}</div>
-	<div class="date">Odeslal {$post->user|userLink} · {$post->timestamp|date:'j. n. Y H:i:s'} {if $user->isInRole('admin')} · <a n:href="Post:edit $post->id">Upravit</a>{/if}</div>
+	<div class="date">Odeslal {$post->user|userLink} · {$post->timestamp|date:'j. n. Y H:i:s'} {if $user->isAllowed('post', 'edit')} · <a n:href="Post:edit $post->id">Upravit</a>{/if}</div>
 </div>
 {/foreach}
 {control paginator}

@@ -41,7 +41,7 @@ class PostPresenter extends BasePresenter {
 		if(!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isInRole('admin')) {
+		if(!$this->user->isAllowed('post', $this->action)) {
 			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->values;
@@ -79,7 +79,7 @@ class PostPresenter extends BasePresenter {
 		if(!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isInRole('admin')) {
+		if(!$this->user->isAllowed('post', $this->action)) {
 			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
@@ -88,7 +88,7 @@ class PostPresenter extends BasePresenter {
 		if(!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isInRole('admin')) {
+		if(!$this->user->isAllowed('post', $this->action)) {
 			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$post = $this->posts->getById($id);

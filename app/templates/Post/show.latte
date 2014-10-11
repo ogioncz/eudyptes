@@ -2,5 +2,5 @@
 <div class="post">
 	<h2 n:inner-block="title"><a n:href="show $post->id">{$post->title}</a></h2>
 	<div>{$post->content|noescape}</div>
-	<div class="date">Odeslal {$post->user|userLink} · {$post->timestamp|date:'j. n. Y H:i:s'} {if $user->isInRole('admin')} · <a n:href="edit $post->id">Upravit</a>{/if}</div>
+	<div class="date">Odeslal {$post->user|userLink} · {$post->timestamp|date:'j. n. Y H:i:s'} {if $user->isAllowed('post', 'edit')} · <a n:href="edit $post->id">Upravit</a>{/if}</div>
 </div>

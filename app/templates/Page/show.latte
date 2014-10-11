@@ -2,5 +2,5 @@
 <div class="post">
 	<h2 n:inner-block="title"><a n:href="show $page->slug">{$page->title}</a></h2>
 	<div>{$last_revision->content|noescape}</div>
-	<div class="date">{if $user->isInRole('admin')}<a n:href="edit $page->id">Upravit</a>{/if} · <a n:href="history $page->id">Historie</a></div>
+	<div class="date">{if $user->isAllowed('page', 'edit')}<a n:href="edit $page->id">Upravit</a>{/if} · <a n:href="history $page->id">Historie</a></div>
 </div>

@@ -37,3 +37,21 @@ services:
 	formatter: App\Model\Formatter(@parsedown, @purifier)
 	router: @App\RouterFactory::createRouter
 	purifier: @App\Model\PurifierFactory::createPurifier('%tempDir%/cache')
+	authorizator:
+		class: Nette\Security\Permission
+		setup:
+			- addRole('guest')
+			- addRole('basic', 'guest')
+			- addRole('moderator', 'basic')
+			- addRole('editor', 'moderator')
+			- addRole('admin', 'editor')
+			- addResource('meeting')
+			- addResource('page')
+			- addResource('post')
+			- addResource('profile')
+			- allow('basic', 'meeting', 'create')
+			- allow('moderator', 'profile')
+			- allow('moderator', 'meeting')
+			- allow('editor', 'page')
+			- allow('editor', 'post')
+			- allow('admin')
