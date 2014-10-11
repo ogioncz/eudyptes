@@ -12,6 +12,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	/** @var App\Model\MeetingRepository @inject */
 	public $meetings;
 
+	/** @var App\Model\PageRepository @inject */
+	public $pages;
+
 	protected function createComponentPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
 		$vp->getPaginator()->itemsPerPage = 10;
@@ -31,5 +34,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 			$this->template->unreadMails = $user->receivedMail->get()->findBy(['read' => false])->count();
 			$this->template->upcomingMeetings = $this->meetings->findUpcoming()->count();
 		}
+
+		$this->template->menu = $this->pages->findBy(['menu' => true])->orderBy(['title' => 'ASC']);
 	}
 }

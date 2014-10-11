@@ -97,8 +97,8 @@
 			</div>
 			<div class="col-xs-6 col-md-3">
 				<ul class="nav nav-stacked">
-					<li class="active"><a n:href="homepage:">Home</a></li>
-					<li><a n:href="page:list">List of pages</a></li>
+					<li n:foreach="$menu as $menuItem" n:class="$presenter->isLinkCurrent('page:show', $menuItem->slug) ? active"><a n:href="page:show $menuItem->slug">{$menuItem->title}</a></li>
+					<li n:class="$presenter->isLinkCurrent('page:list') ? active"><a n:href="page:list">List of pages</a></li>
 				</ul>
 			</div>
 		</div>
