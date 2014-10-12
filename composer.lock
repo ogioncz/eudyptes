@@ -662,12 +662,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/database.git",
-                "reference": "28dff3697e3c3e26f1367aaf7590d5c9e11dc4fe"
+                "reference": "7f31a2c38a59b41eee84008c350e81f7c8d059e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/database/zipball/28dff3697e3c3e26f1367aaf7590d5c9e11dc4fe",
-                "reference": "28dff3697e3c3e26f1367aaf7590d5c9e11dc4fe",
+                "url": "https://api.github.com/repos/nette/database/zipball/7f31a2c38a59b41eee84008c350e81f7c8d059e0",
+                "reference": "7f31a2c38a59b41eee84008c350e81f7c8d059e0",
                 "shasum": ""
             },
             "require": {
@@ -712,7 +712,7 @@
             ],
             "description": "Nette Database Component",
             "homepage": "http://nette.org",
-            "time": "2014-10-04 08:28:28"
+            "time": "2014-10-11 08:03:09"
         },
         {
             "name": "nette/deprecated",
