@@ -26,52 +26,27 @@ class Participator extends Control {
 
 		$this->template->meeting = $meeting;
 		$this->template->participants = $meeting->visitors;
+		$this->template->youParticipate = $meeting->visitors->get()->findById($this->presenter->user->identity->id)->count();
 
 		$this->template->render();
 	}
 
-	protected function createComponentParticipateForm() {
-		$cb = $this->participateFormSucceeded;
-		$meetings = $this->meetings;
-		$userId = $this->presenter->user->identity->id;
-
-		return new Multiplier(function($meetingId) use ($cb, $meetings, $userId) {
-			$youParticipate = array_reduce(iterator_to_array($meetings->getById($meetingId)->visitors->get()), function($carry, $visitor) use ($userId) {
-				if($visitor->id === $userId) {
-					return true;
-				}
-				return $carry;
-			}, false);
-
-			$form = new \Nette\Application\UI\Form;
-			$form->setRenderer(new Rendering\Bs3FormRenderer);
-			$form->form->getElementPrototype()->removeClass('form-horizontal');
-			$form->form->getElementPrototype()->addClass('form-inline');
-			$form->addHidden('action', $youParticipate ? 'unparticipate' : 'participate');
-			$form->addHidden('id', $meetingId);
-			$form->addSubmit('send', $youParticipate ? 'Zrušit účast' : 'Zúčastnit se');
-			$form->onSuccess[] = $cb;
-
-			return $form;
-		});
-	}
-
-	public function participateFormSucceeded($form) {
+	public function handleParticipation($meetingId, $youParticipate) {
 		if(!$this->presenter->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		
-		$values = $form->values;
-		$userId = $this->presenter->user->identity->id;
-		$meeting = $this->meetings->getById($values->id);
 
-		if($values->action === 'unparticipate') {
+		$meeting = $this->meetings->getById($meetingId);
+		$userId = $this->presenter->user->identity->id;
+
+		if($youParticipate) {
 			$meeting->visitors->remove($userId);
 		} else {
 			$meeting->visitors->add($userId);
 		}
 		$this->meetings->persistAndFlush($meeting);
-		
+
+		$this->redrawControl('participants');
 		$this->redirect('this');
 	}
 }
