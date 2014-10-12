@@ -1,0 +1,23 @@
+{
+	"name": "eudyptes",
+	"version": "0.0.0",
+	"homepage": "https://github.com/jtojnar/eudyptes",
+	"authors": [
+		"Jan Tojnar <jtojnar@gmail.com>"
+	],
+	"license": "MIT",
+	"private": true,
+	"ignore": [
+		"**/.*",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"dependencies": {
+		"jquery": "~2.1.1",
+		"bootstrap": "~3.2.0",
+		"nette-forms": null,
+		"jquery-details": "mathiasbynens/jquery-details#~0.1.0",
+		"smalot-bootstrap-datetimepicker": "~2.3.1"
+	}
+}

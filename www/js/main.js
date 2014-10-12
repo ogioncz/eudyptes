@@ -5,4 +5,5 @@ $(function(){
 	});
 	$('input.nospam').val('nospam');
 	$('.nospam').css('display', 'none');
+	$('details').details();
 });
