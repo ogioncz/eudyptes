@@ -46,7 +46,6 @@ class Participator extends Control {
 		}
 		$this->meetings->persistAndFlush($meeting);
 
-		$this->redrawControl('participants');
 		$this->redirect('this');
 	}
 }

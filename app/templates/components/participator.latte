@@ -1,4 +1,2 @@
-{snippet participants}
 {count($participants)} {foreach $participants as $participant}{first} ({/first}{$participant|userLink}{sep}, {/sep}{last}){/last}{/foreach}
 <a class="ajax btn btn-primary" n:href="participation! $meeting->id, $youParticipate">{$youParticipate ? 'Zrušit účast' : 'Zúčastnit se'}</a>
-{/snippet}
