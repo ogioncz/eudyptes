@@ -12,7 +12,7 @@ $(function() {
 				{opening: '**', closing: '**', title: 'důležitý text (ctrl+b)', body: '<span class="glyphicon glyphicon-bold"></span>', shortcut: 66},
 				{opening: '*', closing: '*', title: 'zvýrazněný text (ctrl+i)', body: '<span class="glyphicon glyphicon-italic"></span>', shortcut: 73},
 				{opening: '[', closing: ']()', title: 'odkaz (ctrl+l)', body: '<span class="glyphicon glyphicon-globe"></span>', shortcut: 76},
-				{opening: '<spoiler>', closing: '</spoiler>', title: 'spoiler', body: '<span class="glyphicon glyphicon-eye-close"></span>'}
+				{opening: '!!!\n', closing: '\n!!!', title: 'spoiler (ctrl+s)', body: '<span class="glyphicon glyphicon-eye-close"></span>', shortcut: 83}
 			],
 			[
 				{opening: '„', closing: '“', title: 'české uvozovky (ctrl+q)', body: '„“', shortcut: 81},

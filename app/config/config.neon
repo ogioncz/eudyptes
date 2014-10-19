@@ -33,7 +33,7 @@ services:
 	- App\RouterFactory
 	- App\Model\PurifierFactory
 	oembed: Alb\OEmbed\Simple
-	parsedown: ParsedownExtra
+	parsedown: ParsedownExtended
 	formatter: App\Model\Formatter(@parsedown, @purifier)
 	router: @App\RouterFactory::createRouter
 	purifier: @App\Model\PurifierFactory::createPurifier('%tempDir%/cache')
