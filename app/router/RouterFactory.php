@@ -29,6 +29,7 @@ class RouterFactory {
 		$router[] = new Route('mail', 'Mail:list', Route::ONE_WAY);
 		$router[] = new Route('mail/sent', ['presenter' => 'Mail', 'action' => 'list', 'sent' => true], Route::ONE_WAY);
 		$router[] = new Route('mail/<id \d+>', 'Mail:show', Route::ONE_WAY);
+		$router[] = new Route('page/show/<slug .*>', ['presenter' => 'Page', 'action' => 'show']);
 		$router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:default');
 		return $router;
 	}
