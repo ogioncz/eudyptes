@@ -80,6 +80,9 @@ class PurifierFactory extends Nette\Object {
 
 			// Custom data attributes
 			$def->addAttribute('a', 'data-lightbox', 'Enum#true');
+			$def->addAttribute('div', 'data-ride', 'Enum#carousel');
+			$def->addAttribute('div', 'data-interval', 'Text');
+			$def->addAttribute('a', 'data-slide', 'Enum#prev,next');
 			$def->addAttribute('blockquote', 'data-from', 'Text');
 
 			$def->addAttribute('a', 'rev', 'Enum#footnote');
