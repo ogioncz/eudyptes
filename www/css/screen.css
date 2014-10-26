@@ -149,3 +149,7 @@ header > a {
 	background-size: contain;
 	margin-bottom: 1em;
 }
+
+img {
+	max-width: 100%;
+}
