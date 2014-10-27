@@ -150,6 +150,10 @@ header > a {
 	margin-bottom: 1em;
 }
 
+.dl-horizontal dd:before, .dl-horizontal dd:after {
+	clear: none;
+}
+
 img {
 	max-width: 100%;
 }
