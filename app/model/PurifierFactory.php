@@ -56,6 +56,8 @@ class PurifierFactory extends Nette\Object {
 				'poster' => 'URI',
 				'preload' => 'Enum#auto,metadata,none',
 				'controls' => 'Bool',
+				'autoplay' => 'Bool',
+				'loop' => 'Bool',
 			));
 			$def->addElement('source', 'Block', 'Empty', 'Common', array(
 				'src' => 'URI',
