@@ -48,7 +48,7 @@ class PurifierFactory extends Nette\Object {
 			$def->addElement('figcaption', 'Inline', 'Flow', 'Common');
 
 			// http://developers.whatwg.org/the-video-element.html#the-video-element
-			$def->addElement('video', 'Block', 'Optional: (source, Flow) | (Flow, source) | Flow', 'Common', array(
+			$def->addElement('video', 'Block', 'Optional: (source, Flow | #PCDATA) | Flow | #PCDATA', 'Common', array(
 				'src' => 'URI',
 				'type' => 'Text',
 				'width' => 'Length',
@@ -57,7 +57,7 @@ class PurifierFactory extends Nette\Object {
 				'preload' => 'Enum#auto,metadata,none',
 				'controls' => 'Bool',
 			));
-			$def->addElement('source', 'Block', 'Flow', 'Common', array(
+			$def->addElement('source', 'Block', 'Empty', 'Common', array(
 				'src' => 'URI',
 				'type' => 'Text',
 			));
