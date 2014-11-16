@@ -34,7 +34,7 @@ class Formatter extends Nette\Object {
 			foreach($matches as $match) {
 				if(in_array($match[1], Formatter::$OEMBED_WHITELIST) && !isset($this->replacements[$match[0]])) {
 					try {
-						$this->replacements[$match[0]] = '<figure>' . $this->oembed->request($match[0])->getHtml() . '</figure>';
+						$this->replacements[$match[0]] = '<figure class="rwd-media rwd-ratio-16-9">' . $this->oembed->request($match[0])->getHtml() . '</figure>';
 					} catch(\Exception $e) {} // can’t serve, link is better than nothing so let’s leave it at that
 				}
 			}
