@@ -138,16 +138,16 @@
         },
         {
             "name": "erusev/parsedown",
-            "version": "1.1.1",
+            "version": "1.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown.git",
-                "reference": "da5d75e97e1ed19e57bd54fa6cb595a6a0879a67"
+                "reference": "495e7ac73bb5fde6b857b88ff2bb1b5e79a4263a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/da5d75e97e1ed19e57bd54fa6cb595a6a0879a67",
-                "reference": "da5d75e97e1ed19e57bd54fa6cb595a6a0879a67",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/495e7ac73bb5fde6b857b88ff2bb1b5e79a4263a",
+                "reference": "495e7ac73bb5fde6b857b88ff2bb1b5e79a4263a",
                 "shasum": ""
             },
             "type": "library",
@@ -173,7 +173,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2014-10-29 20:29:46"
+            "time": "2014-11-29 02:29:14"
         },
         {
             "name": "erusev/parsedown-extra",
@@ -181,12 +181,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/erusev/parsedown-extra.git",
-                "reference": "e81515ed5549871b16ece3aaab8cf023930b1e7e"
+                "reference": "d8f2bb2ddee51cbb60cc3ac0f5d635141af06737"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/e81515ed5549871b16ece3aaab8cf023930b1e7e",
-                "reference": "e81515ed5549871b16ece3aaab8cf023930b1e7e",
+                "url": "https://api.github.com/repos/erusev/parsedown-extra/zipball/d8f2bb2ddee51cbb60cc3ac0f5d635141af06737",
+                "reference": "d8f2bb2ddee51cbb60cc3ac0f5d635141af06737",
                 "shasum": ""
             },
             "require": {
@@ -217,7 +217,7 @@
                 "parsedown",
                 "parser"
             ],
-            "time": "2014-10-29 01:21:00"
+            "time": "2014-11-26 23:20:16"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -309,12 +309,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Kdyby/Replicator.git",
-                "reference": "ad2f06e3dfe7f76c0f7a9ce6e23d5be357e8130d"
+                "reference": "d10ec08a02bd5016690d69bd26e6d1cee59c291b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Kdyby/Replicator/zipball/ad2f06e3dfe7f76c0f7a9ce6e23d5be357e8130d",
-                "reference": "ad2f06e3dfe7f76c0f7a9ce6e23d5be357e8130d",
+                "url": "https://api.github.com/repos/Kdyby/Replicator/zipball/d10ec08a02bd5016690d69bd26e6d1cee59c291b",
+                "reference": "d10ec08a02bd5016690d69bd26e6d1cee59c291b",
                 "shasum": ""
             },
             "require": {
@@ -379,7 +379,7 @@
                 "nette",
                 "replicator"
             ],
-            "time": "2014-11-14 20:11:36"
+            "time": "2014-12-05 18:57:19"
         },
         {
             "name": "latte/latte",
@@ -663,12 +663,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/database.git",
-                "reference": "a4a8d557e1470ab1a9b68505d66a64d6f02e1ca9"
+                "reference": "7365af52f4806b7bc7c1f92d5dfb8c959f8f0d3d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/database/zipball/a4a8d557e1470ab1a9b68505d66a64d6f02e1ca9",
-                "reference": "a4a8d557e1470ab1a9b68505d66a64d6f02e1ca9",
+                "url": "https://api.github.com/repos/nette/database/zipball/7365af52f4806b7bc7c1f92d5dfb8c959f8f0d3d",
+                "reference": "7365af52f4806b7bc7c1f92d5dfb8c959f8f0d3d",
                 "shasum": ""
             },
             "require": {
@@ -713,7 +713,7 @@
             ],
             "description": "Nette Database Component",
             "homepage": "http://nette.org",
-            "time": "2014-11-05 03:19:21"
+            "time": "2014-11-18 01:18:54"
         },
         {
             "name": "nette/deprecated",
@@ -929,16 +929,16 @@
         },
         {
             "name": "nette/http",
-            "version": "v2.2.3",
+            "version": "v2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/http.git",
-                "reference": "1fafcc7b575604488d33a02063784a9746263482"
+                "reference": "e86342380c5e427f87000d7d104494fa336fbc12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/http/zipball/1fafcc7b575604488d33a02063784a9746263482",
-                "reference": "1fafcc7b575604488d33a02063784a9746263482",
+                "url": "https://api.github.com/repos/nette/http/zipball/e86342380c5e427f87000d7d104494fa336fbc12",
+                "reference": "e86342380c5e427f87000d7d104494fa336fbc12",
                 "shasum": ""
             },
             "require": {
@@ -978,35 +978,28 @@
             ],
             "description": "Nette HTTP Component",
             "homepage": "http://nette.org",
-            "time": "2014-11-15 17:52:29"
+            "time": "2014-11-16 13:45:55"
         },
         {
             "name": "nette/mail",
-            "version": "v2.2.3",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/mail.git",
-                "reference": "7a2e7d8012a636bb4658aa01064792981fcdd2c6"
+                "reference": "938cc6e6d0ef701ca5c666b14f0beea8b0c96d2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/mail/zipball/7a2e7d8012a636bb4658aa01064792981fcdd2c6",
-                "reference": "7a2e7d8012a636bb4658aa01064792981fcdd2c6",
+                "url": "https://api.github.com/repos/nette/mail/zipball/938cc6e6d0ef701ca5c666b14f0beea8b0c96d2b",
+                "reference": "938cc6e6d0ef701ca5c666b14f0beea8b0c96d2b",
                 "shasum": ""
             },
             "require": {
-                "ext-iconv": "*",
                 "nette/utils": "~2.2",
                 "php": ">=5.3.1"
             },
-            "conflict": {
-                "nette/nette": "<2.2"
-            },
             "require-dev": {
                 "nette/tester": "~1.0"
-            },
-            "suggest": {
-                "ext-fileinfo": "to detect type of attached files"
             },
             "type": "library",
             "autoload": {
@@ -1032,24 +1025,23 @@
             ],
             "description": "Nette Mail: Sending E-mails",
             "homepage": "http://nette.org",
-            "time": "2014-10-15 20:45:25"
+            "time": "2014-05-11 16:48:44"
         },
         {
             "name": "nette/neon",
-            "version": "v2.2.3",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/neon.git",
-                "reference": "3b28bcb3170df6db15c106cc0f7a821818b0d244"
+                "reference": "d499dc50348566c9af91568e64d2ec1498df4594"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/neon/zipball/3b28bcb3170df6db15c106cc0f7a821818b0d244",
-                "reference": "3b28bcb3170df6db15c106cc0f7a821818b0d244",
+                "url": "https://api.github.com/repos/nette/neon/zipball/d499dc50348566c9af91568e64d2ec1498df4594",
+                "reference": "d499dc50348566c9af91568e64d2ec1498df4594",
                 "shasum": ""
             },
             "require": {
-                "ext-iconv": "*",
                 "php": ">=5.3.1"
             },
             "require-dev": {
@@ -1079,7 +1071,7 @@
             ],
             "description": "Nette NEON: parser & generator for Nette Object Notation",
             "homepage": "http://ne-on.org",
-            "time": "2014-11-08 15:36:11"
+            "time": "2014-05-11 16:51:17"
         },
         {
             "name": "nette/nette",
@@ -1579,12 +1571,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextras/orm.git",
-                "reference": "609a4e3cd9267c2e80e2e0d77b4b4cb629ec3fbf"
+                "reference": "b8babc1f33ca9a0fa147446927690ad6d4e2e72b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextras/orm/zipball/609a4e3cd9267c2e80e2e0d77b4b4cb629ec3fbf",
-                "reference": "609a4e3cd9267c2e80e2e0d77b4b4cb629ec3fbf",
+                "url": "https://api.github.com/repos/nextras/orm/zipball/b8babc1f33ca9a0fa147446927690ad6d4e2e72b",
+                "reference": "b8babc1f33ca9a0fa147446927690ad6d4e2e72b",
                 "shasum": ""
             },
             "require": {
@@ -1634,7 +1626,7 @@
                 "nextras",
                 "orm"
             ],
-            "time": "2014-11-10 13:59:46"
+            "time": "2014-12-03 23:20:24"
         },
         {
             "name": "oodle/inflect",
