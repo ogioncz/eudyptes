@@ -8,4 +8,7 @@ vendor/*
 !.htaccess
 !web.config
 app/config/config.local.neon
-www/components
+assets/vendor
+node_modules
+www/css/screen.css
+www/javascript/
