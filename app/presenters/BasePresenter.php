@@ -43,5 +43,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		}
 
 		$this->template->menu = $this->pages->findBy(['menu' => true])->orderBy(['title' => 'ASC']);
+		$this->template->logo = file_get_contents(__DIR__ . '/../../www/images/bar.svg');
 	}
 }
