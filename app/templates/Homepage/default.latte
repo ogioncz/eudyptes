@@ -1,6 +1,6 @@
 {block content}
 <h2 n:inner-block="title">Novinky</h2>
-<a n:href="Post:create">Nový příspěvek</a>
+<a n:href="Post:create" n:if="$user->isAllowed('post', 'create')">Nový příspěvek</a>
 {foreach $posts as $post}
 <div class="post">
 	<h2><a n:href="Post:show $post->id">{$post->title}</a></h2>
