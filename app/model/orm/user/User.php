@@ -19,6 +19,7 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property DateTime $registered {default now}
  * @property string|null $profile
  *
+ * @property OneHasMany|Token[] $tokens {1:m TokenRepository}
  * @property OneHasMany|Post[] $createdPosts {1:m PostRepository order:timestamp,DESC}
  * @property OneHasMany|Page[] $createdPages {1:m PageRepository order:title,DESC}
  * @property OneHasMany|Revision[] $createdRevisions {1:m RevisionRepository order:timestamp,DESC}

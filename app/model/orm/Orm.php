@@ -11,6 +11,7 @@ use Nextras\Orm\Model\DIModel;
  * @property-read PostRepository $posts
  * @property-read MailRepository $mails
  * @property-read PageRepository $pages
+ * @property-read TokenRepository $tokens
  * @property-read RevisionRepository $revisions
  */
 class Orm extends DIModel {
