@@ -59,7 +59,7 @@ gulp.task('javascript', function(){
 
  gulp.task('watch', function() {
 	gulp.watch(config.assets.less + '/**/*.less', ['css']); 
-	gulp.watch(config.assets.javascript + '/**/*.less', ['javascript']); 
+	gulp.watch(config.assets.javascript + '/**/*.js', ['javascript']); 
 });
 
   gulp.task('default', ['bower', 'css', 'javascript']);
