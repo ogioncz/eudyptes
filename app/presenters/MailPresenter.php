@@ -62,7 +62,7 @@ class MailPresenter extends BasePresenter {
 
 		$subject = $form->addText('subject', 'Předmět:')->setRequired();
 		$subject->getControlPrototype()->data['content'] = 'Předmět zprávy má výstižně charakerizovat, čeho se zpráva týká.';
-		if($this->action === 'reply') {
+		if ($this->action === 'reply') {
 			$subject->setDefaultValue('re: ' . preg_replace('/^(?:re: )+/i', '', $this->template->original->subject));
 		}
 
@@ -92,7 +92,7 @@ class MailPresenter extends BasePresenter {
 		$mail->content = $formatted['text'];
 		$mail->sender = $this->users->getById($this->user->identity->id);
 		$mail->ip = $this->context->httpRequest->remoteAddress;
-		
+
 		if ($this->action === 'reply') {
 			$original_id = $this->getParameter('id');
 			if (!$original_id) {
@@ -107,7 +107,7 @@ class MailPresenter extends BasePresenter {
 			if ($original->recipient->id !== $this->user->identity->id) {
 				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
-		
+
 			$mail->recipient = $this->users->getById($original->sender);
 			$mail->reaction = $this->mails->getById($original->id);
 		} else {
@@ -129,7 +129,7 @@ class MailPresenter extends BasePresenter {
 
 		$mail = $this->mails->persistAndFlush($mail);
 
-		if($mail->recipient->notifyByMail) {
+		if ($mail->recipient->notifyByMail) {
 			$this->notifyByMail($mail);
 		}
 

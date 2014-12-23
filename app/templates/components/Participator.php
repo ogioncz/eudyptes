@@ -4,8 +4,6 @@ namespace App\Components;
 
 use App;
 use Nette\Application\UI\Control;
-use Nette\Application\UI\Multiplier;
-use Nextras\Forms\Rendering;
 
 class Participator extends Control {
 
@@ -32,21 +30,21 @@ class Participator extends Control {
 	}
 
 	public function handleParticipation($meetingId, $youParticipate) {
-		if(!$this->presenter->user->loggedIn) {
+		if (!$this->presenter->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
 		$meeting = $this->meetings->getById($meetingId);
 		$userId = $this->presenter->user->identity->id;
 
-		if($youParticipate) {
+		if ($youParticipate) {
 			$meeting->visitors->remove($userId);
 		} else {
 			$meeting->visitors->add($userId);
 		}
 		$this->meetings->persistAndFlush($meeting);
 
-		if(!$this->presenter->ajax) {
+		if (!$this->presenter->ajax) {
 			$this->redirect('this');
 		} else {
 			$this->presenter->invalidateControl('meetings');

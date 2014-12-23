@@ -18,7 +18,7 @@ class PostPresenter extends BasePresenter {
 
 	public function renderShow($id) {
 		$post = $this->posts->getById($id);
-		if(!$post) {
+		if (!$post) {
 			$this->error('Aktuálka nenalezena');
 		}
 
@@ -41,22 +41,22 @@ class PostPresenter extends BasePresenter {
 
 		return $form;
 	}
-	
+
 	public function postFormSucceeded(Nette\Application\UI\Form $form) {
-		if(!$this->user->loggedIn) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isAllowed('post', $this->action)) {
+		if (!$this->user->isAllowed('post', $this->action)) {
 			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->values;
-		
-		if($this->action === 'create') {
+
+		if ($this->action === 'create') {
 			$post = new Post;
 		} else {
 			$id = $this->getParameter('id');
 			$post = $this->posts->getById($id);
-			if(!$post) {
+			if (!$post) {
 				$this->error('Aktuálka nenalezena.');
 			}
 		}
@@ -64,14 +64,13 @@ class PostPresenter extends BasePresenter {
 		$post->markdown = $values->markdown;
 
 		$formatted = $this->formatter->format($post->markdown);
-		if(count($formatted['errors'])) {
+		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
 		$post->content = $formatted['text'];
-		
 
-		if($this->action === 'create') {
+		if ($this->action === 'create') {
 			$post->user = $this->users->getById($this->user->identity->id);
 		}
 
@@ -81,23 +80,23 @@ class PostPresenter extends BasePresenter {
 	}
 
 	public function actionCreate() {
-		if(!$this->user->loggedIn) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isAllowed('post', $this->action)) {
+		if (!$this->user->isAllowed('post', $this->action)) {
 			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
-	
+
 	public function actionEdit($id) {
-		if(!$this->user->loggedIn) {
+		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if(!$this->user->isAllowed('post', $this->action)) {
+		if (!$this->user->isAllowed('post', $this->action)) {
 			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$post = $this->posts->getById($id);
-		if(!$post) {
+		if (!$post) {
 			$this->error('Aktuálka nenalezena');
 		}
 		$data = $post->toArray();

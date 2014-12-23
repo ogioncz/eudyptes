@@ -30,15 +30,15 @@ class Formatter extends Nette\Object {
 		$alpha = "a-z\x80-\xFF";
 		$domain = "[0-9$alpha](?:[-0-9$alpha]{0,61}[0-9$alpha])?";
 		$topDomain = "[$alpha][-0-9$alpha]{0,17}[$alpha]";
-		if(preg_match_all("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", $text, $matches, PREG_SET_ORDER)) {
-			foreach($matches as $match) {
-				if(in_array($match[1], Formatter::$OEMBED_WHITELIST) && !isset($this->replacements[$match[0]])) {
+		if (preg_match_all("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", $text, $matches, PREG_SET_ORDER)) {
+			foreach ($matches as $match) {
+				if (in_array($match[1], Formatter::$OEMBED_WHITELIST) && !isset($this->replacements[$match[0]])) {
 					try {
 						$request = $this->oembed->request($match[0]);
-						if($request) {
+						if ($request) {
 							$this->replacements[$match[0]] = '<figure class="rwd-media rwd-ratio-16-9">' . $request->getHtml() . '</figure>';
 						}
-					} catch(\Exception $e) {
+					} catch (\Exception $e) {
 						\Tracy\Debugger::log($e);
 					} // can’t serve, link is better than nothing so let’s leave it at that
 				}
@@ -62,7 +62,7 @@ class Formatter extends Nette\Object {
 
 	public function formatErrors($errors) {
 		$list = Html::el('ul');
-		foreach($errors as $error) {
+		foreach ($errors as $error) {
 			$list->add(Html::el('li', 'Na řádku ' . $error[0] . ': ' . $error[2]));
 		}
 		return $list;

@@ -15,7 +15,7 @@ use Nextras\Orm\Entity\Entity;
  * @property string $ip
  */
 class Token extends Entity {
-	const REGISTRATION ='registration';
-	const LOGIN ='login';
-	const PASSWORD ='password';
+	const REGISTRATION = 'registration';
+	const LOGIN = 'login';
+	const PASSWORD = 'password';
 }

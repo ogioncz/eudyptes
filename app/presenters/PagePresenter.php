@@ -68,7 +68,7 @@ class PagePresenter extends BasePresenter {
 
 		return $form;
 	}
-	
+
 	public function pageFormSucceeded(Nette\Application\UI\Form $form) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
@@ -78,12 +78,12 @@ class PagePresenter extends BasePresenter {
 		}
 		$values = $form->values;
 
-		if($this->action === 'create') {
+		if ($this->action === 'create') {
 			$page = new Model\Page;
 		} else {
 			$id = $this->getParameter('id');
 			$page = $this->pages->getById($id);
-			if(!$page) {
+			if (!$page) {
 				$this->error('Stránka nenalezena.');
 			}
 		}
@@ -96,7 +96,7 @@ class PagePresenter extends BasePresenter {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		if($this->action === 'create') {
+		if ($this->action === 'create') {
 			$page->user = $this->users->getById($this->user->identity->id);
 		}
 		$this->pages->persist($page);
@@ -123,7 +123,7 @@ class PagePresenter extends BasePresenter {
 			$this->error('Pro vytváření stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
-	
+
 	public function actionEdit($id) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);

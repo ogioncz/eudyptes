@@ -16,33 +16,33 @@ var graph = new Springy.Graph();
 var pages = {$pages};
 var elements = {};
 var links = [];
-for(var page in pages) {
-	if(pages.hasOwnProperty(page)) {
+for (var page in pages) {
+	if (pages.hasOwnProperty(page)) {
 		var page = pages[page];
-		
+
 		elements[page.slug] = graph.newNode({ slug: page.slug, label: page.title, ondoubleclick: (function(path) {
 			return function() {
 				window.open(path);
 			};
 		})(page.path) });
 
-		for(var href in page.links) {
-			if(page.links.hasOwnProperty(href)) {
+		for (var href in page.links) {
+			if (page.links.hasOwnProperty(href)) {
 				links.push([page.slug, page.links[href]]);
 			}
 		}
 	}
 }
 
-for(var edge in links) {
-	if(links.hasOwnProperty(edge)) {
+for (var edge in links) {
+	if (links.hasOwnProperty(edge)) {
 		var edge = links[edge];
 		graph.newEdge(elements[edge[0]], elements[edge[1]]);
 	}
 }
 var springyness = null;
 function regenerate() {
-	if(springyness) {
+	if (springyness) {
 		springyness.renderer.stop();
 		$('#canvas').replaceWith('<canvas id="canvas" width="800" height="600"></canvas>');
 	}

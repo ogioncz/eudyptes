@@ -30,7 +30,7 @@ class PurifierFactory extends Nette\Object {
 		$config->set('HTML.DefinitionID', 'html5-definitions'); // unique id
 		$config->set('HTML.DefinitionRev', 1);
 
-		if($def = $config->maybeGetRawHTMLDefinition()) {
+		if ($def = $config->maybeGetRawHTMLDefinition()) {
 			// http://developers.whatwg.org/sections.html
 			$def->addElement('section', 'Block', 'Flow', 'Common');
 			$def->addElement('nav', 'Block', 'Flow', 'Common');

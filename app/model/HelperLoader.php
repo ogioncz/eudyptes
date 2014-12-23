@@ -29,16 +29,16 @@ class HelperLoader extends Nette\Object {
 	}
 
 	public function relDate(\DateTime $date) {
-		if($date == (new \DateTime('today'))) {
+		if ($date == (new \DateTime('today'))) {
 			return '(dnes)';
-		} else if($date == (new \DateTime('tomorrow'))) {
+		} else if ($date == (new \DateTime('tomorrow'))) {
 			return '(zítra)';
 		}
 		return '';
 	}
 
 	public function dateNA(\DateTime $time, $format = null) {
-		if($time) {
+		if ($time) {
 			return \Latte\Runtime\Filters::date($time, $format);
 		} else {
 			return 'N/A';
@@ -61,7 +61,7 @@ class HelperLoader extends Nette\Object {
 			case '<':
 				// load tag
 				$start = $i + 1;
-				while($i < $textLength && $text{$i} !== '>' && !ctype_space($text{$i})) {
+				while ($i < $textLength && $text{$i} !== '>' && !ctype_space($text{$i})) {
 					$i++;
 				}
 				$tag = strToLower(subStr($text, $start, $i - $start));
@@ -92,7 +92,7 @@ class HelperLoader extends Nette\Object {
 			}
 		}
 		$text = subStr($text, 0, $i);
-		if($tags) {
+		if ($tags) {
 			$text .= '…</' . implode('></', $tags) . '>';
 		}
 		return $text;

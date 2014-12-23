@@ -28,24 +28,24 @@ $(function() {
 
 		var shortcuts = [];
 		var quickbarContent = '';
-		for(var group in buttons) {
+		for (var group in buttons) {
 			quickbarContent += '<div class="btn-group">';
-			for(var btn in buttons[group]) {
+			for (var btn in buttons[group]) {
 				var button = buttons[group][btn];
 				quickbarContent += '<button class="btn btn-default" type="button"';
-				if(button.action) {
+				if (button.action) {
 					quickbarContent += ' data-action="' + htmlSpecialChars(button.action) + '"';
 				}
-				if(button.opening) {
+				if (button.opening) {
 					quickbarContent += ' data-opening="' + htmlSpecialChars(button.opening) + '"';
 				}
-				if(button.closing) {
+				if (button.closing) {
 					quickbarContent += ' data-closing="' + htmlSpecialChars(button.closing) + '"';
 				}
-				if(button.title) {
+				if (button.title) {
 					quickbarContent += ' title="' + htmlSpecialChars(button.title) + '"';
 				}
-				if(button.shortcut) {
+				if (button.shortcut) {
 					shortcuts.push(button.shortcut);
 					quickbarContent += ' data-shortcut="' + button.shortcut + '"';
 				}
@@ -63,12 +63,12 @@ $(function() {
 				var action = btn.attr('data-action');
 				var opening = btn.attr('data-opening');
 				var closing = btn.attr('data-closing');
-				if(action == 'fullscreen') {
+				if (action == 'fullscreen') {
 					ca.parent().toggleClass('fullscreen');
 					$('body').toggleClass('nooverflow');
-				} else if(closing) {
+				} else if (closing) {
 					ca.insert5(opening, closing);
-				} else if(opening) {
+				} else if (opening) {
 					ca.insert5(opening);
 				} else {
 					ca.insert5(btn.text());
@@ -78,7 +78,7 @@ $(function() {
 
 		contentArea.keydown((function(ca) {
 			return function(e) {
-				if(ca.is(':focus') && shortcuts.indexOf(e.which) >= 0 && e.ctrlKey && !e.altKey) {
+				if (ca.is(':focus') && shortcuts.indexOf(e.which) >= 0 && e.ctrlKey && !e.altKey) {
 					ca.parent().find('button[data-shortcut='+e.which+']').click();
 					e.preventDefault();
 				}

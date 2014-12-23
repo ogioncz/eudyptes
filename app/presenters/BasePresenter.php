@@ -17,14 +17,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	public function startup() {
 		parent::startup();
-		if(isset($this->formatter)) {
+		if (isset($this->formatter)) {
 			$this->formatter->parsedown->presenter = $this;
 		}
 	}
 
 	protected function createComponentPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
-		$vp->getPaginator()->itemsPerPage = 10;
+		$vp->paginator->itemsPerPage = 10;
 		return $vp;
 	}
 
@@ -36,7 +36,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	public function beforeRender() {
 		parent::beforeRender();
-		if($this->user->loggedIn) {
+		if ($this->user->loggedIn) {
 			$user = $this->users->getById($this->user->identity->id);
 			$this->template->unreadMails = $user->receivedMail->get()->findBy(['read' => false])->count();
 			$this->template->upcomingMeetings = $this->meetings->findUpcoming()->count();

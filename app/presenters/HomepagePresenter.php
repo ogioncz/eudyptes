@@ -9,7 +9,7 @@ class HomepagePresenter extends BasePresenter {
 	public $posts;
 
 	public function renderDefault() {
-		$paginator = $this['paginator']->getPaginator();
+		$paginator = $this['paginator']->paginator;
 		$paginator->itemCount = $this->posts->findAll()->count();
 		$this->template->posts = $this->posts->findAll()->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}

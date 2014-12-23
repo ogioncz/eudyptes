@@ -7,11 +7,10 @@ use Nette\Application\Routers\RouteList;
 use Nette\Application\Routers\Route;
 
 class RouterFactory {
-
 	/**
 	 * @return Nette\Application\IRouter
 	 */
-	public function createRouter() 	{
+	public function createRouter() {
 		$router = new RouteList();
 		$router[] = new Route('post/<id \d+>', 'Post:show', Route::ONE_WAY);
 		$router[] = new Route('post/<id \d+>/edit', 'Post:edit', Route::ONE_WAY);
@@ -33,5 +32,4 @@ class RouterFactory {
 		$router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:default');
 		return $router;
 	}
-
 }

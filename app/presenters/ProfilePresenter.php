@@ -63,9 +63,9 @@ class ProfilePresenter extends BasePresenter {
 		$username = $form->addText('username', 'Přezdívka:')->disabled = true;
 
 		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::FILLED)->addRule(Form::MIME_TYPE, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
-		
+
 		$medium = $this->context->parameters['avatarStorage'] . '/' . $this->user->identity->id . 'm.png';
-		if(file_exists($medium)) {
+		if (file_exists($medium)) {
 			$form->addCheckbox('removeAvatar', 'Odstranit avatar');
 		}
 
@@ -101,12 +101,12 @@ class ProfilePresenter extends BasePresenter {
 		$original = $this->context->parameters['avatarStorage'] . '/' . $user->id . '.png';
 		$medium = $this->context->parameters['avatarStorage'] . '/' . $user->id . 'm.png';
 
-		if(isset($values->removeAvatar) && $values->removeAvatar) {
+		if (isset($values->removeAvatar) && $values->removeAvatar) {
 			@unlink($original);
 			@unlink($medium);
 		}
 
-		if($values->avatar->isOk()) {
+		if ($values->avatar->isOk()) {
 			$values->avatar->move($original);
 			try {
 				$img = new SimpleImage($original);
@@ -117,7 +117,7 @@ class ProfilePresenter extends BasePresenter {
 			}
 		}
 
-		if($values->password) {
+		if ($values->password) {
 			$user->password = Passwords::hash($values->password);
 		}
 
@@ -140,14 +140,14 @@ class ProfilePresenter extends BasePresenter {
 		$username = $form->addText('username', 'Přezdívka:');
 		$username->setRequired('Zadej prosím své uživatelské jméno.');
 		$username->setOption('description', 'Pod tímto jménem tě budou znát ostatní uživatelé.');
-		
+
 		$email = $form->addText('email', 'E-Mail:')->setType('email');
 		$email->setOption('description', 'Slouží k upozorňování na zprávy a obnovu hesla. Bez tvého souhlasu ti nebudeme nic posílat.');
 		$email->setRequired('Zadej prosím svůj e-mail.');
 		$email->addRule($form::EMAIL, 'Zadej prosím platný e-mail.');
 
 		$form->addPassword('password', 'Heslo:')->setRequired('Zadej prosím své heslo.');
-		
+
 		$noSpam = $form->addText('nospam', 'Zadej „nospam“');
 		$noSpam->addRule(Form::FILLED, 'Ošklivý spamovací robote!');
 		$noSpam->addRule(Form::EQUAL, 'Ošklivý spamovací robote!', 'nospam');

@@ -57,7 +57,7 @@ class MeetingPresenter extends BasePresenter {
 		$form->addSubmit('add', 'Přidat')->setValidationScope(false)->onClick[] = function(SubmitButton $button) {
 			$button->parent['times']->createOne();
 		};
-		
+
 		$form->addTextArea('markdown', 'Popis:')->setRequired()->getControlPrototype()->addRows(15);
 
 		$submit = $form->addSubmit('send', 'Odeslat a zveřejnit');
@@ -66,7 +66,7 @@ class MeetingPresenter extends BasePresenter {
 
 		return $form;
 	}
-	
+
 	public function meetingFormSucceeded(SubmitButton $submit) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
@@ -97,9 +97,9 @@ class MeetingPresenter extends BasePresenter {
 		$meeting->date = $values->date;
 		$meeting->markdown = $values->markdown;
 		$meeting->description = $formatted['text'];
-		
+
 		$program = [];
-		foreach($values->times as $time) {
+		foreach ($values->times as $time) {
 			$program[] = ['time' => $time['time']->format('H:i'), 'event' => $time['event']];
 		}
 
@@ -122,7 +122,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 	}
-	
+
 	public function actionEdit($id) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);

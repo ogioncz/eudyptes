@@ -25,7 +25,7 @@ class TimePicker extends \Nextras\Forms\Controls\DateTimePickerPrototype {
 
 	protected function getDefaultParser() {
 		return function($value) {
-			if(!preg_match('#^(?P<HH>0?[0-9]|1[0-9]|2[0-3]):(?P<mm>[0-5][0-9])$#', $value, $matches)) {
+			if (!preg_match('#^(?P<HH>0?[0-9]|1[0-9]|2[0-3]):(?P<mm>[0-5][0-9])$#', $value, $matches)) {
 				return null;
 			}
 
