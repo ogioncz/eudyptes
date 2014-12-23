@@ -47,7 +47,7 @@ class Participator extends Control {
 		if (!$this->presenter->ajax) {
 			$this->redirect('this');
 		} else {
-			$this->presenter->invalidateControl('meetings');
+			$this->presenter->redrawControl('meetings');
 		}
 	}
 }
