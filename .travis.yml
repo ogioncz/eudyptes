@@ -10,4 +10,8 @@ script:
 before_script:
   - composer create-project nette/code-checker code-checker ~2.2 --no-interaction --prefer-source
 
+cache:
+  directories:
+  - code-checker
+
 sudo: false
