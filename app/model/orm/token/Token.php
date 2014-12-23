@@ -6,7 +6,7 @@ use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 
 /**
- * Shout
+ * Token
  * @property User $user {m:1 UserRepository $tokens}
  * @property string $token
  * @property string $type {default registration} {enum self::REGISTRATION self::LOGIN self::PASSWORD}
