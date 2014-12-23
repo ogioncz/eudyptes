@@ -90,7 +90,7 @@
 
 		<div class="row">
 			<div class="col-xs-12 col-md-9">
-				<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">{$flash->message}</div>
+				{snippet flashes}<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}">{$flash->message}</div>{/snippet}
 
 				{include content}
 			</div>
@@ -114,6 +114,7 @@
 	<script src="{$basePath}/javascript/bootstrap-datetimepicker.js"></script>
 	<script src="{$basePath}/javascript/bootstrap-datetimepicker.cs.js"></script>
 	<script src="{$basePath}/javascript/nextras.datetimepicker.init.js"></script>
+	<script src="{$basePath}/javascript/nette.ajax.js"></script>
 	<script src="{$basePath}/javascript/main.js"></script>
 	{block scripts}{/block}
 </body>

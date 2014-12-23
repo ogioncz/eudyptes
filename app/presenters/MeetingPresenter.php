@@ -24,7 +24,11 @@ class MeetingPresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		$this->template->meetings = $this->meetings->findUpcoming();
+		if (isset($this->params['do']) && $this->params['do'] === 'participator-participation') {
+			$this->template->meetings = $this->meetings->findById($this['participator']->params['meetingId']);
+		} else {
+			$this->template->meetings = $this->meetings->findUpcoming();
+		}
 	}
 
 	protected function createComponentMeetingForm() {

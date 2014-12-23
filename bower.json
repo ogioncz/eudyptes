@@ -19,6 +19,7 @@
 		"nette-forms": null,
 		"jquery-details": "mathiasbynens/jquery-details#~0.1.0",
 		"smalot-bootstrap-datetimepicker": "~2.3.1",
-		"nextras-forms": "git@github.com:nextras/forms.git#master"
+		"nextras-forms": "git@github.com:nextras/forms.git#master",
+		"nette.ajax.js": "~2.0.0"
 	}
 }

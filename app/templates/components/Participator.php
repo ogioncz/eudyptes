@@ -46,6 +46,10 @@ class Participator extends Control {
 		}
 		$this->meetings->persistAndFlush($meeting);
 
-		$this->redirect('this');
+		if(!$this->presenter->ajax) {
+			$this->redirect('this');
+		} else {
+			$this->presenter->invalidateControl('meetings');
+		}
 	}
 }

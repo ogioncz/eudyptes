@@ -3,6 +3,7 @@
 
 <a n:if="$user->isAllowed('meeting', 'create')" class="pull-right link-icon" n:href="create"><i class="glyphicon glyphicon-plus"></i>Nový sraz</a>
 {if count($meetings)}
+{snippet meetings}
 {foreach $meetings as $meeting}
 <a n:if="$user->isAllowed('meeting', 'edit') || $meeting->user->id === $user->identity->id" class="pull-right link-icon" n:href="edit $meeting->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
 <a n:if="$user->isAllowed('meeting', 'delete') || $meeting->user->id === $user->identity->id" class="pull-right link-icon" n:href="delete $meeting->id"><span class="glyphicon glyphicon-remove"></span>Smazat</a>
@@ -23,9 +24,10 @@ Na programu nic není.
 {/if}
 </dd>
 <dt>Popis:</dt><dd>{$meeting->description|noescape}</dd>
-<dt>Účastníci:</dt><dd>{control participator, $meeting}</button></form></dd>
+<dt>Účastníci:</dt><dd n:snippet="participator-$meeting->id">{control participator, $meeting}</dd>
 </dl>
 {/foreach}
+{/snippet}
 {else}
 <p class="alert alert-info">Nekonají se žádné srazy</p>
 {/if}
