@@ -37,7 +37,7 @@ class HelperLoader extends Nette\Object {
 		return '';
 	}
 
-	public function dateNA(\DateTime $time, $format = null) {
+	public function dateNA(\DateTime $time = null, $format = null) {
 		if ($time) {
 			return \Latte\Runtime\Filters::date($time, $format);
 		} else {
