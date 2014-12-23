@@ -15,8 +15,10 @@
 <tr n:foreach="$pages as $page">
 {?$last_revision = $page->getLastRevision()}
 <td><a n:href="show $page->slug">{$page->title}</a></td>
+{if $last_revision}
 <td>{$last_revision->timestamp|dateNA:'j. n. Y H:i:s'}</td>
 <td>{$last_revision->user|userLink}</td>
+{else}<td colspan="2">N/A</td>{/if}
 <td>{$page->menu ? 'ano' : 'ne'}</td>
 <td>{if $user->isAllowed('page', 'edit')}<a n:href="edit $page->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>{/if} <a n:href="history $page->id"><span class="glyphicon glyphicon-time"></span>Historie</a></td>
 </tr>
