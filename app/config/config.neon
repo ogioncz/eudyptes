@@ -41,7 +41,9 @@ services:
 		class: Nette\Security\Permission
 		setup:
 			- addRole('guest')
+			- addRole('new', 'guest')
 			- addRole('basic', 'guest')
+			- addRole('verified', 'basic')
 			- addRole('moderator', 'basic')
 			- addRole('editor', 'moderator')
 			- addRole('admin', 'editor')
