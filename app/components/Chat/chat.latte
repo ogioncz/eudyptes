@@ -1,0 +1,15 @@
+<div class="chat" id="chat">
+	<header>
+		<div class="chat-toolbar"></div>
+		<h2>Chat</h2>
+	</header>
+	<div class="chat-body">
+		<ul n:snippet="chatMessages">
+			{foreach $chats as $chat}
+			<li><strong>{$chat->user|userLink}:</strong> {$chat->content}</li>
+			{/foreach}
+			<li class="hidden"><a n:href="refresh! $chat->id" class="ajax refresh-chat">Obnovit</a></li>
+		</ul>
+		{if $user->isAllowed('chat', 'send')}{snippet chatForm}{control chatForm}{/snippet}{/if}
+	</div>
+</div>

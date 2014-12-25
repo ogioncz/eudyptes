@@ -15,6 +15,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	/** @var App\Model\PageRepository @inject */
 	public $pages;
 
+	/** @var App\Model\ChatRepository @inject */
+	public $chats;
+
 	public function startup() {
 		parent::startup();
 		if (isset($this->formatter)) {
@@ -44,5 +47,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 		$this->template->menu = $this->pages->findBy(['menu' => true])->orderBy(['title' => 'ASC']);
 		$this->template->logo = file_get_contents(__DIR__ . '/../../www/images/bar.svg');
+	}
+
+	/**
+	* Chat control factory.
+	* @return App\Components\ChatControl
+	*/
+	protected function createComponentChat() {
+		$chat = new App\Components\ChatControl($this->chats, $this->users);
+		return $chat;
 	}
 }

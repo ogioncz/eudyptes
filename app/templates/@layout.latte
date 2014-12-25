@@ -106,6 +106,8 @@
 		<p><small>karachi</small></p>
 	</footer>
 
+	{if $user->loggedIn && $user->isAllowed('chat', 'read')}{control chat}{/if}
+
 	<script src="{$basePath}/javascript/jquery.js"></script>
 	<script src="{$basePath}/javascript/bootstrap.js"></script>
 	<script src="{$basePath}/javascript/netteForms.js"></script>
@@ -115,6 +117,7 @@
 	<script src="{$basePath}/javascript/bootstrap-datetimepicker.cs.js"></script>
 	<script src="{$basePath}/javascript/nextras.datetimepicker.init.js"></script>
 	<script src="{$basePath}/javascript/nette.ajax.js"></script>
+	{if $user->loggedIn && $user->isAllowed('chat', 'read')}<script src="{$basePath}/javascript/chat.js"></script>{/if}
 	<script src="{$basePath}/javascript/main.js"></script>
 	{block scripts}{/block}
 </body>

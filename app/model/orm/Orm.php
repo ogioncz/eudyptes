@@ -10,6 +10,7 @@ use Nextras\Orm\Model\DIModel;
  * @property-read UserRepository $users
  * @property-read PostRepository $posts
  * @property-read MailRepository $mails
+ * @property-read ChatRepository $chats
  * @property-read PageRepository $pages
  * @property-read TokenRepository $tokens
  * @property-read RevisionRepository $revisions
