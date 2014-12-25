@@ -76,6 +76,9 @@ class PurifierFactory extends Nette\Object {
 			$def->addElement('mark', 'Inline', 'Inline', 'Common');
 			$def->addElement('wbr', 'Inline', 'Empty', 'Core');
 
+			// https://developers.whatwg.org/the-button-element.html#the-meter-element
+			$def->addElement('meter', 'Inline', 'Inline', 'Common', ['value' => 'Length', 'min' => 'Length', 'max' => 'Length', 'low' => 'Length', 'high' => 'Length', 'optimum' => 'Length']);
+
 			// http://developers.whatwg.org/edits.html
 			$def->addElement('ins', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'CDATA'));
 			$def->addElement('del', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'CDATA'));
