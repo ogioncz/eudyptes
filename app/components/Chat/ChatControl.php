@@ -33,7 +33,7 @@ class ChatControl extends Control {
 		// } else {
 		// 	$this->template->chats = $allChats->limitBy(50, max(0, $allChats->count() - 50));
 		// }
-		$this->template->chats = $allChats->limitBy(50, max(0, $allChats->count() - 50));
+		$this->template->chats = $allChats->limitBy(50, max(0, $allChats->countStored() - 50));
 
 		$this->template->render();
 	}
