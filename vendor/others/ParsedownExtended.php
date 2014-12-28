@@ -1,8 +1,5 @@
 <?php
 class ParsedownExtended extends ParsedownExtra {
-	/** @var Nette\Application\UI\Presenter $presenter */
-	public $presenter = null;
-
 	function __construct() {
 		$this->BlockTypes['!'][] = 'Details';
 	}
@@ -56,23 +53,5 @@ class ParsedownExtended extends ParsedownExtra {
 	protected function completeDetails($Block) {
 		$Block['element']['text'][1] = $this->text($Block['element']['text'][1]);
 		return $Block;
-	}
-
-
-	protected function identifyLink($excerpt) {
-		$span = parent::identifyLink($excerpt);
-
-		if (isset($span['element']['attributes']['href'])) {
-			preg_match('/^(.+?):(.+)/', $span['element']['attributes']['href'], $m);
-			if (isset($m[1])) {
-				if ($m[1] === 'post') {
-					$span['element']['attributes']['href'] = $this->presenter->link('post:show', $m[2]);
-				} else if ($m[1] === 'page') {
-					$span['element']['attributes']['href'] = $this->presenter->link('page:show', $m[2]);
-				}
-			}
-		}
-
-		return $span;
 	}
 }

@@ -10,7 +10,7 @@ class PurifierFactory extends Nette\Object {
 	/**
 	 * @return HTMLPurifier
 	 */
-	public function createPurifier($cacheDir) {
+	public function createPurifier(Nette\Application\Application $app, $cacheDir) {
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
 		$config->set('CSS.AllowTricky', true);
@@ -95,6 +95,9 @@ class PurifierFactory extends Nette\Object {
 			// Others
 			$def->addAttribute('iframe', 'allowfullscreen', 'Bool');
 		}
+
+		$uri = $config->getDefinition('URI');
+		$uri->addFilter(new TransformCustomSchemesUriFilter($app), $config);
 
 		return new HTMLPurifier($config);
 	}

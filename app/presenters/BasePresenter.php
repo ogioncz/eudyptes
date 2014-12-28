@@ -18,13 +18,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	/** @var App\Model\ChatRepository @inject */
 	public $chats;
 
-	public function startup() {
-		parent::startup();
-		if (isset($this->formatter)) {
-			$this->formatter->parsedown->presenter = $this;
-		}
-	}
-
 	protected function createComponentPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
 		$vp->paginator->itemsPerPage = 10;

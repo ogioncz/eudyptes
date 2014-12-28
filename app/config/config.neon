@@ -36,7 +36,7 @@ services:
 	parsedown: ParsedownExtended
 	formatter: App\Model\Formatter(@parsedown, @purifier)
 	router: @App\RouterFactory::createRouter
-	purifier: @App\Model\PurifierFactory::createPurifier('%tempDir%/cache')
+	purifier: @App\Model\PurifierFactory::createPurifier(@Nette\Application\Application, '%tempDir%/cache')
 	authorizator:
 		class: Nette\Security\Permission
 		setup:
