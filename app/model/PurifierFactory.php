@@ -59,6 +59,15 @@ class PurifierFactory extends Nette\Object {
 				'autoplay' => 'Bool',
 				'loop' => 'Bool',
 			));
+			$def->addElement('audio', 'Block', 'Optional: (source, Flow | #PCDATA) | Flow | #PCDATA', 'Common', array(
+				'src' => 'URI',
+				'type' => 'Text',
+				'preload' => 'Enum#auto,metadata,none',
+				'controls' => 'Bool',
+				'autoplay' => 'Bool',
+				'loop' => 'Bool',
+				'muted' => 'Bool',
+			));
 			$def->addElement('source', 'Block', 'Empty', 'Common', array(
 				'src' => 'URI',
 				'type' => 'Text',

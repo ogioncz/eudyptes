@@ -56,6 +56,7 @@ class Formatter extends Nette\Object {
 		$text = CustomTags::age($text);
 		$text = CustomTags::item($text);
 		$text = CustomTags::coins($text);
+		$text = CustomTags::music($text);
 
 		$text = $this->parsedown->text($text);
 

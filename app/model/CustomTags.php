@@ -55,4 +55,8 @@ class CustomTags extends Nette\Object {
 		}, $text);
 		return $text;
 	}
+
+	public static function music($text) {
+		return preg_replace('/<cp-music>(\d+)<\/cp-music>/sU', '<audio src="http://upload.fan-club-penguin.cz/hudba/$1.mp3" loop="loop" autoplay="autoplay" type="audio/mp3"></audio>', $text);
+	}
 }
