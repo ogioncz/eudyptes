@@ -66,7 +66,7 @@ class MailPresenter extends BasePresenter {
 			$subject->setDefaultValue('re: ' . preg_replace('/^(?:re: )+/i', '', $this->template->original->subject));
 		}
 
-		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15);
+		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$form->addSubmit('send', 'Odeslat');
 		$form->onSuccess[] = $this->mailFormSucceeded;

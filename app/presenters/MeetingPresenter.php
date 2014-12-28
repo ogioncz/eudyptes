@@ -58,7 +58,7 @@ class MeetingPresenter extends BasePresenter {
 			$button->parent['times']->createOne();
 		};
 
-		$form->addTextArea('markdown', 'Popis:')->setRequired()->getControlPrototype()->addRows(15);
+		$form->addTextArea('markdown', 'Popis:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$submit = $form->addSubmit('send', 'Odeslat a zveřejnit');
 		$submit->onClick[] = $this->meetingFormSucceeded;

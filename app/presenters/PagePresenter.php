@@ -61,7 +61,7 @@ class PagePresenter extends BasePresenter {
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addText('title', 'Nadpis:')->setRequired();
 		$form->addText('slug', 'Adresa:')->setRequired()->setType('url');
-		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15);
+		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$form->addSubmit('send', 'Odeslat a zveřejnit');
 		$form->onSuccess[] = $this->pageFormSucceeded;

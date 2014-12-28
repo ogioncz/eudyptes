@@ -2,7 +2,7 @@ $(function() {
 	function htmlSpecialChars(text) {
 		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 	}
-	$('textarea').each(function() {
+	$('textarea.editor').each(function() {
 		var contentArea = $(this);
 		var quickbar = $('<div class="quickbar" class="btn-toolbar"></div>');
 		contentArea.before(quickbar);

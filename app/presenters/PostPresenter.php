@@ -34,7 +34,7 @@ class PostPresenter extends BasePresenter {
 		$form = new Nette\Application\UI\Form;
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addText('title', 'Nadpis:')->setRequired();
-		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15);
+		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$form->addSubmit('send', 'Odeslat a zveřejnit');
 		$form->onSuccess[] = $this->postFormSucceeded;
