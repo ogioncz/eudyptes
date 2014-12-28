@@ -91,6 +91,7 @@ class PurifierFactory extends Nette\Object {
 			$def->addAttribute('blockquote', 'data-from', 'Text');
 
 			$def->addAttribute('a', 'rev', 'Enum#footnote');
+			$def->addAttribute('a', 'rel', 'Enum#prev,next');
 
 			// Others
 			$def->addAttribute('iframe', 'allowfullscreen', 'Bool');
