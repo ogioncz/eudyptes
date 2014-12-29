@@ -2,6 +2,8 @@
 namespace App\Presenters;
 
 use Nette;
+use Nette\Caching\Cache;
+use Tracy\Debugger;
 use Nextras\Forms\Rendering;
 use App;
 use App\Model;
@@ -22,13 +24,23 @@ class PagePresenter extends BasePresenter {
 			$this->error('Stránka nenalezena');
 		}
 
-		$last_revision = $page->lastRevision;
-		if (!$last_revision) {
-			$this->error('Stránka nemá žádné revize.');
-		}
+
+		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
 
 		$this->template->page = $page;
-		$this->template->last_revision = $last_revision;
+		$this->template->content = $cache->load($page->slug, function() use ($page) {
+			$last_revision = $page->lastRevision;
+			if (!$last_revision) {
+				$this->error('Stránka nemá žádné revize.');
+			}
+			$formatted = $this->formatter->format($last_revision->markdown);
+
+			if (count($formatted['errors'])) {
+				Debugger::log($this->formatter->formatErrors($formatted['errors']));
+			}
+
+			return $formatted['text'];
+		});
 	}
 
 	public function renderList() {
@@ -95,6 +107,9 @@ class PagePresenter extends BasePresenter {
 		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
+
+		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
+		$cache->save($page->slug, $formatted['text']);
 
 		if ($this->action === 'create') {
 			$page->user = $this->users->getById($this->user->identity->id);
