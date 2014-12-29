@@ -29,11 +29,7 @@ class PagePresenter extends BasePresenter {
 
 		$this->template->page = $page;
 		$this->template->content = $cache->load($page->slug, function() use ($page) {
-			$last_revision = $page->lastRevision;
-			if (!$last_revision) {
-				$this->error('Stránka nemá žádné revize.');
-			}
-			$formatted = $this->formatter->format($last_revision->markdown);
+			$formatted = $this->formatter->format($page->markdown);
 
 			if (count($formatted['errors'])) {
 				Debugger::log($this->formatter->formatErrors($formatted['errors']));
@@ -150,13 +146,9 @@ class PagePresenter extends BasePresenter {
 		if (!$page) {
 			$this->error('Stránka nenalezena');
 		}
-		$last_revision = $page->lastRevision;
-		if (!$last_revision) {
-			$this->error('Stránka nemá žádné revize.');
-		}
 
 		$data = $page->toArray();
-		$data['markdown'] = $last_revision->markdown;
+		$data['markdown'] = $page->markdown;
 		$this['pageForm']->setDefaults($data);
 	}
 
