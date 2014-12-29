@@ -102,6 +102,9 @@ class PurifierFactory extends Nette\Object {
 			$def->addAttribute('a', 'rev', 'Enum#footnote');
 			$def->addAttribute('a', 'rel', 'Enum#prev,next');
 
+			$def->addAttribute('img', 'data-content', 'Text');
+			$def->addAttribute('img', 'data-title', 'Text');
+
 			// Others
 			$def->addAttribute('iframe', 'allowfullscreen', 'Bool');
 		}
