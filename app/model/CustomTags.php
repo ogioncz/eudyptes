@@ -43,7 +43,7 @@ class CustomTags extends Nette\Object {
 	}
 
 	public static function coins($text) {
-		$text = preg_replace('/<cp-coins>(\d+)<\/cp-coins>/sU', '<span class="cpcoins"><img src="http://upload.fan-club-penguin.cz/system/coins.png" alt="" width="60" height="60" class="cpitem"><span>\1<span class="sr-only"> mincí</span></span></span>', $text);
+		$text = preg_replace('/<cp-coins>(\d+)<\/cp-coins>/sU', '<span class="cpcoins cpitem"><span>\1<span class="sr-only"> mincí</span></span></span>', $text);
 		return $text;
 	}
 
