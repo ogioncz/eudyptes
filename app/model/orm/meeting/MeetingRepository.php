@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use Nextras\Orm\Repository\Repository;
-use Nextras\Orm\Entity\Collection\ICollection;
+use Nextras\Orm\Collection\ICollection;
 
 class MeetingRepository extends Repository {
 	public function findUpcoming() {

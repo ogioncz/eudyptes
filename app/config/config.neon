@@ -23,7 +23,7 @@ nette:
 		expiration: 31 days
 
 extensions:
-	orm: Nextras\Orm\DI\OrmExtension
+	orm: Nextras\Orm\Bridge\NetteDI\OrmExtension
 
 orm:
 	model: App\Model\Orm

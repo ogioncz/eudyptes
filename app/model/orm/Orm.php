@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use Nextras\Orm\Model\DIModel;
+use Nextras\Orm\Model\Model;
 
 /**
  * Model
@@ -15,5 +15,5 @@ use Nextras\Orm\Model\DIModel;
  * @property-read TokenRepository $tokens
  * @property-read RevisionRepository $revisions
  */
-class Orm extends DIModel {
+class Orm extends Model {
 }
