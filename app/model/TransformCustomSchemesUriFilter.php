@@ -25,7 +25,7 @@ class TransformCustomSchemesUriFilter extends \HTMLPurifier_URIFilter {
 		if ($uri->scheme !== 'post' && $uri->scheme !== 'page') {
 			return true;
 		}
-		$uri = new \HTMLPurifier_URI(null, null, null, null, $this->app->presenter->link($uri->scheme . ':show', $uri->path), null, null);
+		$uri = new \HTMLPurifier_URI(null, null, null, null, $this->app->presenter->link($uri->scheme . ':show', $uri->path), $uri->query, $uri->fragment);
 		return true;
 	}
 }
