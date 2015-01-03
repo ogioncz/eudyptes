@@ -46,9 +46,6 @@ class PostPresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->user->isAllowed('post', $this->action)) {
-			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
-		}
 		$values = $form->values;
 
 		if ($this->action === 'create') {
@@ -60,6 +57,11 @@ class PostPresenter extends BasePresenter {
 				$this->error('Aktuálka nenalezena.');
 			}
 		}
+
+		if (!$this->allowed($this->action === 'create' ? 'post' : $post, $this->action)) {
+			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+		}
+
 		$post->title = $values->title;
 		$post->markdown = $values->markdown;
 
@@ -83,7 +85,7 @@ class PostPresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->user->isAllowed('post', $this->action)) {
+		if (!$this->allowed('post', $this->action)) {
 			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
@@ -92,7 +94,7 @@ class PostPresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->user->isAllowed('post', $this->action)) {
+		if (!$this->allowed('post', $this->action)) {
 			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$post = $this->posts->getById($id);

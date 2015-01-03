@@ -87,7 +87,7 @@ class MeetingPresenter extends BasePresenter {
 			if (!$meeting) {
 				$this->error('Sraz nenalezen.');
 			}
-			if (!$this->user->isAllowed('meeting', 'edit') && $meeting->user->id !== $this->user->identity->id) {
+			if (!$this->allowed($meeting, $this->action)) {
 				$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
 		}
@@ -121,6 +121,9 @@ class MeetingPresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
+		if (!$this->allowed('meeting', $this->action)) {
+			$this->error('Pro založení srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+		}
 	}
 
 	public function actionEdit($id) {
@@ -132,7 +135,7 @@ class MeetingPresenter extends BasePresenter {
 		if (!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
-		if (!$this->user->isAllowed('meeting', $this->action) && $meeting->user->id !== $this->user->identity->id) {
+		if (!$this->allowed($meeting, 'edit')) {
 			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$data = $meeting->toArray();
@@ -159,7 +162,7 @@ class MeetingPresenter extends BasePresenter {
 		if (!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
-		if (!$this->user->isAllowed('meeting', $this->action) && $meeting->user->id !== $this->user->identity->id) {
+		if (!$this->allowed($meeting, $this->action)) {
 			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
@@ -177,7 +180,7 @@ class MeetingPresenter extends BasePresenter {
 		if (!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
-		if (!$this->user->isAllowed('meeting', $this->action) && $meeting->user->id !== $this->user->identity->id) {
+		if (!$this->allowed('meeting', $this->action)) {
 			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 

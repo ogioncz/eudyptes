@@ -81,9 +81,7 @@ class PagePresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->user->isAllowed('page', $this->action)) {
-			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
-		}
+
 		$values = $form->values;
 
 		if ($this->action === 'create') {
@@ -94,6 +92,10 @@ class PagePresenter extends BasePresenter {
 			if (!$page) {
 				$this->error('Stránka nenalezena.');
 			}
+		}
+
+		if (!$this->allowed($this->action === 'create' ? 'page' : $page, $this->action)) {
+			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
 		$page->slug = $values->slug;
@@ -130,7 +132,7 @@ class PagePresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->user->isAllowed('page', $this->action)) {
+		if (!$this->allowed('page', $this->action)) {
 			$this->error('Pro vytváření stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
@@ -139,12 +141,12 @@ class PagePresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->user->isAllowed('page', $this->action)) {
-			$this->error('Pro úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
-		}
 		$page = $this->pages->getById($id);
 		if (!$page) {
 			$this->error('Stránka nenalezena');
+		}
+		if (!$this->allowed($page, $this->action)) {
+			$this->error('Pro úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
 		$data = $page->toArray();

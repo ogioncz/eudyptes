@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Nette;
 use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
@@ -29,5 +30,8 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property OneHasMany|Meeting[] $createdMeetings {1:m MeetingRepository order:date,DESC}
  * @property ManyHasMany|Meeting[] $visitedMeetings {m:n MeetingRepository $visitors}
  */
-class User extends Entity {
+class User extends Entity implements Nette\Security\IRole {
+	public function getRoleId() {
+		return $this->role;
+	}
 }

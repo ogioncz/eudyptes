@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Nette;
 use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
@@ -20,5 +21,8 @@ use Nextras\Orm\Relationships\OneHasMany;
  *
  * @property OneHasMany|Mail[] $replies {1:m MailRepository $reaction order:timestamp,ASC}
  */
-class Mail extends Entity {
+class Mail extends Entity implements Nette\Security\IResource {
+	public function getResourceId() {
+		return 'mail';
+	}
 }

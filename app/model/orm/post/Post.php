@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Nette;
 use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 
@@ -14,5 +15,8 @@ use Nextras\Orm\Entity\Entity;
  * @property DateTime $timestamp {default now}
  * @property bool $likeable {default false}
  */
-class Post extends Entity {
+class Post extends Entity implements Nette\Security\IResource {
+	public function getResourceId() {
+		return 'post';
+	}
 }

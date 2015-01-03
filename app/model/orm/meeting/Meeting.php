@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use Nette;
 use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
@@ -20,5 +21,8 @@ use Nextras\Orm\Relationships\ManyHasMany;
  *
  * @property ManyHasMany|User[] $visitors {m:n UserRepository $visitedMeetings primary}
  */
-class Meeting extends Entity {
+class Meeting extends Entity implements Nette\Security\IResource {
+	public function getResourceId() {
+		return 'meeting';
+	}
 }

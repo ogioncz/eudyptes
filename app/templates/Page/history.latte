@@ -1,6 +1,6 @@
 {block content}
 <h2 n:inner-block="title">Historie stránky <a n:href="show $page->slug">{$page->title}</a></h2>
-<a n:if="$user->isAllowed('page', 'edit')" class="pull-right link-icon" n:href="edit $page->id"><i class="glyphicon glyphicon-pencil"></i>Upravit</a>
+<a n:if="$allowed($page, 'edit')" class="pull-right link-icon" n:href="edit $page->id"><i class="glyphicon glyphicon-pencil"></i>Upravit</a>
 {if count($revisions)}
 <ul>
 <li n:foreach="$revisions as $revision">

@@ -1,13 +1,13 @@
 {block content}
 <h2 n:inner-block="title">Srazy</h2>
 
-<a n:if="$user->isAllowed('meeting', 'create')" class="pull-right link-icon" n:href="create"><i class="glyphicon glyphicon-plus"></i>Nový sraz</a>
+<a n:if="$allowed('meeting', 'create')" class="pull-right link-icon" n:href="create"><i class="glyphicon glyphicon-plus"></i>Nový sraz</a>
 {if count($meetings)}
 {snippet meetings}
 {foreach $meetings as $meeting}
-<a n:if="$user->isAllowed('meeting', 'edit') || $meeting->user->id === $user->identity->id" class="pull-right link-icon" n:href="edit $meeting->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
-<a n:if="$user->isAllowed('meeting', 'delete') || $meeting->user->id === $user->identity->id" class="pull-right link-icon" n:href="delete $meeting->id"><span class="glyphicon glyphicon-remove"></span>Smazat</a>
-<a n:if="$user->isAllowed('profile', 'ban')" class="pull-right link-icon" href="profile:ban $meeting->user $meeting->ip"><span class="glyphicon glyphicon-ban-circle"></span>Udělit ban</a>
+<a n:if="$allowed($meeting, 'edit')" class="pull-right link-icon" n:href="edit $meeting->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
+<a n:if="$allowed($meeting, 'delete')" class="pull-right link-icon" n:href="delete $meeting->id"><span class="glyphicon glyphicon-remove"></span>Smazat</a>
+<a n:if="$allowed('profile', 'ban')" class="pull-right link-icon" href="profile:ban $meeting->user $meeting->ip"><span class="glyphicon glyphicon-ban-circle"></span>Udělit ban</a>
 <h3>{$meeting->title}</h3>
 <dl class="dl-horizontal">
 <dt>Navrhnul:</dt><dd>{$meeting->user|userLink}</dd>
