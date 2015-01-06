@@ -33,7 +33,11 @@ class MailPresenter extends BasePresenter {
 		$this->template->mails = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->user->identity->id])->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 
-	public function renderShow($id) {
+	public function renderShow($id, $tree = false) {
+		if ($tree) {
+			$this->template->setFile(__DIR__ . '/../templates/Mail/tree.latte');
+		}
+
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}

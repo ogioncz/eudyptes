@@ -1,0 +1,8 @@
+<div class="mail">
+	<h3><a n:href="show $mail->id">{$mail->subject}</a></h3>
+	<div>{$mail->content|noescape}</div>
+	<div class="date">{$mail->sender|userLink} → {$mail->recipient|userLink} · {$mail->timestamp|date:'j. n. Y H:i:s'}{if $mail->recipient->id === $user->identity->id} · <a n:href="reply $mail->id">Odpovědět</a>{/if}</div>
+	{foreach $mail->replies as $reply}
+		{include '%message.latte', mail => $reply}
+	{/foreach}
+</div>
