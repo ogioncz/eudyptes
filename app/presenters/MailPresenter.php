@@ -44,7 +44,7 @@ class MailPresenter extends BasePresenter {
 			$this->error('Tato zpráva neexistuje');
 		}
 
-		if ($mail->sender->id !== $this->user->identity->id && $mail->recipient->id !== $this->user->identity->id) {
+		if (!$this->allowed($mail, 'show')) {
 			$this->error('Toto není tvá zpráva', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
