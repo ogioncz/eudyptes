@@ -26,13 +26,6 @@ class ChatControl extends Control {
 		$this->template->getLatte()->addFilter(null, [new \App\Model\HelperLoader($this->presenter), 'loader']);
 		$this->template->setFile(__DIR__ . '/chat.latte');
 		$allChats = $this->chats->findAll()->orderBy(['timestamp' => 'ASC']);
-		// if ($this->presenter->ajax && $this['chatForm']->success) {
-		// 	$this->template->chats = $allChats->limitBy(50, max(0, $allChats->count() - 50));
-		// // } else if (isset($this->presenter->params['do']) && $this->presenter->params['do'] === $this->name . '-refresh') {
-		// // 	$this->template->chats = $this->chats->findBy(['id>' => $this->params['id']]);
-		// } else {
-		// 	$this->template->chats = $allChats->limitBy(50, max(0, $allChats->count() - 50));
-		// }
 		$this->template->chats = $allChats->limitBy(50, max(0, $allChats->countStored() - 50));
 
 		$this->template->render();
