@@ -36,4 +36,11 @@ class RevisionPresenter extends BasePresenter {
 		$this->template->old = $old;
 		$this->template->new = $new;
 	}
+
+	public function renderList() {
+		$paginator = $this['paginator']->paginator;
+		$paginator->itemsPerPage = 50;
+		$paginator->itemCount = $this->revisions->findAll()->count();
+		$this->template->revisions = $this->revisions->findAll()->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
+	}
 }

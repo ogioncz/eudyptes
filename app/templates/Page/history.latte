@@ -5,8 +5,7 @@
 <ul>
 <li n:foreach="$revisions as $revision">
 	<a n:href="revision:show $revision->id">{$revision->timestamp|dateNA:'j. n. Y H:i:s'}</a> od uživatele {$revision->user|userLink}
-	{ifset $prev} · <a n:href="revision:diff $revision->id, $prev->id">srovnat s novější revizí</a>{/ifset}
-	{?$prev = $revision}
+	{if $revision->previous} · <a n:href="revision:diff $revision->id, $revision->previous->id">srovnat s novější revizí</a>{/if}
 </li>
 </ul>
 {else}
