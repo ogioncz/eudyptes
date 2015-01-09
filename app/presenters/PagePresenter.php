@@ -119,7 +119,7 @@ class PagePresenter extends BasePresenter {
 		$revision->page = $page;
 		$revision->content = $formatted['text'];
 		$revision->user = $this->users->getById($this->user->identity->id);
-		$revision->ip = $this->context->httpRequest->remoteAddress;
+		$revision->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$page->revisions->add($revision);
 
 		$this->pages->persistAndFlush($page);

@@ -63,7 +63,7 @@ class ChatControl extends Control {
 
 		$chat = new Chat;
 		$chat->content = $values->content;
-		$chat->ip = $this->presenter->context->httpRequest->remoteAddress;
+		$chat->ip = $this->presenter->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$chat->user = $this->users->getById($this->presenter->user->identity->id);
 		$this->chats->persistAndFlush($chat);
 		if (!$this->presenter->ajax) {

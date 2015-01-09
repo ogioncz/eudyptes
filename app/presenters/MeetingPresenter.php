@@ -108,7 +108,7 @@ class MeetingPresenter extends BasePresenter {
 		$meeting->program = Json::encode($program);
 
 		if ($this->action === 'create') {
-			$meeting->ip = $this->context->httpRequest->remoteAddress;
+			$meeting->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
 			$meeting->user = $this->users->getById($this->user->identity->id);
 		}
 		$this->meetings->persistAndFlush($meeting);

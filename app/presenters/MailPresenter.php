@@ -95,7 +95,7 @@ class MailPresenter extends BasePresenter {
 		$mail->markdown = $values->markdown;
 		$mail->content = $formatted['text'];
 		$mail->sender = $this->users->getById($this->user->identity->id);
-		$mail->ip = $this->context->httpRequest->remoteAddress;
+		$mail->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
 
 		if ($this->action === 'reply') {
 			$original_id = $this->getParameter('id');

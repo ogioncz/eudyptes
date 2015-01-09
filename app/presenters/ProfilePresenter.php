@@ -36,11 +36,11 @@ class ProfilePresenter extends BasePresenter {
 			$this->error('Uživatel nenalezen');
 		}
 		if (file_exists($this->context->parameters['avatarStorage'] . '/' . $profile->id . 'm.png')) {
-			$this->template->avatar = str_replace('♥basePath♥', $this->context->httpRequest->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $profile->id . 'm.png';
+			$this->template->avatar = str_replace('♥basePath♥', $this->context->getByType('Nette\Http\IRequest')->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $profile->id . 'm.png';
 		}
 
 		$this->template->isMe = $this->user->loggedIn && $this->user->identity->id === $profile->id;
-		$this->template->ipAddress = $this->context->httpRequest->remoteAddress;
+		$this->template->ipAddress = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$this->template->profile = $profile;
 	}
 
@@ -227,7 +227,7 @@ class ProfilePresenter extends BasePresenter {
 			$t = Strings::random();
 			$token = new Token;
 			$token->token = Passwords::hash($t);
-			$token->ip = $this->context->httpRequest->remoteAddress;
+			$token->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
 			$token->expiration = (new Nette\Utils\DateTime())->add(\DateInterval::createFromDateString('2 day'));
 			$token->type = Token::PASSWORD;
 			$user->tokens->add($token);

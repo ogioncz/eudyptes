@@ -46,7 +46,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	public function allowed($resource, $action) {
 		$user = $this->user->loggedIn ? $this->users->getById($this->user->identity->id) : null;
-		return $this->context->authorizator->isAllowed($user, $resource, $action);
+		return $this->context->getService('authorizator')->isAllowed($user, $resource, $action);
 	}
 
 	/**
