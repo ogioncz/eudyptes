@@ -29,7 +29,7 @@ class MailPresenter extends BasePresenter {
 		$this->template->sent = $sent;
 		$paginator = $this['paginator']->getPaginator();
 		$paginator->itemsPerPage = $this->itemsPerPage;
-		$paginator->itemCount = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->user->identity->id])->count();
+		$paginator->itemCount = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->user->identity->id])->countStored();
 		$this->template->mails = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->user->identity->id])->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 

@@ -34,8 +34,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		parent::beforeRender();
 		if ($this->user->loggedIn) {
 			$user = $this->users->getById($this->user->identity->id);
-			$this->template->unreadMails = $user->receivedMail->get()->findBy(['read' => false])->count();
-			$this->template->upcomingMeetings = $this->meetings->findUpcoming()->count();
+			$this->template->unreadMails = $user->receivedMail->get()->findBy(['read' => false])->countStored();
+			$this->template->upcomingMeetings = $this->meetings->findUpcoming()->countStored();
 		}
 
 		$this->template->menu = $this->pages->findBy(['menu' => true])->orderBy(['title' => 'ASC']);

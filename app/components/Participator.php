@@ -24,7 +24,7 @@ class Participator extends Control {
 
 		$this->template->meeting = $meeting;
 		$this->template->participants = $meeting->visitors;
-		$this->template->youParticipate = $meeting->visitors->get()->findById($this->presenter->user->identity->id)->count();
+		$this->template->youParticipate = $meeting->visitors->get()->findById($this->presenter->user->identity->id)->countStored();
 
 		$this->template->render();
 	}
