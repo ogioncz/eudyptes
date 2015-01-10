@@ -2,6 +2,7 @@
 class ParsedownExtended extends ParsedownExtra {
 	function __construct() {
 		$this->BlockTypes['!'][] = 'Details';
+		parent::__construct();
 	}
 
 
