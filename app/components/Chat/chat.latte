@@ -6,7 +6,7 @@
 	<div class="chat-body">
 		<ul n:snippet="chatMessages">
 			{foreach $chats as $chat}
-			<li><strong>{$chat->user|userLink}:</strong> {$chat->content}</li>
+			<li title="{$chat->timestamp|date:'j. n. Y H:i:s'}"><strong>{$chat->user|userLink}:</strong> {$chat->content}</li>
 			{/foreach}
 			<li class="hidden"><a n:href="refresh! $chat->id" class="ajax refresh-chat">Obnovit</a></li>
 		</ul>
