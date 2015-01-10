@@ -39,6 +39,23 @@ class PagePresenter extends BasePresenter {
 		});
 	}
 
+	public function actionPurge($id) {
+		$page = $this->pages->getByID($id);
+		if (!$page) {
+			$this->error('Stránka nenalezena');
+		}
+
+		if (!$this->allowed($page, 'purge')) {
+			$this->error('Nemáš právo vymazat cache!', Nette\Http\IResponse::S403_FORBIDDEN);
+		}
+
+		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
+		$cache->remove($page->slug);
+
+		$this->flashMessage('Cache byla vymazána.', 'success');
+		$this->redirect('show', $page->slug);
+	}
+
 	public function renderList() {
 		$pages = $this->pages->findAll();
 		$this->template->pages = $pages;
