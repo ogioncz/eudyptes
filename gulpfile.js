@@ -1,7 +1,6 @@
 var gulp = require('gulp');
 var less = require('gulp-less'); 
-var LessPluginAutoPrefix = require('less-plugin-autoprefix'),
-	autoprefix = new LessPluginAutoPrefix({browsers: ["last 2 versions"]});
+var autoprefix = require('gulp-autoprefixer');
 var csso = require('gulp-csso');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
@@ -28,7 +27,6 @@ gulp.task('bower', function() { 
 gulp.task('css', function() { 
 	return gulp.src(config.assets.less + '/screen.less')
 	.pipe(less({
-		plugins: [autoprefix],
 		paths: [
 			config.assets.less,
 			config.assets.vendor + '/bootstrap/less',
@@ -38,6 +36,7 @@ gulp.task('css', function() { 
 		return "Error: " + error.message;
 	})))
 	.pipe(csso())
+	.pipe(autoprefix('last 2 versions'))
 	.pipe(gulp.dest(config.public.css)); 
 });
 
