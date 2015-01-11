@@ -59,12 +59,4 @@ $(function() {
 			}
 		}
 	});
-	// $.nette.ext('scrollOnSubmit', {
-	// 	success: function() {
-	// 		console.log(arguments[3].nette.el);
-	// 		if(arguments[3].type === 'post' && arguments[3].nette.form && $(arguments[3].nette.el[0]).prop('data-target').length > 0) {
-	// 			scrollDown($(arguments[3].nette.form[0]).parent('.chat'));
-	// 		}
-	// 	}
-	// });
 });
