@@ -7,7 +7,7 @@
 		<ul n:snippet="chatMessages">
 			{foreach $chats as $chat}
 			<li title="{$chat->timestamp|date:'j. n. Y H:i:s'}"><strong>{$chat->user|userLink}:</strong> {$chat->content}</li>
-			<li n:if="!$iterator->last && $iterator->nextValue->timestamp->format('Y-m-d') !== $chat->timestamp->format('Y-m-d')" class="chat-date">{$chat->timestamp|date:'j. n. Y'}</li>
+			<li n:if="!$iterator->last && $iterator->nextValue->timestamp->format('Y-m-d') !== $chat->timestamp->format('Y-m-d')" class="chat-date">{$iterator->nextValue->timestamp|date:'j. n. Y'}</li>
 			{/foreach}
 			<li class="hidden"><a n:href="refresh! $chat->id" class="ajax refresh-chat">Obnovit</a></li>
 		</ul>
