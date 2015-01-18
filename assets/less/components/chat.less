@@ -54,3 +54,29 @@
 	color: #9c9c9c;
 	text-shadow: 1px 1px 1px #eeeeec;
 }
+
+.chat .role-admin:before, .chat .role-moderator:before, .chat .role-editor:before, .chat .role-verified:before {
+	width: 15px;
+	height: 15px;
+	display: block;
+	float: left;
+	content: '';
+	background-repeat: no-repeat;
+	background-position: bottom center;
+}
+
+.chat .role-admin:before {
+	background-image: url(../images/chat/admin.png);
+}
+
+.chat .role-moderator:before {
+	background-image: url(../images/chat/moderator.png);
+}
+
+.chat .role-editor:before {
+	background-image: url(../images/chat/editor.png);
+}
+
+.chat .role-verified:before {
+	background-image: url(../images/chat/verified.png);
+}
