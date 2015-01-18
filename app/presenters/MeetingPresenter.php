@@ -33,6 +33,7 @@ class MeetingPresenter extends BasePresenter {
 
 	protected function createComponentMeetingForm() {
 		$form = new Nette\Application\UI\Form;
+		$form->addProtection();
 		$renderer = new Rendering\Bs3FormRenderer;
 		$form->setRenderer($renderer);
 
@@ -144,6 +145,7 @@ class MeetingPresenter extends BasePresenter {
 
 	protected function createComponentDeleteForm() {
 		$form = new Nette\Application\UI\Form;
+		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 
 		$submit = $form->addSubmit('send', 'Ano, smazat');

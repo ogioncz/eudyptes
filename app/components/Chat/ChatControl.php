@@ -33,6 +33,7 @@ class ChatControl extends Control {
 
 	protected function createComponentChatForm() {
 		$form = new Nette\Application\UI\Form;
+		$form->addProtection();
 		$form->getElementPrototype()->class('ajax');
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addTextArea('content', 'Zpráva:')->setRequired();

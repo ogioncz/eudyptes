@@ -62,6 +62,7 @@ class MailPresenter extends BasePresenter {
 
 	protected function createComponentMailForm() {
 		$form = new Nette\Application\UI\Form;
+		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 
 		$subject = $form->addText('subject', 'Předmět:')->setRequired();

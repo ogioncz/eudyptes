@@ -59,6 +59,7 @@ class ProfilePresenter extends BasePresenter {
 
 	protected function createComponentProfileForm() {
 		$form = new Form;
+		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$username = $form->addText('username', 'Přezdívka:')->disabled = true;
 
@@ -136,6 +137,7 @@ class ProfilePresenter extends BasePresenter {
 
 	protected function createComponentSignUpForm() {
 		$form = new Form;
+		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$username = $form->addText('username', 'Přezdívka:');
 		$username->setRequired('Zadej prosím své uživatelské jméno.');
@@ -196,6 +198,7 @@ class ProfilePresenter extends BasePresenter {
 
 	protected function createComponentPasswordResetRequestForm() {
 		$form = new Form;
+		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$type = $form->addRadioList('type', null, ['username' => 'Přezdívka', 'email' => 'E-Mail'])->setDefaultValue('username');
 		$type->getSeparatorPrototype()->setName(null);
@@ -259,6 +262,7 @@ class ProfilePresenter extends BasePresenter {
 
 	protected function createComponentPasswordResetForm() {
 		$form = new Form;
+		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 
 		$token = $form->addHidden('token', $this->token);

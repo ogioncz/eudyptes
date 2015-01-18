@@ -83,6 +83,7 @@ class PagePresenter extends BasePresenter {
 
 	protected function createComponentPageForm() {
 		$form = new Nette\Application\UI\Form;
+		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addText('title', 'Nadpis:')->setRequired();
 		$form->addText('slug', 'Adresa:')->setRequired()->setType('url');
