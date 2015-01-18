@@ -94,7 +94,6 @@ class MeetingPresenter extends BasePresenter {
 
 		$meeting->title = $values->title;
 		$meeting->server = $values->server;
-		$meeting->date = $values->date;
 		$meeting->markdown = $values->markdown;
 		$meeting->description = $formatted['text'];
 
@@ -104,8 +103,8 @@ class MeetingPresenter extends BasePresenter {
 		}
 
 		list($hour, $minute) = explode(':', $program[0]['time']);
-		$meeting->start = $values->date->setTime($hour, $minute);
 		$meeting->program = Json::encode($program);
+		$meeting->date = $values->date->setTime($hour, $minute);
 
 		if ($this->action === 'create') {
 			$meeting->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;

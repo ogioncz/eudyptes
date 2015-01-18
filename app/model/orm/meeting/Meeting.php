@@ -13,7 +13,6 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property string $title
  * @property string $server
  * @property DateTime $date
- * @property DateTime $start
  * @property string $program
  * @property string $markdown
  * @property string $description
