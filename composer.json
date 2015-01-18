@@ -16,7 +16,7 @@
 		}
 	],
 	"require": {
-		"php": ">= 5.3.7",
+		"php": ">= 5.4",
 		"nette/nette": "dev-master",
 		"erusev/parsedown-extra": "dev-master",
 		"flaptor/indextank-php": "dev-master",
@@ -25,7 +25,6 @@
 		"alb/oembed": "dev-master",
 		"kdyby/forms-replicator": "@dev",
 		"caxy/php-htmldiff": "@dev",
-		"nette/database": "~2.3@dev",
 		"nextras/orm": "@dev",
 		"abeautifulsite/simpleimage": "~2.5"
 	},
