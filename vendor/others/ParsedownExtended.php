@@ -51,4 +51,8 @@ class ParsedownExtended extends ParsedownExtra {
 		. '</details>';
 		return $Block;
 	}
+
+	public function urlsToLinks($text) {
+		return $this->unmarkedInlineUrl($text);
+	}
 }
