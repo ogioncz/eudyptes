@@ -22,6 +22,10 @@ nette:
 		save_path: "%tempDir%/sessions"
 		expiration: 31 days
 
+	forms:
+		messages:
+			PROTECTION: 'Pro větší bezpečnost prosím odešli tento formulář znovu.'
+
 extensions:
 	orm: Nextras\Orm\Bridge\NetteDI\OrmExtension
 
