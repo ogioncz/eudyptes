@@ -3,51 +3,49 @@
 namespace App\Components;
 
 use App;
+use Nette;
 use Nette\Application\UI\Control;
+use Nextras\Forms\Rendering\Bs3FormRenderer;
 
 class Participator extends Control {
 
-	/** @var App\Model\MeetingRepository */
-	public $meetings;
+	/** @var App\Model\Meeting */
+	public $meeting;
 
-	/** @var App\Model\UserRepository */
-	public $users;
+	/** @var bool */
+	public $youParticipate;
 
-	public function __construct(App\Model\MeetingRepository $meetings, App\Model\UserRepository $users) {
-		$this->meetings = $meetings;
-		$this->users = $users;
+	/** @var callback */
+	public $callback;
+
+	public function __construct(App\Model\Meeting $meeting, $youParticipate, $callback) {
+		$this->meeting = $meeting;
+		$this->youParticipate = $youParticipate;
+		$this->callback = $callback;
 	}
 
-	public function render($meeting) {
-		$this->template->getLatte()->addFilter(null, [new \App\Model\HelperLoader($this->presenter), 'loader']);
+	public function render() {
+		$this->template->getLatte()->addFilter(null, [new App\Model\HelperLoader($this->presenter), 'loader']);
 		$this->template->setFile(__DIR__ . '/participator.latte');
 
-		$this->template->meeting = $meeting;
-		$this->template->participants = $meeting->visitors;
-		$this->template->youParticipate = $meeting->visitors->get()->findById($this->presenter->user->identity->id)->countStored();
+		$this->template->participants = $this->meeting->visitors;
 
 		$this->template->render();
 	}
 
-	public function handleParticipation($meetingId, $youParticipate) {
-		if (!$this->presenter->user->loggedIn) {
-			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
-		}
 
-		$meeting = $this->meetings->getById($meetingId);
-		$userId = $this->presenter->user->identity->id;
+	protected function createComponentParticipateForm() {
+		$form = new Nette\Application\UI\Form;
+		$form->addProtection();
+		$form->getElementPrototype()->class('ajax');
+		$form->setRenderer(new Bs3FormRenderer);
+		$form->form->getElementPrototype()->removeClass('form-horizontal');
+		$form->form->getElementPrototype()->addClass('form-inline');
+		$form->addHidden('action', $this->youParticipate ? 'unparticipate' : 'participate');
+		$form->addHidden('id', $this->meeting->id);
+		$form->addSubmit('send', $this->youParticipate ? 'Zrušit účast' : 'Zúčastnit se');
+		$form->onSuccess[] = $this->callback;
 
-		if ($youParticipate) {
-			$meeting->visitors->remove($userId);
-		} else {
-			$meeting->visitors->add($userId);
-		}
-		$this->meetings->persistAndFlush($meeting);
-
-		if (!$this->presenter->ajax) {
-			$this->redirect('this');
-		} else {
-			$this->presenter->redrawControl('meetings');
-		}
+		return $form;
 	}
 }

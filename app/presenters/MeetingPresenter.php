@@ -9,6 +9,7 @@ use Nextras\Forms\Rendering;
 use Nette\Utils\Json;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
+use Nette\Application\UI\Multiplier;
 
 class MeetingPresenter extends BasePresenter {
 	/** @var App\Model\Formatter @inject */
@@ -193,7 +194,46 @@ class MeetingPresenter extends BasePresenter {
 	* @return App\Components\Participator
 	*/
 	protected function createComponentParticipator() {
-		$participator = new App\Components\Participator($this->meetings, $this->users);
-		return $participator;
+		return new Multiplier(function($meetingId) {
+			$userId = $this->user->identity->id;
+			$meeting = $this->meetings->getById($meetingId);
+			$youParticipate = array_reduce(iterator_to_array($meeting->visitors->get()), function($carry, $visitor) use ($userId) {
+				if($visitor->id === $userId) {
+					return true;
+				}
+				return $carry;
+			}, false);
+
+			return new App\Components\Participator($meeting, $youParticipate, $this->participatorClicked);
+		});
+	}
+
+	public function participatorClicked(Nette\Application\UI\Form $form, $values) {
+		if (!$this->user->loggedIn) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
+		$meeting = $this->meetings->getById($values->id);
+		$userId = $this->user->identity->id;
+		$youParticipate = $values->action === 'unparticipate';
+		try {
+			if ($youParticipate) {
+				$meeting->visitors->remove($userId);
+			} else {
+				$meeting->visitors->add($userId);
+			}
+			$youParticipate = !$youParticipate;
+			$this->meetings->persistAndFlush($meeting);
+		} catch (\Exception $e) {
+			\Tracy\Debugger::log($e);
+		}
+
+		$form->components['action']->value = $youParticipate ? 'unparticipate' : 'participate';
+		$form->components['send']->caption = $youParticipate ? 'Zrušit účast' : 'Zúčastnit se';
+		if (!$this->ajax) {
+			$this->redirect('this');
+		} else {
+			$this->redrawControl('meetings');
+		}
 	}
 }
