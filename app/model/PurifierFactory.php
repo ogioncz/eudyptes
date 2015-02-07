@@ -72,6 +72,13 @@ class PurifierFactory extends Nette\Object {
 				'src' => 'URI',
 				'type' => 'Text',
 			));
+			$def->addElement('track', 'Block', 'Empty', 'Common', array(
+				'src' => 'URI',
+				'srclang' => 'Text',
+				'kind' => 'Enum#subtitles,captions,descriptions,chapters,metadata',
+				'label' => 'Text',
+				'default' => 'Bool',
+			));
 
 			// http://developers.whatwg.org/interactive-elements.html#the-details-element
 			$def->addElement('details', 'Block', 'Required: (summary, Flow)', 'Common', ['open' => 'Bool']);
