@@ -24,7 +24,7 @@ gulp.task('bower', function() { 
 	.pipe(gulp.dest(config.assets.vendor)) ;
 });
 
-gulp.task('css', function() { 
+gulp.task('css', ['bower'], function() { 
 	return gulp.src(config.assets.less + '/screen.less')
 	.pipe(less({
 		paths: [
@@ -40,7 +40,7 @@ gulp.task('css', function() { 
 	.pipe(gulp.dest(config.public.css)); 
 });
 
-gulp.task('javascript', function(){  
+gulp.task('javascript', ['bower'], function(){  
 	return gulp.src([
 		config.assets.vendor + '/jquery/dist/jquery.js',
 		config.assets.vendor + '/bootstrap/dist/js/bootstrap.js',
