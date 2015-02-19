@@ -26,33 +26,39 @@ class ProfilePresenter extends BasePresenter {
 	/** @persistent */
 	public $tid = null;
 
+	/** @var App\Model\User @persistent */
+	public $profile = null;
+
 	public function renderList() {
 		$this->template->profiles = $this->users->findAll()->orderBy('username');
 	}
 
 	public function renderShow($id) {
-		$profile = $this->users->getById($id);
-		if (!$profile) {
+		$this->profile = $this->users->getById($id);
+		if (!$this->profile) {
 			$this->error('Uživatel nenalezen');
 		}
-		if (file_exists($this->context->parameters['avatarStorage'] . '/' . $profile->id . 'm.png')) {
-			$this->template->avatar = str_replace('♥basePath♥', $this->context->getByType('Nette\Http\IRequest')->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $profile->id . 'm.png';
+		if (file_exists($this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png')) {
+			$this->template->avatar = str_replace('♥basePath♥', $this->context->getByType('Nette\Http\IRequest')->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $this->profile->id . 'm.png';
 		}
 
 		$this->template->ipAddress = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
-		$this->template->profile = $profile;
+		$this->template->profile = $this->profile;
 	}
 
-	public function actionEdit() {
+	public function actionEdit($id) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		$user = $this->users->getById($this->user->identity->id);
-		if (!$user) {
+		$this->profile = $this->users->getById($id);
+		if (!$this->profile) {
 			$this->error('Uživatel nenalezen');
 		}
+		if (!$this->allowed($this->profile, 'edit')) {
+			$this->error('Nemáš oprávnění upravovat tohoto uživatele.');
+		}
 
-		$data = $user->toArray();
+		$data = $this->profile->toArray();
 		$this['profileForm']->setDefaults($data);
 	}
 
@@ -60,7 +66,11 @@ class ProfilePresenter extends BasePresenter {
 		$form = new Form;
 		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
-		$username = $form->addText('username', 'Přezdívka:')->disabled = true;
+		$username = $form->addText('username', 'Přezdívka:');
+
+		if (!$this->allowed($this->profile, 'rename')) {
+			$username->disabled = true;
+		}
 
 		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::FILLED)->addRule(Form::MIME_TYPE, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
 
@@ -91,8 +101,16 @@ class ProfilePresenter extends BasePresenter {
 
 	public function profileFormSucceeded(Form $form) {
 		$values = $form->values;
+		if (!$this->allowed($this->profile, 'edit')) {
+			$this->error('Nemáš oprávnění upravovat tohoto uživatele.');
+		}
 
-		$user = $this->users->getById($this->user->identity->id);
+		$user = $this->profile;
+
+		if ($this->allowed($this->profile, 'rename')) {
+			$user->username = $values->username;
+		}
+
 		$user->email = $values->email;
 		$user->skype = $values->skype;
 		$user->member = (bool) $values->member;

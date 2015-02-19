@@ -69,7 +69,7 @@ services:
 			- allow('basic', 'page', 'edit', App\Model\OwnershipAssertions::ownsPage)
 			- allow('basic', 'mail', 'show', App\Model\OwnershipAssertions::ownsMail)
 
-			- allow('moderator', 'user', ['edit', 'seeMail'])
+			- allow('moderator', 'user', ['edit', 'seeMail', 'rename'])
 			- allow('moderator', 'meeting', ['edit', 'delete'])
 			- allow('editor', 'page', ['create', 'edit'])
 			- allow('editor', 'post', ['create', 'edit'])

@@ -1,5 +1,5 @@
 {block content}
-<a n:if="$allowed($profile, 'edit')" class="pull-right link-icon" n:href="edit"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
+<a n:if="$allowed($profile, 'edit')" class="pull-right link-icon" n:href="edit $profile->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
 <h2 n:inner-block="title">Profil uživatele {$profile->username}</h2>
 <img src="{ifset $avatar}{$avatar}{else}{$baseUrl}/images/avatar.png{/ifset}" width="100" height="100" alt="" class="avatar pull-right">
 <dl class="dl-horizontal">
