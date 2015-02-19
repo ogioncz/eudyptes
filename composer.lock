@@ -698,12 +698,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/database.git",
-                "reference": "d3b7af4538ed76d4aff683abb0b860b7d8517cc3"
+                "reference": "0735e7f5a646290759b04eb424866b6c2abe4547"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/database/zipball/d3b7af4538ed76d4aff683abb0b860b7d8517cc3",
-                "reference": "d3b7af4538ed76d4aff683abb0b860b7d8517cc3",
+                "url": "https://api.github.com/repos/nette/database/zipball/0735e7f5a646290759b04eb424866b6c2abe4547",
+                "reference": "0735e7f5a646290759b04eb424866b6c2abe4547",
                 "shasum": ""
             },
             "require": {
@@ -749,7 +749,7 @@
             ],
             "description": "Nette Database Component",
             "homepage": "http://nette.org",
-            "time": "2015-02-17 17:34:30"
+            "time": "2015-02-19 22:46:50"
         },
         {
             "name": "nette/deprecated",
@@ -924,12 +924,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/forms.git",
-                "reference": "d7496e8bb4255c35b03d53a520e06c9ef49daf55"
+                "reference": "c3006dc9f4606d583af0feeb53935555eb875c4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/forms/zipball/d7496e8bb4255c35b03d53a520e06c9ef49daf55",
-                "reference": "d7496e8bb4255c35b03d53a520e06c9ef49daf55",
+                "url": "https://api.github.com/repos/nette/forms/zipball/c3006dc9f4606d583af0feeb53935555eb875c4b",
+                "reference": "c3006dc9f4606d583af0feeb53935555eb875c4b",
                 "shasum": ""
             },
             "require": {
@@ -976,7 +976,7 @@
             ],
             "description": "Nette Forms: greatly facilitates web forms",
             "homepage": "http://nette.org",
-            "time": "2015-02-18 19:13:34"
+            "time": "2015-02-19 12:13:14"
         },
         {
             "name": "nette/http",
@@ -1043,12 +1043,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/mail.git",
-                "reference": "02fc9a47a59aadc665be1cafd730fe9342eb35f9"
+                "reference": "cc366fce91f07c33c4c084b752e39dbfac35a952"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/mail/zipball/02fc9a47a59aadc665be1cafd730fe9342eb35f9",
-                "reference": "02fc9a47a59aadc665be1cafd730fe9342eb35f9",
+                "url": "https://api.github.com/repos/nette/mail/zipball/cc366fce91f07c33c4c084b752e39dbfac35a952",
+                "reference": "cc366fce91f07c33c4c084b752e39dbfac35a952",
                 "shasum": ""
             },
             "require": {
@@ -1095,7 +1095,7 @@
             ],
             "description": "Nette Mail: Sending E-mails",
             "homepage": "http://nette.org",
-            "time": "2015-02-16 18:00:43"
+            "time": "2015-02-19 13:56:07"
         },
         {
             "name": "nette/neon",
