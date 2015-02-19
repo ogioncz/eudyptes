@@ -8,7 +8,7 @@ script:
   - php code-checker/src/code-checker.php -d app
 
 before_script:
-  - 'if [ ! -d code-checker ]; then composer create-project nette/code-checker code-checker "~2.2" --no-interaction --prefer-source; else return 0; fi'
+  - 'if [ ! -d code-checker ]; then composer create-project nette/code-checker code-checker ~2.3 --no-interaction --prefer-source; else return 0; fi'
 
 cache:
   directories:
