@@ -50,6 +50,7 @@ gulp.task('javascript', ['bower'], function(){
 		config.assets.vendor + '/smalot-bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.cs.js',
 		config.assets.vendor + '/nextras-forms/js/nextras.datetimepicker.init.js',
 		config.assets.vendor + '/nextras-forms/js/nextras.netteForms.js',
+		config.assets.vendor + '/nette.ajax.js/nette.ajax.js',
 		config.assets.javascript + '/**/*.js'
 	])
 	.pipe(uglify())
