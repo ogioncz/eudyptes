@@ -12,22 +12,21 @@ php:
 	# zlib.output_compression: yes
 
 
-nette:
-	application:
-		errorPresenter: Error
-		mapping:
-			*: App\*Module\Presenters\*Presenter
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
 
-	session:
-		save_path: "%tempDir%/sessions"
-		expiration: 31 days
+session:
+	save_path: "%tempDir%/sessions"
+	expiration: 31 days
 
-	forms:
-		messages:
-			PROTECTION: 'Pro větší bezpečnost prosím odešli tento formulář znovu.'
+forms:
+	messages:
+		PROTECTION: 'Pro větší bezpečnost prosím odešli tento formulář znovu.'
 
 extensions:
-	orm: Nextras\Orm\Bridge\NetteDI\OrmExtension
+	orm: Nextras\Orm\Bridges\NetteDI\OrmExtension
 
 orm:
 	model: App\Model\Orm

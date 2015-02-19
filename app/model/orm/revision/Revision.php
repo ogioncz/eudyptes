@@ -19,11 +19,11 @@ use Nextras\Orm\Collection\ICollection;
  * @property-read Revision|null $next {virtual}
  */
 class Revision extends Entity {
-	public function getPrevious() {
-		return $this->getRepository()->findBy(['page' => $this->page->id, 'id<' => $this->getId()])->orderBy(['timestamp' => ICollection::DESC])->limitBy(1)->fetch();
+	public function getterPrevious() {
+		return $this->getRepository()->findBy(['page' => $this->page->id, 'id<' => $this->getPersistedId()])->orderBy(['timestamp' => ICollection::DESC])->limitBy(1)->fetch();
 	}
 
-	public function getNext() {
-		return $this->getRepository()->findBy(['page' => $this->page->id, 'id>' => $this->getId()])->orderBy(['timestamp' => ICollection::ASC])->limitBy(1)->fetch();
+	public function getterNext() {
+		return $this->getRepository()->findBy(['page' => $this->page->id, 'id>' => $this->getPersistedId()])->orderBy(['timestamp' => ICollection::ASC])->limitBy(1)->fetch();
 	}
 }

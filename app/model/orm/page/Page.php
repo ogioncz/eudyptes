@@ -20,11 +20,11 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property OneHasMany|Revision[] $revisions {1:m RevisionRepository order:timestamp,DESC}
  */
 class Page extends Entity implements Nette\Security\IResource {
-	public function getLastRevision() {
+	public function getterLastRevision() {
 		return $this->revisions->get()->orderBy(['timestamp' => 'DESC'])->fetch();
 	}
 
-	public function getMarkdown() {
+	public function getterMarkdown() {
 		return $this->lastRevision ? $this->lastRevision->markdown : null;
 	}
 

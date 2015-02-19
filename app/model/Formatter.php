@@ -82,6 +82,22 @@ class Formatter extends Nette\Object {
 		return $text;
 	}
 
+	public function urlsToLinks($text) {
+		$re = '/\bhttps?:[\/]{2}[^\s<]+\b\/*/ui';
+		$offset = 0;
+		while (strpos($text, '://', $offset) && preg_match($re, $text, $matches, PREG_OFFSET_CAPTURE, $offset)) {
+			$url = $matches[0][0];
+			$urlLength = strlen($url);
+			$urlPosition = $matches[0][1];
+			$markup = '<a href="'.$url.'">'.$url.'</a>';
+			$markupLength = strlen($markup);
+			$text = substr_replace($text, $markup, $urlPosition, $urlLength);
+			$offset = $urlPosition + $markupLength;
+		}
+
+		return $text;
+	}
+
 	public function formatErrors($errors) {
 		$list = Html::el('ul');
 		foreach ($errors as $error) {

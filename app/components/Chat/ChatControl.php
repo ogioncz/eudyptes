@@ -63,7 +63,7 @@ class ChatControl extends Control {
 		$values = $form->values;
 
 		$chat = new Chat;
-		$chat->content = $this->presenter->context->getService('parsedown')->urlsToLinks(htmlSpecialChars($values->content));
+		$chat->content = $this->presenter->context->getService('formatter')->urlsToLinks(htmlSpecialChars($values->content));
 		$chat->ip = $this->presenter->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$chat->user = $this->users->getById($this->presenter->user->identity->id);
 		$this->chats->persistAndFlush($chat);
