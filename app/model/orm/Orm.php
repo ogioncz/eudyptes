@@ -14,6 +14,7 @@ use Nextras\Orm\Model\Model;
  * @property-read PageRepository $pages
  * @property-read TokenRepository $tokens
  * @property-read RevisionRepository $revisions
+ * @property-read StampRepository $stamps
  */
 class Orm extends Model {
 }

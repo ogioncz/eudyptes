@@ -4,6 +4,7 @@ $(function() {
 	$('input.nospam').val('nospam');
 	$('.nospam').css('display', 'none');
 	$('details').details();
+	$('.stamp').popover({trigger: 'hover', html: true});
 
 	$.nette.init();
 });

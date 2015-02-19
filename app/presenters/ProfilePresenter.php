@@ -20,6 +20,9 @@ class ProfilePresenter extends BasePresenter {
 	/** @var App\Model\TokenRepository @inject */
 	public $tokens;
 
+	/** @var App\Model\StampRepository @inject */
+	public $stamps;
+
 	/** @persistent */
 	public $token = null;
 
@@ -44,6 +47,7 @@ class ProfilePresenter extends BasePresenter {
 
 		$this->template->ipAddress = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$this->template->profile = $this->profile;
+		$this->template->stamps = $this->stamps->findAll();
 	}
 
 	public function actionEdit($id) {

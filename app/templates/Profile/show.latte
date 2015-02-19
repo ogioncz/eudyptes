@@ -9,3 +9,6 @@
 {if $profile->registered}<dt>Registrace:</dt><dd>{$profile->registered|date:'j. n. Y H:i:s'}</dd>{/if}
 {if $profile->skype}<dt>Skype:</dt><dd><a href="callto:{$profile->skype}">{$profile->skype}</a></dd>{/if}
 </dl>
+
+<h3>Známky</h3>
+<img n:foreach="$stamps as $stamp" src="{$baseUrl}/images/stamps/{$stamp->icon}.png" alt="{$stamp->name}" width="64" height="64" n:class="!$profile->ownedStamps->has($stamp) ? stamp-disabled, stamp" data-title="{$stamp->name . ($stamp->obtainable ? ' <span class="label label-success pull-right">Získatelná</span>' : '')}" data-content="{$stamp->description}">

@@ -29,6 +29,7 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property OneHasMany|Chat[] $createdChats {1:m ChatRepository order:timestamp,DESC}
  * @property OneHasMany|Meeting[] $createdMeetings {1:m MeetingRepository order:date,DESC}
  * @property ManyHasMany|Meeting[] $visitedMeetings {m:n MeetingRepository $visitors}
+ * @property ManyHasMany|Stamp[] $ownedStamps {m:n StampRepository $owners primary}
  */
 class User extends Entity implements Nette\Security\IRole, Nette\Security\IResource {
 	public function getRoleId() {
