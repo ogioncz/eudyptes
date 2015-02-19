@@ -15,4 +15,12 @@ class OwnershipAssertions extends Nette\Object {
 	public static function ownsMail(Permission $acl) {
 		return $acl->queriedResource instanceof IResource && $acl->queriedRole instanceof IRole && ($acl->queriedRole->id === $acl->queriedResource->sender->id || $acl->queriedRole->id === $acl->queriedResource->recipient->id);
 	}
+
+	public static function ownsProfile(Permission $acl) {
+		return $acl->queriedResource instanceof IResource && $acl->queriedRole instanceof IRole && $acl->queriedRole->id === $acl->queriedResource->id;
+	}
+
+	public static function canMail(Permission $acl) {
+		return $acl->queriedResource instanceof IResource && $acl->queriedRole instanceof IRole && $acl->queriedRole->id !== $acl->queriedResource->id;
+	}
 }

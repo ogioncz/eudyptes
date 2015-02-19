@@ -30,8 +30,12 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property OneHasMany|Meeting[] $createdMeetings {1:m MeetingRepository order:date,DESC}
  * @property ManyHasMany|Meeting[] $visitedMeetings {m:n MeetingRepository $visitors}
  */
-class User extends Entity implements Nette\Security\IRole {
+class User extends Entity implements Nette\Security\IRole, Nette\Security\IResource {
 	public function getRoleId() {
 		return $this->role;
+	}
+
+	public function getResourceId() {
+		return 'user';
 	}
 }

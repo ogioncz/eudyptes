@@ -8,7 +8,7 @@
 <menu class="content-panel">
 	<li n:if="$allowed($meeting, 'edit')"><a n:href="edit $meeting->id" title="Upravit"><span class="glyphicon glyphicon-pencil"></span></a></li>
 	<li n:if="$allowed($meeting, 'delete')"><a n:href="delete $meeting->id" title="Smazat"><span class="glyphicon glyphicon-remove"></span></a></li>
-	<li n:if="$allowed('profile', 'ban')"><a href="profile:ban $meeting->user $meeting->ip" title="Udělit ban"><span class="glyphicon glyphicon-ban-circle"></span></a></li>
+	<li n:if="$allowed('user', 'ban')"><a href="Profile:ban $meeting->user $meeting->ip" title="Udělit ban"><span class="glyphicon glyphicon-ban-circle"></span></a></li>
 </menu>
 <h3>{$meeting->title}</h3>
 <dl class="dl-horizontal">

@@ -39,7 +39,6 @@ class ProfilePresenter extends BasePresenter {
 			$this->template->avatar = str_replace('♥basePath♥', $this->context->getByType('Nette\Http\IRequest')->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $profile->id . 'm.png';
 		}
 
-		$this->template->isMe = $this->user->loggedIn && $this->user->identity->id === $profile->id;
 		$this->template->ipAddress = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$this->template->profile = $profile;
 	}

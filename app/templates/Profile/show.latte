@@ -1,12 +1,11 @@
 {block content}
-<a n:if="$isMe" class="pull-right link-icon" n:href="edit"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
+<a n:if="$allowed($profile, 'edit')" class="pull-right link-icon" n:href="edit"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>
 <h2 n:inner-block="title">Profil uživatele {$profile->username}</h2>
 <img src="{ifset $avatar}{$avatar}{else}{$baseUrl}/images/avatar.png{/ifset}" width="100" height="100" alt="" class="avatar pull-right">
 <dl class="dl-horizontal">
 <dt>Jméno:</dt><dd>{$profile->username}</dd>
 <dt>Member:</dt><dd>{$profile->member ? 'Ano' : 'Ne'}</dd>
-<dt>E-Mail:</dt><dd>{$user->isAllowed('profile', 'seeMail') || $isMe ? $profile->email : 'tajné'}{if !$isMe} (<a n:href="Mail:create $profile->id">Poslat zprávu</a>){/if}</dd>
+<dt>E-Mail:</dt><dd>{$allowed($profile, 'seeMail') ? $profile->email : 'tajné'}{if $allowed($profile, 'sendMail')} (<a n:href="Mail:create $profile->id">Poslat zprávu</a>){/if}</dd>
 {if $profile->registered}<dt>Registrace:</dt><dd>{$profile->registered|date:'j. n. Y H:i:s'}</dd>{/if}
 {if $profile->skype}<dt>Skype:</dt><dd><a href="callto:{$profile->skype}">{$profile->skype}</a></dd>{/if}
-{if $isMe}<dt>IP:</dt><dd>{$ipAddress}</dd>{/if}
 </dl>
