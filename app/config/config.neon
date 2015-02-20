@@ -59,7 +59,7 @@ services:
 			- addResource('mail')
 
 			- allow('basic', 'user', 'edit', App\Model\OwnershipAssertions::ownsProfile)
-			- allow('basic', 'user', 'seeMail', App\Model\OwnershipAssertions::ownsProfile)
+			- allow('basic', 'user', 'seeMailAddress', App\Model\OwnershipAssertions::ownsProfile)
 			- allow('basic', 'user', 'sendMail', App\Model\OwnershipAssertions::canMail)
 			- allow('basic', 'chat', 'read')
 			- allow('basic', 'chat', 'send')
@@ -69,7 +69,7 @@ services:
 			- allow('basic', 'page', 'edit', App\Model\OwnershipAssertions::ownsPage)
 			- allow('basic', 'mail', 'show', App\Model\OwnershipAssertions::ownsMail)
 
-			- allow('moderator', 'user', ['edit', 'seeMail', 'rename'])
+			- allow('moderator', 'user', ['edit', 'seeMailAddress', 'rename'])
 			- allow('moderator', 'meeting', ['edit', 'delete'])
 			- allow('editor', 'page', ['create', 'edit', 'purge'])
 			- allow('editor', 'post', ['create', 'edit'])
