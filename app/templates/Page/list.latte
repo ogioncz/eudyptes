@@ -13,7 +13,7 @@
 </thead>
 <tbody>
 <tr n:foreach="$pages as $page">
-{?$last_revision = $page->getLastRevision()}
+{var $last_revision = $page->lastRevision}
 <td><a n:href="show $page->slug">{$page->title}</a></td>
 {if $last_revision}
 <td>{$last_revision->timestamp|dateNA:'j. n. Y H:i:s'}</td>
