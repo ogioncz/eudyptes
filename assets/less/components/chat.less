@@ -17,9 +17,15 @@
 	margin: 0;
 	padding: 0;
 	line-height: 1.5em;
+
+	& > .popover {
+		line-height: @line-height-base;
+		color: @text-color;
+		font-size: @font-size-base;
+	}
 }
 
-.chat ul {
+.chat-body ul {
 	max-height: 500px;
 	word-wrap: break-word;
 	overflow: auto;
@@ -28,8 +34,12 @@
 	list-style-type: none;
 }
 
-.chat li + li {
+.chat-body li + li {
 	margin-top: .4em;
+}
+
+.chat-active-count {
+	cursor: pointer;
 }
 
 .chat-toolbar {

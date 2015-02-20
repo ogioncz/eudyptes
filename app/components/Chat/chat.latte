@@ -1,8 +1,13 @@
 <div class="chat" id="chat" data-chat-name="public">
 	<header>
 		<div class="chat-toolbar"></div>
-		<h2>Chat</h2>
+		<h2>Chat <span class="chat-active-count badge" title="Aktivní uživatelé v posledních pěti minutách" n:inner-snippet="chatActiveCount">{$activeUsers->count()}</span></h2>
 	</header>
+	<div class="chat-active-list hide" n:snippet="chatActiveList">
+		<ul class="list-unstyled">
+			<li n:foreach="$activeUsers as $activeUser">{$activeUser|userLink}</li>
+		</ul>
+	</div>
 	<div class="chat-body">
 		<ul n:snippet="chatMessages">
 			{foreach $chats as $chat}

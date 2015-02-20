@@ -27,6 +27,7 @@ class ChatControl extends Control {
 		$this->template->setFile(__DIR__ . '/chat.latte');
 		$allChats = $this->chats->findAll()->orderBy(['timestamp' => 'ASC']);
 		$this->template->chats = $allChats->limitBy(50, max(0, $allChats->countStored() - 50));
+		$this->template->activeUsers = $this->users->findActive();
 
 		$this->template->render();
 	}
@@ -50,6 +51,8 @@ class ChatControl extends Control {
 			$this->redirect('this');
 		} else {
 			$this->redrawControl('chatMessages');
+			$this->redrawControl('chatActiveCount');
+			$this->redrawControl('chatActiveList');
 		}
 	}
 

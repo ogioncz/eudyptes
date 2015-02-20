@@ -59,4 +59,13 @@ $(function() {
 			}
 		}
 	});
+
+	$('.chat-active-count').popover({
+		html: true,
+		placement: 'auto top',
+		content: function() {
+			return $(this).parents('header').next('.chat-active-list').html();
+		}
+	});
+
 });

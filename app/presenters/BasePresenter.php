@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use Nette;
+use Nette\Utils\DateTime;
 use App;
 
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
@@ -22,6 +23,15 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$vp = new \VisualPaginator($this, $name);
 		$vp->paginator->itemsPerPage = 10;
 		return $vp;
+	}
+
+	protected function startup() {
+		if ($this->user->loggedIn) {
+			$user = $this->users->getById($this->user->identity->id);
+			$user->lastActivity = new DateTime();
+			$this->users->persistAndFlush($user);
+		}
+		parent::startup();
 	}
 
 	protected function createTemplate($class=null) {
