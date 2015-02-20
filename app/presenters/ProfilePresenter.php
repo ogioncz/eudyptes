@@ -10,8 +10,11 @@ use Nette\Security\Passwords;
 use Nette\Utils\Strings;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
+use Nette\Database\UniqueConstraintViolationException;
+use Tracy\Debugger;
 use Nextras\Forms\Rendering;
 use abeautifulsite\SimpleImage;
+use Exception;
 
 class ProfilePresenter extends BasePresenter {
 	/** @var App\Model\UserRepository @inject */
@@ -133,9 +136,9 @@ class ProfilePresenter extends BasePresenter {
 			try {
 				$img = new SimpleImage($original);
 				$img->best_fit(100, 100, true)->save($medium);
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				$form->addError('Chyba při zpracování avataru.');
-				\Tracy\Debugger::log($e);
+				Debugger::log($e);
 			}
 		}
 
@@ -147,12 +150,11 @@ class ProfilePresenter extends BasePresenter {
 			$this->users->persistAndFlush($user);
 			$this->flashMessage('Profil byl úspěšně upraven.', 'success');
 			$this->redirect('show', $user->id);
-		} catch (\PDOException $e) {
-			if (intVal($e->getCode()) === 23000) {
-				$form->addError('Tento e-mail je již obsazen.');
-			} else {
-				$form->addError($e->getMessage());
-			}
+		} catch (UniqueConstraintViolationException $e) {
+			$form->addError($this->allowed($user, 'rename') ? 'Tento e-mail nebo přezdívka jsou již obsazeny.' : 'Tento e-mail je již obsazen.');
+		} catch (PDOException $e) {
+			$file = Debugger::log($e);
+			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename($file));
 		}
 	}
 
@@ -195,12 +197,11 @@ class ProfilePresenter extends BasePresenter {
 			$this->users->persistAndFlush($user);
 			$this->flashMessage('Registrace proběhla úspěšně.', 'success');
 			$this->redirect('Homepage:');
-		} catch (\PDOException $e) {
-			if (intVal($e->getCode()) === 23000) {
-				$form->addError('Toto uživatelské jméno nebo e-mail je již obsazeno.');
-			} else {
-				$form->addError($e->getMessage());
-			}
+		} catch (UniqueConstraintViolationException $e) {
+			$form->addError('Toto uživatelské jméno nebo e-mail je již obsazeno.');
+		} catch (PDOException $e) {
+			$file = Debugger::log($e);
+			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename($file));
 		}
 	}
 
