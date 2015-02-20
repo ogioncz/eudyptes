@@ -66,7 +66,7 @@ class MailPresenter extends BasePresenter {
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 
 		$subject = $form->addText('subject', 'Předmět:')->setRequired();
-		$subject->getControlPrototype()->data['content'] = 'Předmět zprávy má výstižně charakerizovat, čeho se zpráva týká.';
+		$subject->getControlPrototype()->addClass('mail-subject')->data['content'] = 'Předmět zprávy má výstižně charakterizovat, čeho se zpráva týká.';
 		if ($this->action === 'reply') {
 			$subject->setDefaultValue('re: ' . preg_replace('/^(?:re: )+/i', '', $this->template->original->subject));
 		}

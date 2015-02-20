@@ -5,6 +5,7 @@ $(function() {
 	$('.nospam').css('display', 'none');
 	$('details').details();
 	$('.stamp').popover({trigger: 'hover', html: true});
+	$('.mail-subject').popover({trigger: 'focus', container: 'body'});
 
 	$.nette.init();
 });
