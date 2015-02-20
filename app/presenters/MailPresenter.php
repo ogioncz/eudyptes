@@ -127,9 +127,11 @@ class MailPresenter extends BasePresenter {
 				$this->error('Uživatel s tímto id neexistuje.');
 			}
 
-			/** @TODO: blocking */
-
 			$mail->recipient = $addressee;
+		}
+
+		if (!$this->allowed($mail->recipient, 'sendMail')) {
+			$this->error('Tomuto uživateli nemůžeš poslat zprávu.');
 		}
 
 		$mail = $this->mails->persistAndFlush($mail);
@@ -172,7 +174,10 @@ class MailPresenter extends BasePresenter {
 			$this->error('Uživatel s tímto id neexistuje.');
 		}
 
-		/** @TODO: blocking */
+		if (!$this->allowed($addressee, 'sendMail')) {
+			$this->error('Tomuto uživateli nemůžeš poslat zprávu.');
+		}
+
 		$this->template->addressee = $addressee;
 	}
 
