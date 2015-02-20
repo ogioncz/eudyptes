@@ -78,7 +78,7 @@ class ProfilePresenter extends BasePresenter {
 
 		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::FILLED)->addRule(Form::MIME_TYPE, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
 
-		$medium = $this->context->parameters['avatarStorage'] . '/' . $this->user->identity->id . 'm.png';
+		$medium = $this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png';
 		if (file_exists($medium)) {
 			$form->addCheckbox('removeAvatar', 'Odstranit avatar');
 		}
