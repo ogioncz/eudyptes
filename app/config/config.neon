@@ -71,5 +71,5 @@ services:
 
 			- allow('moderator', 'user', ['edit', 'seeMail', 'rename'])
 			- allow('moderator', 'meeting', ['edit', 'delete'])
-			- allow('editor', 'page', ['create', 'edit'])
+			- allow('editor', 'page', ['create', 'edit', 'purge'])
 			- allow('editor', 'post', ['create', 'edit'])
