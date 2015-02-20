@@ -4,56 +4,8 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0a1a6cf8be31fd05aeb51c68db36ace9",
+    "hash": "1c062ab317067b5c9cfb0e34702d8155",
     "packages": [
-        {
-            "name": "abeautifulsite/simpleimage",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/claviska/SimpleImage.git",
-                "reference": "a56897173e621590ecb59cd93e4bbf5bf46ae186"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/claviska/SimpleImage/zipball/a56897173e621590ecb59cd93e4bbf5bf46ae186",
-                "reference": "a56897173e621590ecb59cd93e4bbf5bf46ae186",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.5-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "abeautifulsite": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Nazar Mokrynskyi",
-                    "email": "nazar@mokrynskyi.com",
-                    "homepage": "http://cleverstyle.org/",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Cory LaViska",
-                    "homepage": "http://www.abeautifulsite.net/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A PHP class that simplifies working with images",
-            "time": "2014-03-18 06:42:58"
-        },
         {
             "name": "alb/oembed",
             "version": "dev-master",
@@ -698,12 +650,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/database.git",
-                "reference": "0735e7f5a646290759b04eb424866b6c2abe4547"
+                "reference": "d5aa567f2b524418af7daf83f68bde9879704b3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/database/zipball/0735e7f5a646290759b04eb424866b6c2abe4547",
-                "reference": "0735e7f5a646290759b04eb424866b6c2abe4547",
+                "url": "https://api.github.com/repos/nette/database/zipball/d5aa567f2b524418af7daf83f68bde9879704b3a",
+                "reference": "d5aa567f2b524418af7daf83f68bde9879704b3a",
                 "shasum": ""
             },
             "require": {
@@ -749,7 +701,7 @@
             ],
             "description": "Nette Database Component",
             "homepage": "http://nette.org",
-            "time": "2015-02-19 22:46:50"
+            "time": "2015-02-19 23:23:26"
         },
         {
             "name": "nette/deprecated",
@@ -984,12 +936,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/http.git",
-                "reference": "03a422bd41786181691815d1587f4cebf12ff5d5"
+                "reference": "43846908577a799d181e194c024b772a8b61e063"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/http/zipball/03a422bd41786181691815d1587f4cebf12ff5d5",
-                "reference": "03a422bd41786181691815d1587f4cebf12ff5d5",
+                "url": "https://api.github.com/repos/nette/http/zipball/43846908577a799d181e194c024b772a8b61e063",
+                "reference": "43846908577a799d181e194c024b772a8b61e063",
                 "shasum": ""
             },
             "require": {
@@ -1035,7 +987,7 @@
             ],
             "description": "Nette HTTP Component",
             "homepage": "http://nette.org",
-            "time": "2015-02-18 16:29:47"
+            "time": "2015-02-19 22:54:59"
         },
         {
             "name": "nette/mail",

@@ -8,12 +8,12 @@ use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\Passwords;
 use Nette\Utils\Strings;
+use Nette\Utils\Image;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
 use Nette\Database\UniqueConstraintViolationException;
 use Tracy\Debugger;
 use Nextras\Forms\Rendering;
-use abeautifulsite\SimpleImage;
 use Exception;
 
 class ProfilePresenter extends BasePresenter {
@@ -134,8 +134,8 @@ class ProfilePresenter extends BasePresenter {
 		if ($values->avatar->isOk()) {
 			$values->avatar->move($original);
 			try {
-				$img = new SimpleImage($original);
-				$img->best_fit(100, 100, true)->save($medium);
+				$resized = Image::fromFile($original)->resize(100, 100);
+				Image::fromBlank('100', '100', Image::rgb(0, 0, 0, 127))->place($resized, '50%', '50%')->save($medium);
 			} catch (Exception $e) {
 				$form->addError('Chyba při zpracování avataru.');
 				Debugger::log($e);

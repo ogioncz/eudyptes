@@ -25,8 +25,7 @@
 		"alb/oembed": "dev-master",
 		"kdyby/forms-replicator": "@dev",
 		"caxy/php-htmldiff": "@dev",
-		"nextras/orm": "@dev",
-		"abeautifulsite/simpleimage": "~2.5"
+		"nextras/orm": "@dev"
 	},
 	"require-dev": {
 		"nette/tester": "~1.1"
