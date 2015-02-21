@@ -68,4 +68,11 @@ $(function() {
 		}
 	});
 
+	$('body').on('click', function (e) {
+		$('.chat-active-count').each(function () {
+			if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
+				$(this).popover('hide');
+			}
+		});
+	});
 });
