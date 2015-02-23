@@ -163,6 +163,7 @@ class ProfilePresenter extends BasePresenter {
 		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$username = $form->addText('username', 'Přezdívka:');
+		$username->getControlPrototype()->autofocus = true;
 		$username->setRequired('Zadej prosím své uživatelské jméno.');
 		$username->setOption('description', 'Pod tímto jménem tě budou znát ostatní uživatelé.');
 
@@ -227,6 +228,7 @@ class ProfilePresenter extends BasePresenter {
 		$type->setRequired('Vyber si e-mail nebo přezdívku.');
 
 		$handle = $form->addText('handle');
+		$handle->getControlPrototype()->autofocus = true;
 		$handle->setRequired('Zadej prosím své uživatelské jméno nebo e-mail.');
 		$handle->setOption('description', 'Na tvůj e-mail ti pošleme odkaz, pomocí kterého si můžeš heslo změnit.');
 
@@ -291,6 +293,7 @@ class ProfilePresenter extends BasePresenter {
 		$tid = $form->addHidden('tid', $this->tid);
 
 		$password = $form->addPassword('password', 'Heslo');
+		$password->getControlPrototype()->autofocus = true;
 		$password->setRequired('Zadej prosím nové heslo.');
 
 		$form->addSubmit('send', 'Změnit heslo');

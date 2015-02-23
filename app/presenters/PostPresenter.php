@@ -34,7 +34,7 @@ class PostPresenter extends BasePresenter {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
-		$form->addText('title', 'Nadpis:')->setRequired();
+		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$form->addSubmit('send', 'Odeslat a zveřejnit');

@@ -42,7 +42,7 @@ class MeetingPresenter extends BasePresenter {
 		$submit->getControlPrototype()->addClass('hidden');
 		$submit->onClick[] = $this->meetingFormSucceeded;
 
-		$form->addText('title', 'Nadpis:')->setRequired();
+		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$form->addDatePicker('date', 'Datum:')->setRequired();
 		$form->addText('server', 'Server:')->setRequired();
 

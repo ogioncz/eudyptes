@@ -14,7 +14,7 @@ class SignPresenter extends BasePresenter {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
-		$form->addText('username', 'Uživatelské jméno:')->setRequired('Zadej prosím své uživatelské jméno.');
+		$form->addText('username', 'Uživatelské jméno:')->setRequired('Zadej prosím své uživatelské jméno.')->getControlPrototype()->autofocus = true;
 
 		$form->addPassword('password', 'Heslo:')->setRequired('Zadej prosím své heslo.');
 
