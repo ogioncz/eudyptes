@@ -19,10 +19,19 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string $ip
  * @property bool $read {default false}
  *
+ * @property Mail $root {virtual}
  * @property OneHasMany|Mail[] $replies {1:m MailRepository $reaction order:timestamp,ASC}
  */
 class Mail extends Entity implements Nette\Security\IResource {
 	public function getResourceId() {
 		return 'mail';
+	}
+
+	public function getterRoot() {
+		$mail = $this;
+		while ($mail->reaction) {
+			$mail = $mail->reaction;
+		}
+		return $mail;
 	}
 }
