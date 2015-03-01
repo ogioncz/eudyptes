@@ -27,6 +27,7 @@ forms:
 
 extensions:
 	orm: Nextras\Orm\Bridges\NetteDI\OrmExtension
+	dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
 
 orm:
 	model: App\Model\Orm

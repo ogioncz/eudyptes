@@ -5,9 +5,6 @@ namespace App\Presenters;
 use Nette;
 
 class SearchPresenter extends BasePresenter {
-	/** @var Nette\Database\Context @inject */
-	public $database;
-
 	private $itemsPerPage = 15;
 
 	public function renderResult($query) {
