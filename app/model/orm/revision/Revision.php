@@ -11,7 +11,7 @@ use Nextras\Orm\Collection\ICollection;
  * @property Page $page {m:1 PageRepository $revisions}
  * @property string $markdown
  * @property string $content
- * @property DateTime $timestamp {default now}
+ * @property DateTime|null $timestamp {default now}
  * @property User $user {m:1 UserRepository $createdRevisions}
  * @property string $ip
  *
