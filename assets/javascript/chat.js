@@ -38,7 +38,18 @@ $(function() {
 		})(chat, chatBody, chatName));
 		chat.find('header .chat-toolbar').append(toggleChat);
 
-		scrollDown(chat);
+		chat.on('click', '.chat-reply', (function(chat, chatBody, chatName) {
+			return function(e) {
+				var mid = $(this).parent().data('message-id');
+				chat.find('textarea').insert5('{#' + mid + '}\n');
+			}
+		})(chat));
+
+		$(document).ready((function(chat) {
+			return function(e) {
+				scrollDown(chat);
+			}
+		})(chat));
 
 		setInterval(function() {
 			chat.find('.refresh-chat').click();

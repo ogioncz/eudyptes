@@ -11,7 +11,7 @@
 	<div class="chat-body">
 		<ul n:snippet="chatMessages">
 			{foreach $chats as $chat}
-			<li title="{$chat->timestamp|date:'j. n. Y H:i:s'}"><strong>{$chat->user|userLink}:</strong> {$chat->content|noescape}</li>
+			<li title="{$chat->timestamp|date:'j. n. Y H:i:s'}" data-message-id="{$chat->id}"><strong>{$chat->user|userLink}:</strong> {$chat->content|noescape} <button class="chat-reply btn btn-link" title="Odpovědět"><span class="glyphicon glyphicon-share-alt"></span></button></li>
 			<li n:if="!$iterator->last && $iterator->nextValue->timestamp->format('Y-m-d') !== $chat->timestamp->format('Y-m-d')" class="chat-date">{$iterator->nextValue->timestamp|date:'j. n. Y'}</li>
 			{/foreach}
 			<li class="hidden"><a n:href="refresh! $chat->id" class="ajax refresh-chat">Obnovit</a></li>

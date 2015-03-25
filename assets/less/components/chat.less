@@ -66,13 +66,14 @@
 }
 
 .chat .role-admin:before, .chat .role-moderator:before, .chat .role-editor:before, .chat .role-verified:before {
-	width: 15px;
-	height: 15px;
+	width: 1em;
+	height: 1em;
 	display: block;
 	float: left;
 	content: '';
 	background-repeat: no-repeat;
 	background-position: bottom center;
+	background-size: 1em;
 }
 
 .chat .role-admin:before {
@@ -89,4 +90,19 @@
 
 .chat .role-verified:before {
 	background-image: url(../images/chat/verified.png);
+}
+
+.chat-reply {
+	.pull-right();
+	padding: 0;
+}
+
+.chat blockquote {
+	font-size: .75em;
+	padding: .2em .5em;
+	border-left-color: lighten(@text-color, 10%);
+
+	* {
+		color: lighten(@text-color, 10%);
+	}
 }

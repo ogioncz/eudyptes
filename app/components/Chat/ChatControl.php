@@ -67,6 +67,18 @@ class ChatControl extends Control {
 
 		$chat = new Chat;
 		$chat->content = $this->presenter->context->getService('formatter')->urlsToLinks(htmlSpecialChars($values->content));
+		$chat->content = preg_replace_callback('/\{#([0-9]+)\}/', function($m) {
+			$original = $this->chats->getById($m[1]);
+			if (!$original) {
+				return '';
+			}
+			return <<<EOT
+<blockquote>
+<strong>{$this->presenter->createTemplate()->getLatte()->invokeFilter('userLink', [$original->user])}</strong>
+{$original->content}
+</blockquote>
+EOT;
+		}, $chat->content);
 		$chat->ip = $this->presenter->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$chat->user = $this->users->getById($this->presenter->user->identity->id);
 		$this->chats->persistAndFlush($chat);
