@@ -75,10 +75,20 @@ class ChatControl extends Control {
 			if (!$original) {
 				return '';
 			}
+
+			$dom = new \Ogion\Utils\DarnDOMDocument;
+			$dom->loadHTML($original->content);
+			$xpath = new \DOMXPath($dom);
+			$nodes = $xpath->query('//blockquote');
+			foreach ($nodes as $node) {
+				$node->parentNode->removeChild($node);
+			}
+			$quoted = $dom->saveHTML();
+
 			return <<<EOT
 <blockquote>
 <strong>{$this->presenter->createTemplate()->getLatte()->invokeFilter('userLink', [$original->user])}</strong>
-{$original->content}
+{$quoted}
 </blockquote>
 EOT;
 		}, $chat->content);
