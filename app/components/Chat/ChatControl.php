@@ -65,8 +65,11 @@ class ChatControl extends Control {
 		}
 		$values = $form->values;
 
+		$formatter = $this->presenter->context->getService('formatter');
+
 		$chat = new Chat;
-		$chat->content = $this->presenter->context->getService('formatter')->urlsToLinks(htmlSpecialChars($values->content));
+		$chat->content = $formatter->urlsToLinks(htmlSpecialChars($values->content));
+		$chat->content = $formatter->replaceEmoticons($chat->content);
 		$chat->content = preg_replace_callback('/\{#([0-9]+)\}/', function($m) {
 			$original = $this->chats->getById($m[1]);
 			if (!$original) {
