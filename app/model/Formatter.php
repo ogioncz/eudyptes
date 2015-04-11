@@ -83,28 +83,32 @@ class Formatter extends Nette\Object {
 	}
 
 	public function replaceEmoticons($text) {
-		$text = preg_replace('/(😠)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/angry.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(🎂)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/cake.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(☕)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/coffee.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(⚘)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/flower.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(🙁)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/frowning.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(☺)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(♥)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/heart.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(🕹)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/joystick.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(😃)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/laughing.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(💡)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/light-bulb.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(😕)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/meh.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(🌃)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/moon-and-stars.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(🍕)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/pizza.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(😹)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/rabbit-face-with-tears-of-joy.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(☹)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/sad.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(☘)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/shamrock.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(😝)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/sticking-out-tongue.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(😐)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/straight.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(🌣)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/sun.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(😮)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/surprised.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(🎵)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/toot.svg" alt="\1" width="30" height="29">', $text);
-		$text = preg_replace('/(😉)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/winking.svg" alt="\1" width="30" height="29">', $text);
+		$text = preg_replace('/(😕|:-\/)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/meh.svg" alt="😕" width="30" height="29">', $text);
+		$text = preg_replace('/(😠|>:-?\()/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/angry.svg" alt="😠" width="30" height="29">', $text);
+		$text = preg_replace('/(🎂|\(cake\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/cake.svg" alt="🎂" width="30" height="29">', $text);
+		$text = preg_replace('/(☕|\(coffee\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/coffee.svg" alt="☕" width="30" height="29">', $text);
+		$text = preg_replace('/(⚘|\(flower\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/flower.svg" alt="⚘" width="30" height="29">', $text);
+		$text = preg_replace('/(🙁|\(frown(?:ing)?\)|:\'-?\()/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/frowning.svg" alt="🙁" width="30" height="29">', $text);
+		$text = preg_replace('/(☺|:-?\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg" alt="☺" width="30" height="29">', $text);
+		$text = preg_replace('/(♥|<3|\(love\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/heart.svg" alt="♥" width="30" height="29">', $text);
+		$text = preg_replace('/(🕹|\(joystick\)|\(game\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/joystick.svg" alt="🕹" width="30" height="29">', $text);
+		$text = preg_replace('/(😃|:-?D)/', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/laughing.svg" alt="😃" width="30" height="29">', $text);
+		$text = preg_replace('/(💡|\(bulb\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/light-bulb.svg" alt="💡" width="30" height="29">', $text);
+		$text = preg_replace('/(🌃|\(night\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/moon-and-stars.svg" alt="🌃" width="30" height="29">', $text);
+		$text = preg_replace('/(🍕|\(pizza\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/pizza.svg" alt="🍕" width="30" height="29">', $text);
+		$text = preg_replace('/(😹|\(joy\)|:\'-?D)/', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/rabbit-face-with-tears-of-joy.svg" alt="😹" width="30" height="29">', $text);
+		$text = preg_replace('/(☹|:-?\()/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/sad.svg" alt="☹" width="30" height="29">', $text);
+		$text = preg_replace('/(☘|\(clover\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/shamrock.svg" alt="☘" width="30" height="29">', $text);
+		$text = preg_replace('/(😝|:-?p)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/sticking-out-tongue.svg" alt="😝" width="30" height="29">', $text);
+		$text = preg_replace('/(😐|:-?\|)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/straight.svg" alt="😐" width="30" height="29">', $text);
+		$text = preg_replace('/(🌣|☀|☼|\(sun\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/sun.svg" alt="🌣" width="30" height="29">', $text);
+		$text = preg_replace('/(😮|:-?o)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/surprised.svg" alt="😮" width="30" height="29">', $text);
+		$text = preg_replace('/(🎵|\(toot\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/toot.svg" alt="🎵" width="30" height="29">', $text);
+		$text = preg_replace('/(😉|;-?\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/winking.svg" alt="😉" width="30" height="29">', $text);
+		$text = preg_replace('/(\*@\*|\(puffle\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/puffle.svg" alt="*@*" width="30" height="29">', $text);
+		$text = preg_replace('/(\(coin\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/coin.svg" alt="\1" width="30" height="29">', $text);
+		$text = preg_replace('/(\(icebrown\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/chocolate-ice-cream.svg" alt="\1" width="30" height="29">', $text);
+		$text = preg_replace('/(\(icepink\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/strawberry-ice-cream.svg" alt="\1" width="30" height="29">', $text);
 
 		return $text;
 	}
