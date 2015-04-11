@@ -84,13 +84,13 @@ class Formatter extends Nette\Object {
 
 	public function replaceEmoticons($text) {
 		$text = preg_replace('/(😕|:-\/)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/meh.svg" alt="😕" width="30" height="29">', $text);
-		$text = preg_replace('/(😠|>:-?\()/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/angry.svg" alt="😠" width="30" height="29">', $text);
+		$text = preg_replace('/(😠|>:-?\(|&gt;:-?\()/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/angry.svg" alt="😠" width="30" height="29">', $text);
 		$text = preg_replace('/(🎂|\(cake\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/cake.svg" alt="🎂" width="30" height="29">', $text);
 		$text = preg_replace('/(☕|\(coffee\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/coffee.svg" alt="☕" width="30" height="29">', $text);
 		$text = preg_replace('/(⚘|\(flower\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/flower.svg" alt="⚘" width="30" height="29">', $text);
 		$text = preg_replace('/(🙁|\(frown(?:ing)?\)|:\'-?\()/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/frowning.svg" alt="🙁" width="30" height="29">', $text);
 		$text = preg_replace('/(☺|:-?\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg" alt="☺" width="30" height="29">', $text);
-		$text = preg_replace('/(♥|<3|\(love\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/heart.svg" alt="♥" width="30" height="29">', $text);
+		$text = preg_replace('/(♥|<3|&lt;3|\(love\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/heart.svg" alt="♥" width="30" height="29">', $text);
 		$text = preg_replace('/(🕹|\(joystick\)|\(game\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/joystick.svg" alt="🕹" width="30" height="29">', $text);
 		$text = preg_replace('/(😃|:-?D)/', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/laughing.svg" alt="😃" width="30" height="29">', $text);
 		$text = preg_replace('/(💡|\(bulb\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/light-bulb.svg" alt="💡" width="30" height="29">', $text);
