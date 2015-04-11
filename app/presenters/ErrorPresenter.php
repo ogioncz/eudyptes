@@ -3,7 +3,7 @@
 namespace App\Presenters;
 
 use Nette;
-use Nette\Diagnostics\Debugger;
+use Tracy\Debugger;
 
 class ErrorPresenter extends BasePresenter {
 	/**
