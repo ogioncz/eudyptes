@@ -97,6 +97,7 @@ class Formatter extends Nette\Object {
 		$text = preg_replace('/(🌃|\(night\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/moon-and-stars.svg" alt="🌃" width="30" height="29">', $text);
 		$text = preg_replace('/(🍕|\(pizza\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/pizza.svg" alt="🍕" width="30" height="29">', $text);
 		$text = preg_replace('/(😹|\(joy\)|:\'-?D)/', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/rabbit-face-with-tears-of-joy.svg" alt="😹" width="30" height="29">', $text);
+		$text = preg_replace('/(😻|\(cat\))/', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/smiling-cat-face-with-heart-shaped-eyes.svg" alt="😻" width="30" height="29">', $text);
 		$text = preg_replace('/(☹|:-?\()/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/sad.svg" alt="☹" width="30" height="29">', $text);
 		$text = preg_replace('/(☘|\(clover\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/shamrock.svg" alt="☘" width="30" height="29">', $text);
 		$text = preg_replace('/(😝|:-?p)/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/sticking-out-tongue.svg" alt="😝" width="30" height="29">', $text);
