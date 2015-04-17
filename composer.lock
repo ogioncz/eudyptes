@@ -339,12 +339,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/latte.git",
-                "reference": "9ef1baa8358dc999ae4b8d3bafe20a7321f0961f"
+                "reference": "dc5b0d66b0c2a1fce0ef2661f6cf0396374491d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/latte/zipball/9ef1baa8358dc999ae4b8d3bafe20a7321f0961f",
-                "reference": "9ef1baa8358dc999ae4b8d3bafe20a7321f0961f",
+                "url": "https://api.github.com/repos/nette/latte/zipball/dc5b0d66b0c2a1fce0ef2661f6cf0396374491d0",
+                "reference": "dc5b0d66b0c2a1fce0ef2661f6cf0396374491d0",
                 "shasum": ""
             },
             "require": {
@@ -391,7 +391,7 @@
                 "templating",
                 "twig"
             ],
-            "time": "2015-04-01 17:21:02"
+            "time": "2015-04-13 12:06:40"
         },
         {
             "name": "nette/application",
@@ -821,12 +821,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/forms.git",
-                "reference": "8d9fe09520a64b2c58a70a3086b7372b89125d0d"
+                "reference": "6fba2ab210e4e5c5a96ccdef3e36708dfc746be4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/forms/zipball/8d9fe09520a64b2c58a70a3086b7372b89125d0d",
-                "reference": "8d9fe09520a64b2c58a70a3086b7372b89125d0d",
+                "url": "https://api.github.com/repos/nette/forms/zipball/6fba2ab210e4e5c5a96ccdef3e36708dfc746be4",
+                "reference": "6fba2ab210e4e5c5a96ccdef3e36708dfc746be4",
                 "shasum": ""
             },
             "require": {
@@ -873,7 +873,7 @@
             ],
             "description": "Nette Forms: greatly facilitates web forms",
             "homepage": "http://nette.org",
-            "time": "2015-04-01 17:20:45"
+            "time": "2015-04-14 13:17:50"
         },
         {
             "name": "nette/http",
@@ -1339,12 +1339,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextras/dbal.git",
-                "reference": "7ea294aaf758a4604a9adc7a04853b85ac95885c"
+                "reference": "e63515a6b7f19049ea31298f190997a7d92a958e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextras/dbal/zipball/7ea294aaf758a4604a9adc7a04853b85ac95885c",
-                "reference": "7ea294aaf758a4604a9adc7a04853b85ac95885c",
+                "url": "https://api.github.com/repos/nextras/dbal/zipball/e63515a6b7f19049ea31298f190997a7d92a958e",
+                "reference": "e63515a6b7f19049ea31298f190997a7d92a958e",
                 "shasum": ""
             },
             "require": {
@@ -1352,6 +1352,7 @@
             },
             "require-dev": {
                 "mockery/mockery": "~0.9",
+                "nette/di": "~2.3",
                 "nette/tester": "~1.4",
                 "tracy/tracy": "~2.3"
             },
@@ -1364,7 +1365,10 @@
             "autoload": {
                 "psr-4": {
                     "Nextras\\Dbal\\": "src/"
-                }
+                },
+                "classmap": [
+                    "src/exceptions.php"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1383,7 +1387,7 @@
                 "dbal",
                 "nextras"
             ],
-            "time": "2015-04-10 21:21:14"
+            "time": "2015-04-14 18:41:18"
         },
         {
             "name": "nextras/forms",
@@ -1450,12 +1454,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nextras/orm.git",
-                "reference": "33eefea91a25fc7430f4f1adf3b33935b3e5c822"
+                "reference": "abbf35151e80bcfc675e6177d070793ae5b9a624"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nextras/orm/zipball/33eefea91a25fc7430f4f1adf3b33935b3e5c822",
-                "reference": "33eefea91a25fc7430f4f1adf3b33935b3e5c822",
+                "url": "https://api.github.com/repos/nextras/orm/zipball/abbf35151e80bcfc675e6177d070793ae5b9a624",
+                "reference": "abbf35151e80bcfc675e6177d070793ae5b9a624",
                 "shasum": ""
             },
             "require": {
@@ -1503,7 +1507,7 @@
                 "nextras",
                 "orm"
             ],
-            "time": "2015-04-10 09:55:24"
+            "time": "2015-04-14 19:54:25"
         },
         {
             "name": "oodle/inflect",
