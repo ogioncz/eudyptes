@@ -1,7 +1,6 @@
 <?php
 namespace App\Presenters;
 
-use Caxy\HtmlDiff\HtmlDiff;
 use App;
 
 class RevisionPresenter extends BasePresenter {
@@ -17,7 +16,7 @@ class RevisionPresenter extends BasePresenter {
 		$this->template->revision = $revision;
 	}
 
-	public function renderDiff($id, $and) {
+	public function renderDiff($id, $and, $type = 'side') {
 		$old = $this->revisions->getById($id);
 		if (!$old) {
 			$this->error('Revize nenalezena.');
@@ -27,9 +26,14 @@ class RevisionPresenter extends BasePresenter {
 			$this->error('Revize nenalezena.');
 		}
 
-		$differ = new HtmlDiff($old->content, $new->content);
-		$differ->build();
-		$diff = $differ->getDifference();
+		$differ = new \Diff(explode("\n", $old->markdown), explode("\n", $new->markdown));
+		if ($type === 'inline') {
+			$renderer = new \Diff_Renderer_Html_Inline;
+		} else {
+			$renderer = new \Diff_Renderer_Html_SideBySide;
+		}
+
+		$diff = $differ->render($renderer);
 
 		$this->template->page = $old->page;
 		$this->template->diff = $diff;

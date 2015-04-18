@@ -1,5 +1,10 @@
 {block content}
 <div class="post">
+	<div class="btn-group pull-right" role="group" aria-label="Způsob porovnání">
+		<a n:href="this $old->id, $new->id, 'side'" n:class="btn, btn-default, $presenter->isLinkCurrent('this', [$old->id, $new->id, 'side'])? active" title="Vedle sebe"><span class="glyphicon glyphicon-cutlery"></span></a>
+		<a n:href="this $old->id, $new->id, 'inline'" n:class="btn, btn-default, $presenter->isLinkCurrent('this', [$old->id, $new->id, 'inline'])? active" title="Na řádku"><span class="glyphicon glyphicon-option-horizontal"></span></a>
+	</div>
+
 	<h2 n:inner-block="title">Porovnání revizí stránky <a n:href="Page:show $page->slug">{$page->title}</a></h2>
 	<div>{$diff|noescape}</div>
 	<div class="date"><a n:href="show $old->id">Stará</a>: {$old->user|userLink}, {$old->timestamp|dateNA:'j. n. Y H:i:s'} · <a n:href="show $new->id">Nová</a>: {$new->user|userLink}, {$new->timestamp|dateNA:'j. n. Y H:i:s'}</div>

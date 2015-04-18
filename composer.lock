@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "75538481ddfc171ba57384751428db2a",
+    "hash": "801fa70d83b9cf297b0e5ec68b6bd75a",
     "packages": [
         {
             "name": "alb/oembed",
@@ -45,48 +45,6 @@
                 "oembed"
             ],
             "time": "2014-03-05 13:12:14"
-        },
-        {
-            "name": "caxy/php-htmldiff",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/caxy/php-htmldiff.git",
-                "reference": "7846bd7feaeafb191bcd5313814333658c513087"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/caxy/php-htmldiff/zipball/7846bd7feaeafb191bcd5313814333658c513087",
-                "reference": "7846bd7feaeafb191bcd5313814333658c513087",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Caxy\\HtmlDiff": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Josh Schroeder",
-                    "email": "jschroeder@caxy.com",
-                    "homepage": "http://www.caxy.com"
-                }
-            ],
-            "description": "A library for comparing two HTML files/snippets and highlighting the differences using simple HTML.",
-            "homepage": "https://github.com/caxy/php-htmldiff",
-            "keywords": [
-                "diff",
-                "html"
-            ],
-            "time": "2015-03-03 14:39:22"
         },
         {
             "name": "erusev/parsedown",
@@ -1560,6 +1518,40 @@
             "time": "2013-11-30 06:16:23"
         },
         {
+            "name": "phpspec/php-diff",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpspec/php-diff.git",
+                "reference": "30e103d19519fe678ae64a60d77884ef3d71b28a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpspec/php-diff/zipball/30e103d19519fe678ae64a60d77884ef3d71b28a",
+                "reference": "30e103d19519fe678ae64a60d77884ef3d71b28a",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Diff": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Boulton",
+                    "homepage": "http://github.com/chrisboulton",
+                    "role": "Original developer"
+                }
+            ],
+            "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
+            "time": "2013-11-01 13:02:21"
+        },
+        {
             "name": "tracy/tracy",
             "version": "dev-master",
             "source": {
@@ -1701,8 +1693,8 @@
         "ezyang/htmlpurifier": 20,
         "alb/oembed": 20,
         "kdyby/forms-replicator": 20,
-        "caxy/php-htmldiff": 20,
-        "nextras/orm": 20
+        "nextras/orm": 20,
+        "phpspec/php-diff": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -1,26 +1,82 @@
-.diffmod {
-	padding: 2px;
-	margin: 2px;
-	display: inline-block;
-	background-color: #fcf8e3;
-	border: 1px solid #fbeed5;
-}
-
-ins.diffmod, ins.mod, ins.diffins {
-	background-color: #dff0d8;
-	border: 1px solid #d6e9c6;
-	text-decoration: none;
-}
-
-del.diffmod {
-	background-color: #f2dede;
-	border: 1px solid #eed3d7;
-}
-
 .icon-marker {
 	display: inline-block;
 	background-image: url(../icons/marker.svg);
 	width: 14px;
 	height: 14px;
 	background-size: 14px 14px;
+}
+
+.Differences thead th {
+	text-align: left;
+	border-bottom: 1px solid @well-border;
+	background: @well-bg;
+	color: @text-color;
+	padding: 4px;
+}
+
+.Differences tbody th {
+	text-align: right;
+	background: @well-bg;
+	width: 4em;
+	padding: 1px 2px;
+	border-right: 1px solid @well-border;
+	vertical-align: top;
+}
+
+.Differences td {
+	padding: 1px 2px;
+}
+
+.DifferencesSideBySide .ChangeInsert td.Left {
+	background: #dfd;
+}
+
+.DifferencesSideBySide .ChangeInsert td.Right {
+	background: #cfc;
+}
+
+.DifferencesSideBySide .ChangeDelete td.Left {
+	background: #f88;
+}
+
+.DifferencesSideBySide .ChangeDelete td.Right {
+	background: #faa;
+}
+
+.DifferencesSideBySide .ChangeReplace .Left {
+	background: #fe9;
+}
+
+.DifferencesSideBySide .ChangeReplace .Right {
+	background: #fd8;
+}
+
+.Differences ins, .Differences del {
+	text-decoration: none;
+}
+
+.DifferencesSideBySide .ChangeReplace ins, .DifferencesSideBySide .ChangeReplace del {
+	background: #fc0;
+}
+
+.Differences .Skipped {
+	background: #f7f7f7;
+}
+
+.DifferencesInline .ChangeReplace .Left,
+.DifferencesInline .ChangeDelete .Left {
+	background: #fdd;
+}
+
+.DifferencesInline .ChangeReplace .Right,
+.DifferencesInline .ChangeInsert .Right {
+	background: #dfd;
+}
+
+.DifferencesInline .ChangeReplace ins {
+	background: #9e9;
+}
+
+.DifferencesInline .ChangeReplace del {
+	background: #e99;
 }
