@@ -10,7 +10,7 @@
 </thead>
 <tbody>
 <tr n:foreach="$profiles as $profile">
-<td>{$profile|userLink}</td>
+<td>{$profile|userLink:true}</td>
 <td n:if="$allowed('user', 'seeMailAddress')">{$profile->email}</td>
 <td>{if $allowed($profile, 'sendMail')}<a n:href="Mail:create $profile->id">Poslat zprávu</a>{/if}</td>
 </tr>

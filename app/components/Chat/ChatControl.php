@@ -87,7 +87,7 @@ class ChatControl extends Control {
 
 			return <<<EOT
 <blockquote>
-<strong>{$this->presenter->createTemplate()->getLatte()->invokeFilter('userLink', [$original->user])}</strong>
+<strong>{$this->presenter->createTemplate()->getLatte()->invokeFilter('userLink', [$original->user, true])}</strong>
 {$quoted}
 </blockquote>
 EOT;

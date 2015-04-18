@@ -24,8 +24,8 @@ class HelperLoader extends Nette\Object {
 		}
 	}
 
-	public function userLink(User $user) {
-		return Html::el('a', $user->username)->href($this->presenter->link('Profile:show', $user->id))->class('role-' . $user->role);
+	public function userLink(User $user, $visual = false) {
+		return Html::el('a', $user->username)->href($this->presenter->link('Profile:show', $user->id))->class('role-' . $user->role . ($visual ? ' role-visual' : ''));
 	}
 
 	public function relDate(\DateTime $date) {
