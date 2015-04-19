@@ -4,8 +4,55 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "801fa70d83b9cf297b0e5ec68b6bd75a",
+    "hash": "899822f0c2d19bf2b393390098ad67df",
     "packages": [
+        {
+            "name": "actinarium/php-diff",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Actinarium/php-diff.git",
+                "reference": "f8697380476f2f9ec3efda12584426ba27ddbea6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Actinarium/php-diff/zipball/f8697380476f2f9ec3efda12584426ba27ddbea6",
+                "reference": "f8697380476f2f9ec3efda12584426ba27ddbea6",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Actinarium\\Diff\\": "./lib/Diff/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Boulton",
+                    "homepage": "http://github.com/chrisboulton",
+                    "role": "Original developer"
+                },
+                {
+                    "name": "Actine",
+                    "email": "actine@actinarium.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "phpspec",
+                    "homepage": "https://github.com/phpspec",
+                    "role": "Took care of the abandoned lib"
+                }
+            ],
+            "description": "A revamp of popular php-diff library by Chris Boulton, based on difflib implementation in Python",
+            "keywords": [
+                "diff"
+            ],
+            "time": "2014-05-31 18:40:38"
+        },
         {
             "name": "alb/oembed",
             "version": "dev-master",
@@ -1518,40 +1565,6 @@
             "time": "2013-11-30 06:16:23"
         },
         {
-            "name": "phpspec/php-diff",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpspec/php-diff.git",
-                "reference": "30e103d19519fe678ae64a60d77884ef3d71b28a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/php-diff/zipball/30e103d19519fe678ae64a60d77884ef3d71b28a",
-                "reference": "30e103d19519fe678ae64a60d77884ef3d71b28a",
-                "shasum": ""
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Diff": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Chris Boulton",
-                    "homepage": "http://github.com/chrisboulton",
-                    "role": "Original developer"
-                }
-            ],
-            "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
-            "time": "2013-11-01 13:02:21"
-        },
-        {
             "name": "tracy/tracy",
             "version": "dev-master",
             "source": {
@@ -1613,6 +1626,48 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "JBlond/php-diff",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JBlond/php-diff.git",
+                "reference": "d42578aec0883d609d61260a8d6249f8641ca8ce"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JBlond/php-diff/zipball/d42578aec0883d609d61260a8d6249f8641ca8ce",
+                "reference": "d42578aec0883d609d61260a8d6249f8641ca8ce",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Diff": "lib/"
+                }
+            },
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Boulton"
+                },
+                {
+                    "name": "Mario / JBlond"
+                }
+            ],
+            "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
+            "keywords": [
+                "diff",
+                "php"
+            ],
+            "support": {
+                "source": "https://github.com/JBlond/php-diff/tree/master",
+                "issues": "https://github.com/JBlond/php-diff/issues"
+            },
+            "time": "2015-02-23 10:40:48"
+        },
         {
             "name": "nette/tester",
             "version": "dev-master",
@@ -1694,7 +1749,7 @@
         "alb/oembed": 20,
         "kdyby/forms-replicator": 20,
         "nextras/orm": 20,
-        "phpspec/php-diff": 20
+        "actinarium/php-diff": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

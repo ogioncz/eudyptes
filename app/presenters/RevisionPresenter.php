@@ -26,11 +26,11 @@ class RevisionPresenter extends BasePresenter {
 			$this->error('Revize nenalezena.');
 		}
 
-		$differ = new \Diff(explode("\n", $old->markdown), explode("\n", $new->markdown));
+		$differ = new \Actinarium\Diff\Diff(explode("\n", $old->markdown), explode("\n", $new->markdown));
 		if ($type === 'inline') {
-			$renderer = new \Diff_Renderer_Html_Inline;
+			$renderer = new \Actinarium\Diff\Renderer\Html\SideBySideRenderer;
 		} else {
-			$renderer = new \Diff_Renderer_Html_SideBySide;
+			$renderer = new \Actinarium\Diff\Renderer\Html\InlineRenderer;
 		}
 
 		$diff = $differ->render($renderer);

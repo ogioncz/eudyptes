@@ -38,7 +38,7 @@
 		"alb/oembed": "dev-master",
 		"kdyby/forms-replicator": "@dev",
 		"nextras/orm": "@dev",
-		"phpspec/php-diff": "dev-master"
+		"actinarium/php-diff": "dev-master"
 	},
 	"require-dev": {
 		"nette/tester": "~1.1"
