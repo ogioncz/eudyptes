@@ -17,7 +17,7 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property bool $member {default false}
  * @property bool $notifyByMail {default true}
  * @property string|null $skype
- * @property DateTime $registered {default now}
+ * @property DateTime|null $registered {default now}
  * @property DateTime $lastActivity {default now}
  * @property string|null $profile
  *
