@@ -11,7 +11,7 @@ class DarnDOMDocument extends DOMDocument {
 	}
 
 	public function loadHTML($html, $options = null) {
-		$options |= LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD; // don’t wrap document fragments
+		// $options |= LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD; // don’t wrap document fragments
 
 		libxml_use_internal_errors(true); // prevent warning when using html5 tags
 
@@ -24,7 +24,7 @@ class DarnDOMDocument extends DOMDocument {
 	}
 
 	public function saveHTML(DOMNode $element = null) {
-		return html_entity_decode(parent::saveHTML($element));
+		return preg_replace('~^<body[^>]*>(.*)</body>$~s', '$1', parent::saveHTML($this->getElementsByTagName('body')->item(0)));
 	}
 }
 
