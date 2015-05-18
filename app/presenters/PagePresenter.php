@@ -124,26 +124,31 @@ class PagePresenter extends BasePresenter {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
-		$cache->save($page->slug, $formatted['text']);
-
 		if ($this->action === 'create') {
 			$page->user = $this->users->getById($this->user->identity->id);
 		}
-		$this->pages->persist($page);
 
-		$revision = new Model\Revision;
-		$revision->markdown = $values->markdown;
-		$revision->page = $page;
-		$revision->content = $formatted['text'];
-		$revision->user = $this->users->getById($this->user->identity->id);
-		$revision->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
-		$page->revisions->add($revision);
+		try {
+			$this->pages->persistAndFlush($page);
 
-		$this->pages->persistAndFlush($page);
+			$revision = new Model\Revision;
+			$revision->markdown = $values->markdown;
+			$revision->page = $page;
+			$revision->content = $formatted['text'];
+			$revision->user = $this->users->getById($this->user->identity->id);
+			$revision->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
+			$page->revisions->add($revision);
 
-		$this->flashMessage('Stránka byla odeslána.', 'success');
-		$this->redirect('show', $values->slug);
+			$this->pages->persistAndFlush($page);
+
+			$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
+			$cache->save($page->slug, $formatted['text']);
+
+			$this->flashMessage('Stránka byla odeslána.', 'success');
+			$this->redirect('show', $values->slug);
+		} catch (\Nextras\Dbal\UniqueConstraintViolationException $e) {
+			$this->flashMessage('Stránka s tímto slugem již existuje.', 'danger');
+		}
 	}
 
 	public function actionCreate() {
