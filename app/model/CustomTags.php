@@ -37,7 +37,7 @@ class CustomTags extends Nette\Object {
 			$match['attr'] = preg_replace('/"([^"]+)":("[^"]+"),?/', '\1=\2 ', $match['attr']);
 			$match['attr'] = trim($match['attr'], '{} ');
 
-			return '<img src="http://media8.clubpenguin.com/game/items/images/' . $match['type'] . '/icon/' . $match['size'] . '/' . $match['id'] . '.png" alt="" width="' . $match['size'] . '" height="' . $match['size'] . '" ' . $match['attr'] . '>';
+			return '<img src="http://mediacache.fan-club-penguin.cz/game/items/images/' . $match['type'] . '/icon/' . $match['size'] . '/' . $match['id'] . '.png" alt="" width="' . $match['size'] . '" height="' . $match['size'] . '" ' . $match['attr'] . '>';
 		}, $text);
 		return $text;
 	}
