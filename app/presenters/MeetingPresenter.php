@@ -62,6 +62,10 @@ class MeetingPresenter extends BasePresenter {
 
 		$form->addTextArea('markdown', 'Popis:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
+		$previewButton = $form->addSubmit('preview', 'Náhled');
+		$previewButton->onClick[] = $this->meetingFormPreview;
+		$previewButton->getControlPrototype()->addClass('ajax');
+
 		$submit = $form->addSubmit('send', 'Odeslat a zveřejnit');
 		$submit->onClick[] = $this->meetingFormSucceeded;
 		$renderer->primaryButton = $submit;
@@ -116,6 +120,44 @@ class MeetingPresenter extends BasePresenter {
 
 		$this->flashMessage('Sraz byl odeslán.', 'success');
 		$this->redirect('list');
+	}
+
+	public function meetingFormPreview(SubmitButton $button) {
+		if (!$this->user->loggedIn) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
+		$values = $button->form->values;
+
+		$formatted = $this->formatter->format($values['markdown']);
+
+		if (count($formatted['errors'])) {
+			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
+		}
+
+		$meeting = new Meeting();
+
+		$meeting->title = $values->title;
+		$meeting->server = $values->server;
+		$meeting->markdown = $values->markdown;
+		$meeting->description = $formatted['text'];
+
+		$program = [];
+		foreach ($values->times as $time) {
+			$program[] = ['time' => $time['time']->format('H:i'), 'event' => $time['event']];
+		}
+
+		list($hour, $minute) = explode(':', $program[0]['time']);
+		$meeting->program = Json::encode($program);
+		$meeting->date = $values->date->setTime($hour, $minute);
+		$meeting->user = $this->users->getById($this->user->identity->id);
+
+		$this->template->preview = $meeting;
+
+		$this->flashMessage('Toto je jen náhled, sraz zatím nebyl uložen.', 'info');
+
+		$this->redrawControl('flashes');
+		$this->redrawControl('preview');
 	}
 
 	public function actionCreate() {

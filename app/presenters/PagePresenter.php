@@ -3,8 +3,9 @@ namespace App\Presenters;
 
 use Nette;
 use Nette\Caching\Cache;
-use Tracy\Debugger;
+use Nette\Forms\Controls\SubmitButton;
 use Nextras\Forms\Rendering;
+use Tracy\Debugger;
 use App;
 use App\Model;
 
@@ -89,18 +90,23 @@ class PagePresenter extends BasePresenter {
 		$form->addText('slug', 'Adresa:')->setRequired()->setType('url');
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
-		$form->addSubmit('send', 'Odeslat a zveřejnit');
-		$form->onSuccess[] = $this->pageFormSucceeded;
+		$previewButton = $form->addSubmit('preview', 'Náhled');
+		$previewButton->onClick[] = $this->pageFormPreview;
+		$previewButton->getControlPrototype()->addClass('ajax');
+
+		$submitButton = $form->addSubmit('send', 'Odeslat a zveřejnit');
+		$submitButton->onClick[] = $this->pageFormSucceeded;
+		$form->renderer->primaryButton = $submitButton;
 
 		return $form;
 	}
 
-	public function pageFormSucceeded(Nette\Application\UI\Form $form) {
+	public function pageFormSucceeded(SubmitButton $button) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $form->values;
+		$values = $button->form->values;
 
 		if ($this->action === 'create') {
 			$page = new Model\Page;
@@ -149,6 +155,27 @@ class PagePresenter extends BasePresenter {
 		} catch (\Nextras\Dbal\UniqueConstraintViolationException $e) {
 			$this->flashMessage('Stránka s tímto slugem již existuje.', 'danger');
 		}
+	}
+
+	public function pageFormPreview(SubmitButton $button) {
+		if (!$this->user->loggedIn) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
+		$values = $button->form->values;
+
+		$formatted = $this->formatter->format($values['markdown']);
+
+		if (count($formatted['errors'])) {
+			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
+		}
+
+		$this->template->preview = $formatted['text'];
+
+		$this->flashMessage('Toto je jen náhled, stránka zatím nebyla uložena.', 'info');
+
+		$this->redrawControl('flashes');
+		$this->redrawControl('preview');
 	}
 
 	public function actionCreate() {

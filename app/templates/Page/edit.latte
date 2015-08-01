@@ -1,6 +1,12 @@
 {block content}
 <h2 n:inner-block="title">Upravit stránku</h2>
-
+{snippet preview}
+{ifset $preview}
+<div class="edit-preview">
+{$preview|noescape}
+</div>
+{/ifset}
+{/snippet}
 {control pageForm}
 {/block}
 {block scripts}

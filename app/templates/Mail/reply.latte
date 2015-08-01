@@ -1,6 +1,12 @@
 {block content}
 <h2 n:inner-block="title">Odpovědět na zprávu <a n:href="show $original->id">{$original->subject}</a> uživatele {$original->sender|userLink}</h2>
-
+{snippet preview}
+{ifset $preview}
+<div class="edit-preview">
+{$preview|noescape}
+</div>
+{/ifset}
+{/snippet}
 {control mailForm}
 {/block}
 {block scripts}

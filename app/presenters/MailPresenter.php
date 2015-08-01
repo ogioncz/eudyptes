@@ -5,6 +5,7 @@ namespace App\Presenters;
 use Nette;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
+use Nette\Forms\Controls\SubmitButton;
 use Nextras\Forms\Rendering;
 use App;
 use App\Model\Mail;
@@ -74,18 +75,23 @@ class MailPresenter extends BasePresenter {
 
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
-		$form->addSubmit('send', 'Odeslat');
-		$form->onSuccess[] = $this->mailFormSucceeded;
+		$previewButton = $form->addSubmit('preview', 'Náhled');
+		$previewButton->onClick[] = $this->mailFormPreview;
+		$previewButton->getControlPrototype()->addClass('ajax');
+
+		$submitButton = $form->addSubmit('send', 'Odeslat');
+		$submitButton->onClick[] = $this->mailFormSucceeded;
+		$form->renderer->primaryButton = $submitButton;
 
 		return $form;
 	}
 
-	public function mailFormSucceeded(Nette\Application\UI\Form $form) {
+	public function mailFormSucceeded(SubmitButton $button) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $form->values;
+		$values = $button->form->values;
 		$formatted = $this->formatter->format($values->markdown);
 
 		if (count($formatted['errors'])) {
@@ -143,6 +149,27 @@ class MailPresenter extends BasePresenter {
 
 		$this->flashMessage('Zpráva byla odeslána.', 'success');
 		$this->redirect('show', $mail->id);
+	}
+
+	public function mailFormPreview(SubmitButton $button) {
+		if (!$this->user->loggedIn) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
+		$values = $button->form->values;
+
+		$formatted = $this->formatter->format($values['markdown']);
+
+		if (count($formatted['errors'])) {
+			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
+		}
+
+		$this->template->preview = $formatted['text'];
+
+		$this->flashMessage('Toto je jen náhled, zpráva zatím nebyla uložena.', 'info');
+
+		$this->redrawControl('flashes');
+		$this->redrawControl('preview');
 	}
 
 	protected function notifyByMail(Mail $mail) {

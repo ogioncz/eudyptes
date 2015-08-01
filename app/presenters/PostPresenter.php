@@ -2,6 +2,7 @@
 namespace App\Presenters;
 
 use Nette;
+use Nette\Forms\Controls\SubmitButton;
 use Nextras\Forms\Rendering;
 use App;
 use App\Model\Post;
@@ -37,17 +38,22 @@ class PostPresenter extends BasePresenter {
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
-		$form->addSubmit('send', 'Odeslat a zveřejnit');
-		$form->onSuccess[] = $this->postFormSucceeded;
+		$previewButton = $form->addSubmit('preview', 'Náhled');
+		$previewButton->onClick[] = $this->postFormPreview;
+		$previewButton->getControlPrototype()->addClass('ajax');
+
+		$submitButton = $form->addSubmit('send', 'Odeslat a zveřejnit');
+		$submitButton->onClick[] = $this->postFormSucceeded;
+		$form->renderer->primaryButton = $submitButton;
 
 		return $form;
 	}
 
-	public function postFormSucceeded(Nette\Application\UI\Form $form) {
+	public function postFormSucceeded(SubmitButton $button) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		$values = $form->values;
+		$values = $button->form->values;
 
 		if ($this->action === 'create') {
 			$post = new Post;
@@ -80,6 +86,27 @@ class PostPresenter extends BasePresenter {
 		$this->posts->persistAndFlush($post);
 		$this->flashMessage('Aktuálka byla odeslána.', 'success');
 		$this->redirect('show', $post->id);
+	}
+
+	public function postFormPreview(SubmitButton $button) {
+		if (!$this->user->loggedIn) {
+			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		}
+
+		$values = $button->form->values;
+
+		$formatted = $this->formatter->format($values['markdown']);
+
+		if (count($formatted['errors'])) {
+			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
+		}
+
+		$this->template->preview = $formatted['text'];
+
+		$this->flashMessage('Toto je jen náhled, aktuálka zatím nebyla uložena.', 'info');
+
+		$this->redrawControl('flashes');
+		$this->redrawControl('preview');
 	}
 
 	public function actionCreate() {

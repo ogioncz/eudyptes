@@ -1,6 +1,12 @@
 {block content}
 <h2 n:inner-block="title">Vytvořit sraz</h2>
-
+{snippet preview}
+{ifset $preview}
+<div class="edit-preview">
+{include '%meeting.latte', meeting => $preview}
+</div>
+{/ifset}
+{/snippet}
 {control meetingForm}
 {/block}
 {block scripts}

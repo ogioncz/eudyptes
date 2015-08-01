@@ -1,0 +1,17 @@
+<h3>{$meeting->title}</h3>
+<dl class="dl-horizontal">
+<dt>Navrhnul:</dt><dd>{$meeting->user|userLink}</dd>
+<dt>Datum:</dt><dd>{$meeting->date|date:'j. n. Y'} {$meeting->date|relDate}</dd>
+<dt>Server:</dt><dd>{$meeting->server}</dd>
+<dt>Program:</dt><dd>
+{?$events = \Nette\Utils\Json::decode($meeting->program)}
+{if count($events > 0)}
+<table class="table table-striped"><tbody>
+<tr n:foreach="$events as $event"><th>{$event->time}</th><td>{$event->event}</td></tr>
+</tbody></table>
+{else}
+Na programu nic není.
+{/if}
+</dd>
+<dt>Popis:</dt><dd>{$meeting->description|noescape}</dd>
+</dl>
