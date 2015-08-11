@@ -2,10 +2,12 @@
 namespace App\Presenters;
 
 use Nette;
+use Nette\Caching\Cache;
 use Nette\Forms\Controls\SubmitButton;
 use Nextras\Forms\Rendering;
 use App;
 use App\Model\Post;
+use App\Model\PostRevision;
 
 class PostPresenter extends BasePresenter {
 	/** @var App\Model\Formatter @inject */
@@ -27,7 +29,7 @@ class PostPresenter extends BasePresenter {
 	}
 
 	public function renderList() {
-		$posts = $this->posts->findAll()->orderBy(['timestamp' => 'DESC']);
+		$posts = $this->posts->findAll()->orderBy(['createdAt' => 'DESC']);
 		$this->template->posts = $posts;
 	}
 
@@ -53,6 +55,7 @@ class PostPresenter extends BasePresenter {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
+
 		$values = $button->form->values;
 
 		if ($this->action === 'create') {
@@ -69,21 +72,31 @@ class PostPresenter extends BasePresenter {
 			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		$post->title = $values->title;
-		$post->markdown = $values->markdown;
-
-		$formatted = $this->formatter->format($post->markdown);
+		$formatted = $this->formatter->format($values->markdown);
 		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
-
-		$post->content = $formatted['text'];
 
 		if ($this->action === 'create') {
 			$post->user = $this->users->getById($this->user->identity->id);
 		}
 
 		$this->posts->persistAndFlush($post);
+
+		$revision = new PostRevision;
+		$revision->markdown = $values->markdown;
+		$revision->title = $values->title;
+		$revision->post = $post;
+		$revision->content = $formatted['text'];
+		$revision->user = $this->user->identity->id;
+		$revision->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
+		$post->revisions->add($revision);
+
+		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'posts');
+		$cache->save($post->id, $formatted['text']);
+
+		$this->posts->persistAndFlush($post);
+
 		$this->flashMessage('Aktuálka byla odeslána.', 'success');
 		$this->redirect('show', $post->id);
 	}
@@ -129,12 +142,15 @@ class PostPresenter extends BasePresenter {
 		if (!$post) {
 			$this->error('Aktuálka nenalezena');
 		}
-		$data = $post->toArray();
+
+		$data = [];
+		$data['title'] = $post->title;
+		$data['markdown'] = $post->markdown;
 		$this['postForm']->setDefaults($data);
 	}
 
 	public function renderRss() {
-		$posts = $this->posts->findAll()->orderBy(['timestamp' => 'DESC'])->limitBy(15);
+		$posts = $this->posts->findAll()->orderBy(['createdAt' => 'DESC'])->limitBy(15);
 		$this->template->posts = $posts;
 	}
 }

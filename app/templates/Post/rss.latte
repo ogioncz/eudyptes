@@ -4,14 +4,14 @@
 	<atom:link href="{link //this}" rel="self" type="application/rss+xml" />
 	<title>Fan Club Penguin.cz</title>
 	<description>Český fan-web o Clubu Penguin</description>
-	<lastBuildDate>{$posts->fetch()->timestamp|date:'r'}</lastBuildDate>
+	<lastBuildDate>{$posts->fetch()->createdAt|date:'r'}</lastBuildDate>
 	<link>{link //Homepage:}</link>
 	{foreach $posts as $post}
 	<item>
 		<title>{$post->title}</title>
 		<link>{link //show $post->id}</link>
 		<guid>{link //show $post->id}</guid>
-		<pubDate>{$post->timestamp|date:'r'}</pubDate>
+		<pubDate>{$post->createdAt|date:'r'}</pubDate>
 		<dc:creator>{$post->user->username}</dc:creator>
 		<description>{$post->content|htmlTruncate:200}</description>
 	</item>

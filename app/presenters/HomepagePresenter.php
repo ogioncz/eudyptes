@@ -11,6 +11,6 @@ class HomepagePresenter extends BasePresenter {
 	public function renderDefault() {
 		$paginator = $this['paginator']->paginator;
 		$paginator->itemCount = $this->posts->findAll()->countStored();
-		$this->template->posts = $this->posts->findAll()->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
+		$this->template->posts = $this->posts->findAll()->orderBy(['createdAt' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 }

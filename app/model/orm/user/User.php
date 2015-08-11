@@ -22,9 +22,10 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property string|null $profile
  *
  * @property OneHasMany|Token[] $tokens {1:m TokenRepository}
- * @property OneHasMany|Post[] $createdPosts {1:m PostRepository order:timestamp,DESC}
+ * @property OneHasMany|Post[] $createdPosts {1:m PostRepository order:createdAt,DESC}
  * @property OneHasMany|Page[] $createdPages {1:m PageRepository order:title,DESC}
  * @property OneHasMany|Revision[] $createdRevisions {1:m RevisionRepository order:timestamp,DESC}
+ * @property OneHasMany|PostRevision[] $createdPostRevisions {1:m PostRevisionRepository order:timestamp,DESC}
  * @property OneHasMany|Mail[] $receivedMail {1:m MailRepository $recipient order:timestamp,DESC}
  * @property OneHasMany|Mail[] $sentMail {1:m MailRepository $sender order:timestamp,DESC}
  * @property OneHasMany|Chat[] $createdChats {1:m ChatRepository order:timestamp,DESC}
