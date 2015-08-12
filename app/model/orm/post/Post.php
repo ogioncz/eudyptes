@@ -14,6 +14,7 @@ use Nextras\Orm\Entity\Entity;
  * @property string $content {virtual}
  * @property DateTime $createdAt {default now}
  * @property bool $likeable {default false}
+ * @property bool $published {default true}
  *
  * @property-read PostRevision $lastRevision {virtual}
  * @property OneHasMany|PostRevision[] $revisions {1:m PostRevisionRepository order:timestamp,DESC}

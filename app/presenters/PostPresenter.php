@@ -39,12 +39,13 @@ class PostPresenter extends BasePresenter {
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
+		$form->addCheckbox('published', 'Zveřejnit')->setDefaultValue(true);
 
 		$previewButton = $form->addSubmit('preview', 'Náhled');
 		$previewButton->onClick[] = $this->postFormPreview;
 		$previewButton->getControlPrototype()->addClass('ajax');
 
-		$submitButton = $form->addSubmit('send', 'Odeslat a zveřejnit');
+		$submitButton = $form->addSubmit('save', 'Uložit');
 		$submitButton->onClick[] = $this->postFormSucceeded;
 		$form->renderer->primaryButton = $submitButton;
 
@@ -71,6 +72,8 @@ class PostPresenter extends BasePresenter {
 		if (!$this->allowed($this->action === 'create' ? 'post' : $post, $this->action)) {
 			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
+
+		$post->published = $values->published;
 
 		$formatted = $this->formatter->format($values->markdown);
 		if (count($formatted['errors'])) {
@@ -146,6 +149,7 @@ class PostPresenter extends BasePresenter {
 		$data = [];
 		$data['title'] = $post->title;
 		$data['markdown'] = $post->markdown;
+		$data['published'] = $post->published;
 		$this['postForm']->setDefaults($data);
 	}
 

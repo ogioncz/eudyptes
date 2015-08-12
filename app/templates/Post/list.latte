@@ -12,7 +12,7 @@
 </thead>
 <tbody>
 <tr n:foreach="$posts as $post">
-<td><a n:href="show $post->id">{$post->title}</a></td>
+<td><a n:href="show $post->id">{if !$post->published}<span class="label label-warning">nepublikováno</span> {/if}{$post->title}</a></td>
 <td>{$post->createdAt|dateNA:'j. n. Y H:i:s'}</td>
 <td>{$post->user|userLink}</td>
 <td>{if $allowed($post, 'edit')}<a n:href="edit $post->id"><span class="glyphicon glyphicon-pencil"></span>Upravit</a>{/if}</td>
