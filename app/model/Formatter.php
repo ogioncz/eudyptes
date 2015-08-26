@@ -5,9 +5,13 @@ namespace App\Model;
 use Nette;
 use Alb\OEmbed;
 use Nette\Utils\Html;
+use Nette\Utils\Strings;
 
 class Formatter extends Nette\Object {
 	public static $OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be', 'vimeo.com', 'soundcloud.com', 'twitter.com'];
+
+	/** @var PageRepository */
+	public $pages;
 
 	/** @var \Parsedown */
 	public $parsedown;
@@ -18,7 +22,8 @@ class Formatter extends Nette\Object {
 	/** @var OEmbed\Simple */
 	public $oembed;
 
-	public function __construct(\Parsedown $parsedown, \HTMLPurifier $purifier, OEmbed\Simple $oembed) {
+	public function __construct(PageRepository $pages, \Parsedown $parsedown, \HTMLPurifier $purifier, OEmbed\Simple $oembed) {
+		$this->pages = $pages;
 		$this->parsedown = $parsedown;
 		$this->purifier = $purifier;
 		$this->oembed = $oembed;
@@ -28,6 +33,8 @@ class Formatter extends Nette\Object {
 		$text = $this->replaceOembed($text);
 
 		$text = $this->replaceProps($text);
+
+		$text = $this->replaceWikiLinks($text);
 
 		$text = $this->replaceCustomTags($text);
 
@@ -79,6 +86,23 @@ class Formatter extends Nette\Object {
 		$text = CustomTags::item($text);
 		$text = CustomTags::coins($text);
 		$text = CustomTags::music($text);
+
+		return $text;
+	}
+
+	public function replaceWikiLinks($text) {
+		$text = preg_replace_callback('~\[\[([\w /-]+)(?:\|([\w /-]+))?\]\]~u', function($matches) {
+			$link = $label = $matches[1];
+			if (count($matches) === 3) {
+				$label = $matches[2];
+			}
+
+			$link = Strings::webalize($link, '/');
+
+			$redlink = $this->pages->findBy(['slug' => $link])->countStored() === 0;
+
+			return '<a href="page:' . $link . '"' . ($redlink ? ' class="redlink"' : '') . '>' . $label . '</a>';
+		}, $text);
 
 		return $text;
 	}

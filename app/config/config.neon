@@ -38,7 +38,7 @@ services:
 	- App\Model\PurifierFactory
 	oembed: Alb\OEmbed\Simple
 	parsedown: ParsedownExtended
-	formatter: App\Model\Formatter(@parsedown, @purifier)
+	formatter: App\Model\Formatter
 	router: @App\RouterFactory::createRouter
 	purifier: @App\Model\PurifierFactory::createPurifier(@Nette\Application\Application, '%tempDir%/cache')
 	authorizator:
