@@ -22,7 +22,15 @@ class PagePresenter extends BasePresenter {
 	public function renderShow($slug) {
 		$page = $this->pages->getBy(['slug' => $slug]);
 		if (!$page) {
-			$this->error('Stránka nenalezena');
+			if ($this->allowed('page', 'create')) {
+				$httpResponse = $this->context->getByType('Nette\Http\Response');
+				$httpResponse->setCode(Nette\Http\Response::S404_NOT_FOUND);
+				$this->template->slug = $slug;
+				$this->setView('@no-page');
+				$this->sendTemplate();
+			} else {
+				$this->error('Stránka nenalezena');
+			}
 		}
 
 
@@ -178,12 +186,16 @@ class PagePresenter extends BasePresenter {
 		$this->redrawControl('preview');
 	}
 
-	public function actionCreate() {
+	public function actionCreate($slug = null) {
 		if (!$this->user->loggedIn) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('page', $this->action)) {
 			$this->error('Pro vytváření stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+		}
+
+		if (isset($slug)) {
+			$this['pageForm']['slug']->defaultValue = $slug;
 		}
 	}
 
