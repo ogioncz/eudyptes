@@ -51,6 +51,15 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$this->template->menu = $this->pages->findBy(['menu' => true])->orderBy(['title' => 'ASC']);
 		$this->template->logo = file_get_contents(__DIR__ . '/../../www/images/bar.svg');
 
+		$headers = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/images/header'), function($f, $_k) {
+			return $f->isFile();
+		}), function($f, $_k) {
+			return $f->getFileName();
+		}));
+		shuffle($headers);
+
+		$this->template->headerStyle = count($headers) > 0 ? 'background-image: url(' . $this->template->basePath . '/images/header/' . $headers[0] . ');' : '';
+
 		$this->template->allowed = $this->allowed;
 	}
 
