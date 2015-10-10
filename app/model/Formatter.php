@@ -134,6 +134,7 @@ class Formatter extends Nette\Object {
 		$text = preg_replace('/(\*@\*|\(puffle\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/puffle.svg" alt="*@*" width="30" height="29">', $text);
 		$text = preg_replace('/(\(coin\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/coin.svg" alt="\1" width="30" height="29">', $text);
 		$text = preg_replace('/(\(icebrown\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/chocolate-ice-cream.svg" alt="\1" width="30" height="29">', $text);
+		$text = preg_replace('/(\(epf\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/operation-puffle-epf-logo.svg" alt="\1" width="30" height="29">', $text);
 		$text = preg_replace('/(\(icepink\))/i', '<img src="https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/strawberry-ice-cream.svg" alt="\1" width="30" height="29">', $text);
 
 		return $text;
