@@ -91,7 +91,7 @@ class Formatter extends Nette\Object {
 	}
 
 	public function replaceWikiLinks($text) {
-		$text = preg_replace_callback('~\[\[([\w /-]+)(?:\|([\w /-]+))?\]\]~u', function($matches) {
+		$text = preg_replace_callback('~\[\[([\w: /-]+)(?:\|([\w: /-]+))?\]\]~u', function($matches) {
 			$link = $label = $matches[1];
 			if (count($matches) === 3) {
 				$label = $matches[2];
