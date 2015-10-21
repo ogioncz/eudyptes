@@ -58,6 +58,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 			return $this->template->basePath . '/custom/' . $f->getFileName();
 		}));
 
+		$this->template->customScripts = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/custom'), function($f, $_k) {
+			return $f->isFile() && $f->getExtension() == 'js';
+		}), function($f, $_k) {
+			return $this->template->basePath . '/custom/' . $f->getFileName();
+		}));
+
 		$headers = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/images/header'), function($f, $_k) {
 			return $f->isFile();
 		}), function($f, $_k) {

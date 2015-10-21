@@ -130,6 +130,7 @@
 	{if $user->loggedIn && $user->isAllowed('chat', 'read')}<script src="{$basePath}/javascript/chat.js"></script>{/if}
 	<script src="{$basePath}/javascript/lightbox.js"></script>
 	<script src="{$basePath}/javascript/main.js"></script>
+	<script n:foreach="$customScripts as $script" src="{$script}"></script>
 	{block scripts}{/block}
 </body>
 </html>
