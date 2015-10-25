@@ -14,7 +14,7 @@
 <tbody>
 <tr n:foreach="$pages as $page">
 {var $last_revision = $page->lastRevision}
-<td><a n:href="show $page->slug">{$page->title}</a></td>
+<td><span class="glyphicon glyphicon-share-alt" title="Přesměrování" n:if="$last_revision->redirect"></span> <a n:href="show $page->slug">{$page->title}</a></td>
 {if $last_revision}
 <td>{$last_revision->timestamp|dateNA:'j. n. Y H:i:s'}</td>
 <td>{$last_revision->user|userLink}</td>
