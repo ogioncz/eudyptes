@@ -11,7 +11,7 @@
 </thead>
 <tbody>
 <tr n:foreach="$revisions as $revision">
-<td><a n:href="show $revision->id">{$revision->page->title}</a></td>
+<td><span class="glyphicon glyphicon-share-alt" title="Přesměrování" n:if="$revision->redirect"></span> <a n:href="show $revision->id">{$revision->page->title}</a></td>
 <td>{$revision->timestamp|dateNA:'j. n. Y H:i:s'}</td>
 <td>{$revision->user|userLink}</td>
 <td>{if $revision->previous}<a n:href="diff $revision->previous->id, $revision->id">Změny</a>{else}<em>Nová stránka</em>{/if}</td>
