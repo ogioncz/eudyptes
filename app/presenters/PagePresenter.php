@@ -33,6 +33,9 @@ class PagePresenter extends BasePresenter {
 			}
 		}
 
+		if (isset($page->redirect)) {
+			$this->redirectUrl($page->redirect);
+		}
 
 		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
 

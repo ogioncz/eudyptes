@@ -13,6 +13,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string $slug
  * @property string $title
  * @property-read string $markdown {virtual}
+ * @property-read string $redirect {virtual}
  * @property string|null $icon
  * @property bool $menu {default false}
  *
@@ -26,6 +27,10 @@ class Page extends Entity implements Nette\Security\IResource {
 
 	public function getterMarkdown() {
 		return $this->lastRevision ? $this->lastRevision->markdown : null;
+	}
+
+	public function getterRedirect() {
+		return $this->lastRevision ? $this->lastRevision->redirect : null;
 	}
 
 	public function getResourceId() {
