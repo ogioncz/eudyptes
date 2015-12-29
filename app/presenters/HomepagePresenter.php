@@ -10,7 +10,8 @@ class HomepagePresenter extends BasePresenter {
 
 	public function renderDefault() {
 		$paginator = $this['paginator']->paginator;
-		$paginator->itemCount = $this->posts->findBy(['published' => true])->countStored();
-		$this->template->posts = $this->posts->findBy(['published' => true])->orderBy(['createdAt' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
+		$posts = $this->posts->findBy(['published' => true, 'createdAt<=' => new \DateTime()]);
+		$paginator->itemCount = $posts->countStored();
+		$this->template->posts = $posts->orderBy(['createdAt' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 }
