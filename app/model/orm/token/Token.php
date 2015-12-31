@@ -7,9 +7,10 @@ use Nextras\Orm\Entity\Entity;
 
 /**
  * Token
- * @property User $user {m:1 UserRepository $tokens}
+ * @property int $id {primary}
+ * @property User $user {m:1 User::$tokens}
  * @property string $token
- * @property string $type {default registration} {enum self::REGISTRATION self::LOGIN self::PASSWORD}
+ * @property string $type {default self::REGISTRATION} {enum self::REGISTRATION, self::LOGIN, self::PASSWORD}
  * @property DateTime $timestamp {default now}
  * @property DateTime $expiration
  * @property string $ip

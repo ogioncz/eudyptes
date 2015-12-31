@@ -9,13 +9,14 @@ use Nextras\Orm\Relationships\ManyHasMany;
 
 /**
  * Stamp
+ * @property int $id {primary}
  * @property string $name
  * @property string $description
  * @property string $difficulty {enum self::DIFFICULTY_*}
  * @property string $icon
  * @property bool $obtainable
  *
- * @property ManyHasMany|User[] $owners {m:n UserRepository $ownedStamps}
+ * @property ManyHasMany|User[] $owners {m:n User::$ownedStamps}
  */
 class Stamp extends Entity implements Nette\Security\IResource {
 	const DIFFICULTY_NOTHING = '0';

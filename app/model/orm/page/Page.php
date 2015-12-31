@@ -9,7 +9,8 @@ use Nextras\Orm\Relationships\OneHasMany;
 
 /**
  * Page
- * @property User $user {m:1 UserRepository $createdPages}
+ * @property int $id {primary}
+ * @property User $user {m:1 User::$createdPages}
  * @property string $slug
  * @property string $title
  * @property-read string $markdown {virtual}
@@ -18,7 +19,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property bool $menu {default false}
  *
  * @property-read Revision $lastRevision {virtual}
- * @property OneHasMany|Revision[] $revisions {1:m RevisionRepository order:timestamp,DESC}
+ * @property OneHasMany|Revision[] $revisions {1:m Revision::$page, orderBy=[timestamp, DESC]}
  */
 class Page extends Entity implements Nette\Security\IResource {
 	public function getterLastRevision() {

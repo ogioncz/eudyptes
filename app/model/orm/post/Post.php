@@ -8,7 +8,8 @@ use Nextras\Orm\Entity\Entity;
 
 /**
  * Post
- * @property User $user {m:1 UserRepository $createdPosts}
+ * @property int $id {primary}
+ * @property User $user {m:1 User::$createdPosts}
  * @property string $title {virtual}
  * @property string $markdown {virtual}
  * @property string $content {virtual}
@@ -17,7 +18,7 @@ use Nextras\Orm\Entity\Entity;
  * @property bool $published {default true}
  *
  * @property-read PostRevision $lastRevision {virtual}
- * @property OneHasMany|PostRevision[] $revisions {1:m PostRevisionRepository order:timestamp,DESC}
+ * @property OneHasMany|PostRevision[] $revisions {1:m PostRevision::$post, orderBy=[timestamp, DESC]}
  */
 class Post extends Entity implements Nette\Security\IResource {
 	public function getterLastRevision() {

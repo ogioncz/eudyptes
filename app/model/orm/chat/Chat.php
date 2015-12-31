@@ -7,7 +7,8 @@ use Nextras\Orm\Entity\Entity;
 
 /**
  * Chat
- * @property User $user {m:1 UserRepository $createdChats}
+ * @property int $id {primary}
+ * @property User $user {m:1 User::$createdChats}
  * @property string $content
  * @property DateTime $timestamp {default now}
  * @property string $ip

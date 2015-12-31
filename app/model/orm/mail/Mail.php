@@ -9,9 +9,10 @@ use Nextras\Orm\Relationships\OneHasMany;
 
 /**
  * Mail
- * @property User|null $sender {m:1 UserRepository $sentMail}
- * @property User|null $recipient {m:1 UserRepository $receivedMail}
- * @property Mail|null $reaction {m:1 MailRepository $replies}
+ * @property int $id {primary}
+ * @property User|null $sender {m:1 User::$sentMail}
+ * @property User|null $recipient {m:1 User::$receivedMail}
+ * @property Mail|null $reaction {m:1 Mail::$replies}
  * @property string $subject
  * @property string $markdown
  * @property string $content
@@ -20,7 +21,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property bool $read {default false}
  *
  * @property Mail $root {virtual}
- * @property OneHasMany|Mail[] $replies {1:m MailRepository $reaction order:timestamp,ASC}
+ * @property OneHasMany|Mail[] $replies {1:m Mail::$reaction, orderBy=[timestamp, ASC]}
  */
 class Mail extends Entity implements Nette\Security\IResource {
 	public function getResourceId() {

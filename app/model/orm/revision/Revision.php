@@ -8,12 +8,13 @@ use Nextras\Orm\Collection\ICollection;
 
 /**
  * Revision
- * @property Page $page {m:1 PageRepository $revisions}
+ * @property int $id {primary}
+ * @property Page $page {m:1 Page::$revisions}
  * @property string $markdown
  * @property string $content
  * @property string|null $redirect
  * @property DateTime|null $timestamp {default now}
- * @property User $user {m:1 UserRepository $createdRevisions}
+ * @property User $user {m:1 User::$createdRevisions}
  * @property string $ip
  *
  * @property-read Revision|null $previous {virtual}
