@@ -9,7 +9,7 @@ class SearchPresenter extends BasePresenter {
 
 	public function renderResult($query) {
 		if ($query) {
-			$paginator = $this['paginator']->getPaginator();
+			$paginator = $this['paginator']->paginator;
 			$page = $paginator->page;
 			$paginator->itemsPerPage = $this->itemsPerPage;
 
