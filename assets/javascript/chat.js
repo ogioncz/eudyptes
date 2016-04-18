@@ -1,8 +1,19 @@
 $(function() {
 	var localStorageEnabled = 'localStorage' in window && window['localStorage'] !== null;
 	var scrollDown = function(chat) {
-		chat.find('li:nth-last-child(2)')[0].scrollIntoView(false);
+		chat.find('.chat-messages li').last()[0].scrollIntoView(false);
 	};
+
+	var refreshChat = function(chat, scroll) {
+		var lastMessage = chat.find('.chat-messages li').last().attr('data-message-id');
+		$.get(chat.attr('data-chat-refresh'), {'chat-id': lastMessage}, function(data) {
+			chat.find('.chat-messages ul').append(data);
+
+			if (scroll) {
+				scrollDown(chat);
+			}
+		});
+	}
 
 	var chatVisibilities = {};
 	$('.chat').each(function() {
@@ -52,23 +63,24 @@ $(function() {
 			}
 		})(chat));
 
+		chat.find('form').submit(function(e) {
+			e.preventDefault();
+			var textarea = $(this).find('textarea');
+			$.post($(this).attr('action'), $(this).serialize(), function(data) {
+				refreshChat(chat, true);
+				textarea.val('');
+			});
+		});
+
 		setInterval(function() {
-			chat.find('.refresh-chat').click();
+			refreshChat(chat);
 		}, 5000);
 	});
 
 	$('.chat').on('keypress', 'textarea', function(e) {
 		if (e.which === 13 && !e.shiftKey) {
 			e.preventDefault();
-			$(this).submit();
-		}
-	});
-
-	$.nette.ext('scrollOnSubmit', {
-		success: function() {
-			if (arguments[3].type === 'post') {
-				scrollDown($('#chat'));
-			}
+			$(this).closest('form').submit();
 		}
 	});
 

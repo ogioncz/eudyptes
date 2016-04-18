@@ -6,6 +6,7 @@ use App;
 use App\Model\Chat;
 use Nette;
 use Nette\Application\UI\Control;
+use Nette\Application\Responses\TextResponse;
 use Nextras\Forms\Rendering;
 
 
@@ -26,7 +27,7 @@ class ChatControl extends Control {
 		$this->template->getLatte()->addFilter(null, [new \App\Model\HelperLoader($this->presenter), 'loader']);
 		$this->template->setFile(__DIR__ . '/chat.latte');
 		$allChats = $this->chats->findAll()->orderBy(['timestamp' => 'ASC']);
-		$this->template->chats = $allChats->limitBy(50, max(0, $allChats->countStored() - 50));
+		$this->template->chats = $allChats->limitBy(51, max(0, $allChats->countStored() - 51));
 		$this->template->activeUsers = $this->users->findActive();
 
 		$this->template->render();
@@ -35,7 +36,6 @@ class ChatControl extends Control {
 	protected function createComponentChatForm() {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
-		$form->getElementPrototype()->class('ajax');
 		$form->addTextArea('content', 'Zpráva:')->setRequired();
 
 		$submit = $form->addSubmit('send', 'Odeslat')->getControlPrototype();
@@ -48,13 +48,13 @@ class ChatControl extends Control {
 	}
 
 	public function handleRefresh($id) {
-		$this->template->chats = $this->chats->findBy(['id>' => $id]);
 		if (!$this->presenter->isAjax()) {
 			$this->redirect('this');
 		} else {
-			$this->redrawControl('chatMessages');
-			$this->redrawControl('chatActiveCount');
-			$this->redrawControl('chatActiveList');
+			$this->template->getLatte()->addFilter(null, [new \App\Model\HelperLoader($this->presenter), 'loader']);
+			$this->template->setFile(__DIR__ . '/chat-messages.latte');
+			$this->template->chats = $this->chats->findBy(['id>=' => $id]);
+			$this->presenter->sendResponse(new TextResponse($this->template));
 		}
 	}
 
@@ -100,9 +100,7 @@ EOT;
 		if (!$this->presenter->isAjax()) {
 			$this->redirect('this');
 		} else {
-			$this->redrawControl('chatMessages');
-			$this->redrawControl('chatForm');
-			$form->setValues([], TRUE);
+			$this->presenter->sendResponse(new TextResponse('ok'));
 		}
 	}
 }

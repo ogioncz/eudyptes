@@ -1,21 +1,17 @@
-<div n:class="chat, false ? chat-full-size" id="chat" data-chat-name="public">
+<div n:class="chat, false ? chat-full-size" id="chat" data-chat-name="public" data-chat-refresh="{link refresh!}">
 	<div class="chat-main">
 		<header>
 			<div class="chat-toolbar"></div>
-			<h2>Chat <span class="chat-active-count badge" title="Aktivní uživatelé v posledních pěti minutách" n:inner-snippet="chatActiveCount">{$activeUsers->count()}</span></h2>
+			<h2>Chat <span class="chat-active-count badge" title="Aktivní uživatelé v posledních pěti minutách">{$activeUsers->count()}</span></h2>
 		</header>
 		<div class="chat-body">
 			<div class="chat-messages">
-				<ul n:snippet="chatMessages">
-					{foreach $chats as $chat}
-					<li title="{$chat->timestamp|date:'j. n. Y H:i:s'}" data-message-id="{$chat->id}"><strong>{$chat->user|userLink:true}:</strong> {$chat->content|noescape} <button class="chat-reply btn btn-link" title="Odpovědět"><span class="glyphicon glyphicon-share-alt"></span></button></li>
-					<li n:if="!$iterator->last && $iterator->nextValue->timestamp->format('Y-m-d') !== $chat->timestamp->format('Y-m-d')" class="chat-date">{$iterator->nextValue->timestamp|date:'j. n. Y'}</li>
-					{/foreach}
-					<li class="hidden"><a n:href="refresh! $chat->id" class="ajax refresh-chat">Obnovit</a></li>
+				<ul>
+					{include 'chat-messages.latte'}
 				</ul>
 			</div>
 			<div class="chat-actions" n:if="$user->isAllowed('chat', 'send')">
-				<div class="chat-input" n:snippet="chatForm">
+				<div class="chat-input">
 				{form chatForm}
 					<div class="chat-input-inner">
 						<p class="sr-only">{label content /}</p>
@@ -30,7 +26,7 @@
 		</div>
 	</div>
 	<div class="chat-active-list hide">
-		<ul class="list-unstyled" n:snippet="chatActiveList">
+		<ul class="list-unstyled">
 			<li n:foreach="$activeUsers as $activeUser">{$activeUser|userLink:true}</li>
 		</ul>
 	</div>
