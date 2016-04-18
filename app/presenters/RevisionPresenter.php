@@ -42,7 +42,7 @@ class RevisionPresenter extends BasePresenter {
 	}
 
 	public function renderList() {
-		$paginator = $this['paginator']->paginator;
+		$paginator = $this['paginator']->getPaginator();
 		$paginator->itemsPerPage = 50;
 		$revisions = $this->revisions->findAll();
 		$paginator->itemCount = $revisions->countStored();

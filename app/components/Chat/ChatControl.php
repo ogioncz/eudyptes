@@ -40,14 +40,14 @@ class ChatControl extends Control {
 		$form->addTextArea('content', 'Zpráva:')->setRequired();
 
 		$form->addSubmit('send', 'Odeslat')->getControlPrototype();
-		$form->onSuccess[] = $this->chatFormSucceeded;
+		$form->onSuccess[] = [$this, 'chatFormSucceeded'];
 
 		return $form;
 	}
 
 	public function handleRefresh($id) {
 		$this->template->chats = $this->chats->findBy(['id>' => $id]);
-		if (!$this->presenter->ajax) {
+		if (!$this->presenter->isAjax()) {
 			$this->redirect('this');
 		} else {
 			$this->redrawControl('chatMessages');
@@ -95,7 +95,7 @@ EOT;
 		$chat->ip = $this->presenter->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$chat->user = $this->users->getById($this->presenter->user->identity->id);
 		$this->chats->persistAndFlush($chat);
-		if (!$this->presenter->ajax) {
+		if (!$this->presenter->isAjax()) {
 			$this->redirect('this');
 		} else {
 			$this->redrawControl('chatMessages');

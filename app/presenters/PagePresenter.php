@@ -102,11 +102,11 @@ class PagePresenter extends BasePresenter {
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$previewButton = $form->addSubmit('preview', 'Náhled');
-		$previewButton->onClick[] = $this->pageFormPreview;
+		$previewButton->onClick[] = [$this, 'pageFormPreview'];
 		$previewButton->getControlPrototype()->addClass('ajax');
 
 		$submitButton = $form->addSubmit('send', 'Odeslat a zveřejnit');
-		$submitButton->onClick[] = $this->pageFormSucceeded;
+		$submitButton->onClick[] = [$this, 'pageFormSucceeded'];
 		$form->renderer->primaryButton = $submitButton;
 
 		return $form;

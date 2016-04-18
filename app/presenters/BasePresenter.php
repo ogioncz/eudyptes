@@ -21,7 +21,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	protected function createComponentPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
-		$vp->paginator->itemsPerPage = 10;
+		$vp->getPaginator()->itemsPerPage = 10;
 		return $vp;
 	}
 
@@ -73,7 +73,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 		$this->template->headerStyle = count($headers) > 0 ? 'background-image: url(' . $this->template->basePath . '/images/header/' . $headers[0] . ');' : '';
 
-		$this->template->allowed = $this->allowed;
+		$this->template->allowed = [$this, 'allowed'];
 	}
 
 	public function allowed($resource, $action) {

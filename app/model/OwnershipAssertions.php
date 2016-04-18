@@ -9,18 +9,18 @@ use Nette\Security\IResource;
 
 class OwnershipAssertions extends Nette\Object {
 	public static function ownsPage(Permission $acl) {
-		return $acl->queriedResource instanceof IResource && $acl->queriedRole instanceof IRole && $acl->queriedRole->id === $acl->queriedResource->user->id;
+		return $acl->getQueriedResource() instanceof IResource && $acl->getQueriedRole() instanceof IRole && $acl->getQueriedRole()->id === $acl->getQueriedResource()->user->id;
 	}
 
 	public static function ownsMail(Permission $acl) {
-		return $acl->queriedResource instanceof IResource && $acl->queriedRole instanceof IRole && ($acl->queriedRole->id === $acl->queriedResource->sender->id || $acl->queriedRole->id === $acl->queriedResource->recipient->id);
+		return $acl->getQueriedResource() instanceof IResource && $acl->getQueriedRole() instanceof IRole && ($acl->getQueriedRole()->id === $acl->getQueriedResource()->sender->id || $acl->getQueriedRole()->id === $acl->getQueriedResource()->recipient->id);
 	}
 
 	public static function ownsProfile(Permission $acl) {
-		return $acl->queriedResource instanceof IResource && $acl->queriedRole instanceof IRole && $acl->queriedRole->id === $acl->queriedResource->id;
+		return $acl->getQueriedResource() instanceof IResource && $acl->getQueriedRole() instanceof IRole && $acl->getQueriedRole()->id === $acl->getQueriedResource()->id;
 	}
 
 	public static function canMail(Permission $acl) {
-		return $acl->queriedResource instanceof IResource && $acl->queriedRole instanceof IRole && $acl->queriedRole->id !== $acl->queriedResource->id;
+		return $acl->getQueriedResource() instanceof IResource && $acl->getQueriedRole() instanceof IRole && $acl->getQueriedRole()->id !== $acl->getQueriedResource()->id;
 	}
 }

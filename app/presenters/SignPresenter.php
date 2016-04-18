@@ -22,7 +22,7 @@ class SignPresenter extends BasePresenter {
 
 		$form->addSubmit('send', 'Přihlásit se');
 
-		$form->onSuccess[] = $this->signInFormSucceeded;
+		$form->onSuccess[] = [$this, 'signInFormSucceeded'];
 		return $form;
 	}
 

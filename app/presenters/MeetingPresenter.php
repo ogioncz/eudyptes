@@ -40,7 +40,7 @@ class MeetingPresenter extends BasePresenter {
 
 		$submit = $form->addSubmit('firstsend', 'Odeslat a zveřejnit');
 		$submit->getControlPrototype()->addClass('hidden');
-		$submit->onClick[] = $this->meetingFormSucceeded;
+		$submit->onClick[] = [$this, 'meetingFormSucceeded'];
 
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$form->addDatePicker('date', 'Datum:')->setRequired();
@@ -63,11 +63,11 @@ class MeetingPresenter extends BasePresenter {
 		$form->addTextArea('markdown', 'Popis:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$previewButton = $form->addSubmit('preview', 'Náhled');
-		$previewButton->onClick[] = $this->meetingFormPreview;
+		$previewButton->onClick[] = [$this, 'meetingFormPreview'];
 		$previewButton->getControlPrototype()->addClass('ajax');
 
 		$submit = $form->addSubmit('send', 'Odeslat a zveřejnit');
-		$submit->onClick[] = $this->meetingFormSucceeded;
+		$submit->onClick[] = [$this, 'meetingFormSucceeded'];
 		$renderer->primaryButton = $submit;
 
 		return $form;
@@ -193,7 +193,7 @@ class MeetingPresenter extends BasePresenter {
 
 		$submit = $form->addSubmit('send', 'Ano, smazat');
 		$submit->getControlPrototype()->removeClass('btn-primary')->addClass('btn-danger');
-		$form->onSuccess[] = $this->deleteFormSucceeded;
+		$form->onSuccess[] = [$this, 'deleteFormSucceeded'];
 
 		return $form;
 	}
@@ -246,7 +246,7 @@ class MeetingPresenter extends BasePresenter {
 				return $carry;
 			}, false);
 
-			return new App\Components\Participator($meeting, $youParticipate, $this->participatorClicked);
+			return new App\Components\Participator($meeting, $youParticipate, [$this, 'participatorClicked']);
 		});
 	}
 
@@ -272,7 +272,7 @@ class MeetingPresenter extends BasePresenter {
 
 		$form->components['action']->value = $youParticipate ? 'unparticipate' : 'participate';
 		$form->components['send']->caption = $youParticipate ? 'Zrušit účast' : 'Zúčastnit se';
-		if (!$this->ajax) {
+		if (!$this->isAjax()) {
 			$this->redirect('this');
 		} else {
 			$this->redrawControl('meetings');
