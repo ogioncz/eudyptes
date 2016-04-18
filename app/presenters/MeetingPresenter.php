@@ -11,6 +11,9 @@ use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Application\UI\Multiplier;
 
+/**
+ * MeetingPresenter handles user-organised meetings and events.
+ */
 class MeetingPresenter extends BasePresenter {
 	/** @var App\Model\Formatter @inject */
 	public $formatter;

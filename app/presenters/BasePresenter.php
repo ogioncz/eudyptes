@@ -6,6 +6,9 @@ use Nette;
 use Nette\Utils\DateTime;
 use App;
 
+/**
+ * BasePresenter is the mother of all presenters.
+ */
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	/** @var App\Model\UserRepository @inject */
 	public $users;

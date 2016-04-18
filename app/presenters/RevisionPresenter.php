@@ -3,6 +3,9 @@ namespace App\Presenters;
 
 use App;
 
+/**
+ * RevisionPresenter displays and diffs revisions.
+ */
 class RevisionPresenter extends BasePresenter {
 	/** @var App\Model\RevisionRepository @inject */
 	public $revisions;

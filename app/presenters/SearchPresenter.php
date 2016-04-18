@@ -4,6 +4,9 @@ namespace App\Presenters;
 
 use Nette;
 
+/**
+ * SearchPresenter shows search results.
+ */
 class SearchPresenter extends BasePresenter {
 	private $itemsPerPage = 15;
 

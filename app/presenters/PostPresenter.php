@@ -9,6 +9,9 @@ use App;
 use App\Model\Post;
 use App\Model\PostRevision;
 
+/**
+ * PostPresenter handles news posts.
+ */
 class PostPresenter extends BasePresenter {
 	/** @var App\Model\Formatter @inject */
 	public $formatter;

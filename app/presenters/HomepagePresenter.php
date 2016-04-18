@@ -4,6 +4,9 @@ namespace App\Presenters;
 
 use App;
 
+/**
+ * HomepagePresenter handles the front page of the site.
+ */
 class HomepagePresenter extends BasePresenter {
 	/** @var App\Model\PostRepository @inject */
 	public $posts;

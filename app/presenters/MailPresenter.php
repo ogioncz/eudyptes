@@ -10,6 +10,9 @@ use Nextras\Forms\Rendering;
 use App;
 use App\Model\Mail;
 
+/**
+ * MailPresenter handles messages sent between users.
+ */
 class MailPresenter extends BasePresenter {
 	/** @var App\Model\Formatter @inject */
 	public $formatter;

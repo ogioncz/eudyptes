@@ -5,6 +5,9 @@ namespace App\Presenters;
 use Nette;
 use Tracy\Debugger;
 
+/**
+ * ErrorPresenter handles errors.
+ */
 class ErrorPresenter extends BasePresenter {
 	/**
 	 * @param  Exception

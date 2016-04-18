@@ -16,6 +16,9 @@ use Tracy\Debugger;
 use Nextras\Forms\Rendering;
 use Exception;
 
+/**
+ * ProfilePresenter displays user profiles.
+ */
 class ProfilePresenter extends BasePresenter {
 	/** @var App\Model\UserRepository @inject */
 	public $users;

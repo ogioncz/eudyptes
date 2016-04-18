@@ -9,6 +9,9 @@ use Tracy\Debugger;
 use App;
 use App\Model;
 
+/**
+ * PagePresenter handles wiki articles.
+ */
 class PagePresenter extends BasePresenter {
 	/** @var Model\Formatter @inject */
 	public $formatter;

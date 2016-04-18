@@ -5,6 +5,9 @@ namespace App\Presenters;
 use Nette;
 use Nextras\Forms\Rendering;
 
+/**
+ * SignPresenter handles user sign-ins and sign-outs.
+ */
 class SignPresenter extends BasePresenter {
 
 	/** @persistent */
