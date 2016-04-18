@@ -18,6 +18,7 @@ application:
 		*: App\*Module\Presenters\*Presenter
 
 session:
+	autoStart: yes
 	save_path: "%tempDir%/sessions"
 	expiration: 31 days
 
