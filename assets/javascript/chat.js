@@ -12,17 +12,18 @@ $(function() {
 		var toggleChat = $('<button type="btn"><span class="glyphicon glyphicon-chevron-down"></span></button>');
 
 		if (localStorageEnabled && localStorage.getItem('chat-' + chatName)) {
-			chatBody.show();
+			chat.addClass('chat-open');
 			chatVisibilities[chatName] = true;
 		} else {
-			chatBody.hide();
+			chat.addClass('chat-closed');
 			chatVisibilities[chatName] = false;
 			toggleChat.find('span').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
 		}
 
 		toggleChat.click((function(chat, chatBody, chatName) {
 			return function(e) {
-				chatBody.toggle('500ms');
+				chat.toggleClass('chat-open');
+				chat.toggleClass('chat-closed');
 				if (localStorageEnabled) {
 					if (chatVisibilities[chatName]) {
 						localStorage.removeItem('chat-' + chatName);
@@ -74,8 +75,9 @@ $(function() {
 	$('.chat-active-count').popover({
 		html: true,
 		placement: 'auto top',
+		container: 'body',
 		content: function() {
-			return $(this).parents('header').next('.chat-active-list').html();
+			return $(this).parents('header').parent().next('.chat-active-list').html();
 		}
 	});
 

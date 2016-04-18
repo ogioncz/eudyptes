@@ -36,10 +36,12 @@ class ChatControl extends Control {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
 		$form->getElementPrototype()->class('ajax');
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addTextArea('content', 'Zpráva:')->setRequired();
 
-		$form->addSubmit('send', 'Odeslat')->getControlPrototype();
+		$submit = $form->addSubmit('send', 'Odeslat')->getControlPrototype();
+		$submit->setName('button');
+		$submit->create('span class="glyphicon glyphicon-send"');
+		$submit->title = 'Odeslat';
 		$form->onSuccess[] = [$this, 'chatFormSucceeded'];
 
 		return $form;
