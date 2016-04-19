@@ -224,3 +224,17 @@
 		color: lighten(@text-color, 10%);
 	}
 }
+
+.glyphicon-refresh-animate {
+	animation: spin .7s infinite linear;
+}
+
+@keyframes spin {
+	from {
+		transform: scale(1) rotate(0deg);
+	}
+
+	to {
+		transform: scale(1) rotate(360deg);
+	}
+}

@@ -24,6 +24,8 @@ $(function() {
 		var chatBody = chat.find('.chat-body');
 		var chatName = chat.attr('data-chat-name');
 		var toggleChat = $('<button type="btn"><span class="glyphicon glyphicon-chevron-down"></span></button>');
+		var chatTextarea = chat.find('textarea');
+		var submitButton = chat.find('.chat-submit');
 
 		if (localStorageEnabled && localStorage.getItem('chat-' + chatName)) {
 			chat.addClass('chat-open');
@@ -56,7 +58,7 @@ $(function() {
 		chat.on('click', '.chat-reply', (function(chat, chatBody, chatName) {
 			return function(e) {
 				var mid = $(this).parent().data('message-id');
-				chat.find('textarea').insert5('{#' + mid + '}\n');
+				chatTextarea.insert5('{#' + mid + '}\n');
 			}
 		})(chat));
 
@@ -68,11 +70,18 @@ $(function() {
 
 		chat.find('form').submit(function(e) {
 			e.preventDefault();
-			var textarea = $(this).find('textarea');
-			$.post($(this).attr('action'), $(this).serialize(), function(data) {
-				refreshChat(chat, true);
-				textarea.val('');
-			});
+			if (!submitButton.attr('disabled')) {
+				submitButton.attr('disabled', true);
+				submitButton.find('span').toggleClass('glyphicon-send glyphicon-refresh-animate glyphicon-refresh');
+
+				$.post($(this).attr('action'), $(this).serialize(), function(data) {
+					refreshChat(chat, true);
+					chatTextarea.val('');
+				}).always(function() {
+					submitButton.find('span').toggleClass('glyphicon-send glyphicon-refresh-animate glyphicon-refresh');
+					submitButton.attr('disabled', false);
+				});
+			}
 		});
 
 		setInterval(function() {

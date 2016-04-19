@@ -40,6 +40,7 @@ class ChatControl extends Control {
 
 		$submit = $form->addSubmit('send', 'Odeslat')->getControlPrototype();
 		$submit->setName('button');
+		$submit->addClass('chat-submit');
 		$submit->create('span class="glyphicon glyphicon-send"');
 		$submit->title = 'Odeslat';
 		$form->onSuccess[] = [$this, 'chatFormSucceeded'];
