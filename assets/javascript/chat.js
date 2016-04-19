@@ -77,7 +77,7 @@ $(function() {
 
 		setInterval(function() {
 			refreshChat(chat);
-		}, 5000);
+		}, 10000);
 	});
 
 	$('.chat').on('keypress', 'textarea', function(e) {
