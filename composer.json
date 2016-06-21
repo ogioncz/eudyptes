@@ -13,6 +13,10 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/flaptor/indextank-php"
+		},
+		{
+			"type": "vcs",
+			"url": "https://github.com/Trejjam/Replicator"
 		}
 	],
 	"require": {
@@ -40,7 +44,7 @@
 		"actinarium/php-diff": "dev-master"
 	},
 	"require-dev": {
-		"nette/tester": "~1.1"
+		"nette/tester": "~1.7"
 	},
 	"minimum-stability": "dev"
 }
