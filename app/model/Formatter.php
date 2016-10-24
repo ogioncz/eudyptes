@@ -30,6 +30,8 @@ class Formatter extends Nette\Object {
 	}
 
 	public function format($text) {
+		$text = $this->replaceEmoticons($text);
+
 		$text = $this->replaceOembed($text);
 
 		$text = $this->replaceProps($text);
