@@ -161,7 +161,7 @@ class Formatter extends Nette\Object {
 	public function formatErrors($errors) {
 		$list = Html::el('ul');
 		foreach ($errors as $error) {
-			$list->add(Html::el('li', 'Na řádku ' . $error[0] . ': ' . $error[2]));
+			$list->addHtml(Html::el('li', 'Na řádku ' . $error[0] . ': ' . $error[2]));
 		}
 		return $list;
 	}
