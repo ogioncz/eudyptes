@@ -4,7 +4,7 @@
 <dt>Datum:</dt><dd>{$meeting->date|date:'j. n. Y'} {$meeting->date|relDate}</dd>
 <dt>Server:</dt><dd>{$meeting->server}</dd>
 <dt>Program:</dt><dd>
-{?$events = \Nette\Utils\Json::decode($meeting->program)}
+{php $events = \Nette\Utils\Json::decode($meeting->program)}
 {if count($events > 0)}
 <table class="table table-striped"><tbody>
 <tr n:foreach="$events as $event"><th>{$event->time}</th><td>{$event->event}</td></tr>
