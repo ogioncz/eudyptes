@@ -16,4 +16,4 @@ npm install
 gulp
 ```
 
-Server should also have right to write into *temp* and *log* directories. Finally you’ll have to set the database in *app/config/config.local.neon* and also import SQL to your database.
+Server should also have right to write into *temp* and *log* directories. Finally you’ll have to set the database in *app/config/config.local.neon* (see *config.local.neon.default*) and also import SQL to your database.

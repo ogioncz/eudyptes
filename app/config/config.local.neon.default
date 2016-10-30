@@ -1,0 +1,13 @@
+parameters:
+	indextank:
+	avatarStorage: '%wwwDir%/avatars'
+	avatarStoragePublic: '♥basePath♥/avatars'
+
+dbal:
+	driver: mysqli
+	host:
+	dbname: eudyptes
+	username:
+	password:
+	options:
+		charset: utf8mb4
