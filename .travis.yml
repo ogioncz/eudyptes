@@ -10,7 +10,9 @@ script:
   - composer test
 
 before_script:
-  - composer install --dev
-  - 'composer create-project nette/code-checker code-checker ~2.3 --no-interaction --prefer-source'
+  - mv app/config/config.local.neon.default app/config/config.local.neon
+  # Install Nette Tester & Code Checker
+  - composer install --no-interaction --dev --prefer-source
+  - composer create-project nette/code-checker code-checker ^2.7 --no-interaction --prefer-source
 
 sudo: false
