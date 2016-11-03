@@ -34,6 +34,8 @@ class Formatter extends Nette\Object {
 
 		$text = $this->replaceOembed($text);
 
+		$text = $this->replaceGalleries($text);
+
 		$text = $this->replaceProps($text);
 
 		$text = $this->replaceWikiLinks($text);
@@ -69,6 +71,43 @@ class Formatter extends Nette\Object {
 			return $replacements[$match[0]];
 		}, $text);
 
+		return $text;
+	}
+
+	public function replaceGalleries($text) {
+		$imageSize = function($url, $thumbUrl) {
+			$size = @getImageSize($thumbUrl);
+			if (!$size) {
+				$size = @getImageSize($url);
+			}
+			return $size;
+		};
+		$text = preg_replace_callback('/<gallery type="carousel">(.+)<\/gallery>/s', function($match) use ($imageSize) {
+			$temp = sha1(mt_rand());
+			$maxWidth = $maxHeight = 0;
+			$images = preg_replace_callback('/!\[(.*?)\]\(([^"]+?)(?: "([^"]+)")?\)/', function($match) use ($imageSize, &$maxWidth, &$maxHeight) {
+				$alt = $match[1];
+				$caption = !empty($match[3]) ? '<div class="carousel-caption"><p>' . $match[3] . '</p></div>' : '';
+				$url = $match[2];
+				$thumbUrl = preg_replace('/\.(png|jp[e]g|gif)$/', '.thumb.$1', $url);
+				list($width, $height) = $imageSize($url, $thumbUrl);
+				$code = '<div class="item' . ($maxHeight == 0 ? ' active' : '') . '"><a href="' . $url . '" data-lightbox="true"><img src="' . $thumbUrl . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '"></a>' . $caption . '</div>' . PHP_EOL;
+				$maxWidth = max($maxWidth, $width);
+				$maxHeight = max($maxHeight, $height);
+				return $code;
+			}, $match[1]);
+			return <<<EOT
+<figure>
+<div id="carousel-{$temp}" class="carousel slide" style="width: {$maxWidth}px; height: {$maxHeight}px;" data-interval="false">
+<div class="carousel-inner">
+{$images}
+</div>
+<a href="#carousel-{$temp}" data-slide="prev" class="left carousel-control">‹</a>
+<a href="#carousel-{$temp}" data-slide="next" class="right carousel-control">›</a>
+</div>
+</figure>
+EOT;
+		}, $text);
 		return $text;
 	}
 
