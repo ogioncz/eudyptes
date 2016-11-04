@@ -82,7 +82,7 @@ class Formatter extends Nette\Object {
 			}
 			return $size;
 		};
-		$text = preg_replace_callback('/<gallery type="carousel">(.+)<\/gallery>/s', function($match) use ($imageSize) {
+		$text = preg_replace_callback('/<gallery type="carousel">(.+?)<\/gallery>/s', function($match) use ($imageSize) {
 			$temp = sha1(mt_rand());
 			$maxWidth = $maxHeight = 0;
 			$images = preg_replace_callback('/!\[(.*?)\]\(([^"]+?)(?: "([^"]+)")?\)/', function($match) use ($imageSize, &$maxWidth, &$maxHeight) {
