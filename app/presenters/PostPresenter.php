@@ -31,6 +31,23 @@ class PostPresenter extends BasePresenter {
 		$this->template->post = $post;
 	}
 
+	public function actionPurge($id) {
+		$post = $this->posts->getByID($id);
+		if (!$post) {
+			$this->error('Aktuálka nenalezena');
+		}
+
+		if (!$this->allowed($post, 'purge')) {
+			$this->error('Nemáš právo vymazat cache!', Nette\Http\IResponse::S403_FORBIDDEN);
+		}
+
+		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'posts');
+		$cache->remove($post->id);
+
+		$this->flashMessage('Cache byla vymazána.', 'success');
+		$this->redirect('show', $post->id);
+	}
+
 	public function renderList() {
 		$posts = $this->posts->findAll()->orderBy(['createdAt' => 'DESC']);
 		$this->template->posts = $posts;

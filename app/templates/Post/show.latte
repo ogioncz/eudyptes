@@ -1,5 +1,9 @@
 {block content}
 <div class="post">
+	<menu class="content-panel">
+		<li n:if="$allowed($post, 'edit')"><a n:href="edit $post->id" title="Upravit"><span class="glyphicon glyphicon-pencil"></span></a></li>
+		<li n:if="$allowed($post, 'purge')"><a n:href="purge $post->id" title="Vymazat cache"><span class="glyphicon glyphicon-refresh"></span></a></li>
+	</menu>
 	<h2 n:inner-block="title"><a n:href="show $post->id">{$post->title}</a></h2>
 	<div>{$post->content|noescape}</div>
 	<div class="date">Odeslal {$post->user|userLink} · {$post->createdAt|date:'j. n. Y H:i:s'} {if $allowed($post, 'edit')} · <a n:href="edit $post->id">Upravit</a>{/if}</div>
