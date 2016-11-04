@@ -1,13 +1,13 @@
-var gulp = require('gulp');
-var less = require('gulp-less');
-var autoprefix = require('gulp-autoprefixer');
-var csso = require('gulp-csso');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var notify = require("gulp-notify");
-var bower = require('gulp-bower');
+const gulp = require('gulp');
+const less = require('gulp-less');
+const autoprefix = require('gulp-autoprefixer');
+const csso = require('gulp-csso');
+const concat = require('gulp-concat');
+const uglify = require('gulp-uglify');
+const notify = require("gulp-notify");
+const bower = require('gulp-bower');
 
-var config = {
+const config = {
 	assets: {
 		vendor: './assets/vendor',
 		less: './assets/less',
@@ -24,7 +24,7 @@ gulp.task('bower', function() {
 	.pipe(gulp.dest(config.assets.vendor));
 });
 
-gulp.task('css', ['bower'], function() {
+gulp.task('css', gulp.series('bower', function() {
 	return gulp.src(config.assets.less + '/screen.less')
 	.pipe(less({
 		paths: [
@@ -38,9 +38,9 @@ gulp.task('css', ['bower'], function() {
 	.pipe(csso())
 	.pipe(autoprefix('last 2 versions'))
 	.pipe(gulp.dest(config.public.css));
-});
+}));
 
-gulp.task('javascript', ['bower'], function() {
+gulp.task('javascript', gulp.series('bower', function() {
 	return gulp.src([
 		config.assets.vendor + '/jquery/dist/jquery.js',
 		config.assets.vendor + '/bootstrap/dist/js/bootstrap.js',
@@ -55,11 +55,11 @@ gulp.task('javascript', ['bower'], function() {
 	])
 	.pipe(uglify())
 	.pipe(gulp.dest(config.public.javascript));
-});
+}));
 
 gulp.task('watch', function() {
-	gulp.watch(config.assets.less + '/**/*.less', ['css']);
-	gulp.watch(config.assets.javascript + '/**/*.js', ['javascript']);
+	gulp.watch(config.assets.less + '/**/*.less', gulp.series('css'));
+	gulp.watch(config.assets.javascript + '/**/*.js', gulp.series('javascript'));
 });
 
-gulp.task('default', ['bower', 'css', 'javascript']);
+gulp.task('default', gulp.parallel('css', 'javascript'));
