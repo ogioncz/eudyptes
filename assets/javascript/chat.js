@@ -5,11 +5,11 @@ $(function() {
 	};
 
 	var refreshChat = function(chat, scroll) {
-		if (this.lastRefresh) {
-			this.lastRefresh.abort();
+		if (chat.lastRefresh) {
+			chat.lastRefresh.abort();
 		}
 		var lastMessage = chat.find('.chat-messages li').last().attr('data-message-id');
-		this.lastRefresh = $.get(chat.attr('data-chat-refresh'), {'chat-id': lastMessage}, function(data) {
+		chat.lastRefresh = $.get(chat.attr('data-chat-refresh'), {'chat-id': lastMessage}, function(data) {
 			chat.find('.chat-messages ul').append(data);
 
 			if (scroll) {
