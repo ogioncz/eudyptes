@@ -8,6 +8,11 @@ const uglify = require('gulp-uglify');
 const notify = require("gulp-notify");
 const bower = require('gulp-bower');
 
+const notifyAboutError = notify.onError(function(error) {
+	console.log(error);
+	return "Error: " + error.message;
+});
+
 const config = {
 	assets: {
 		vendor: './assets/vendor',
@@ -32,10 +37,7 @@ gulp.task('css', gulp.series('bower', function() {
 			config.assets.less,
 			config.assets.vendor + '/bootstrap/less',
 		]
-	}).on("error", notify.onError(function(error) {
-		console.log(error);
-		return "Error: " + error.message;
-	})))
+	}).on("error", notifyAboutError))
 	.pipe(csso())
 	.pipe(autoprefix('last 2 versions'))
 	.pipe(gulp.dest(config.public.css));
@@ -48,7 +50,7 @@ gulp.task('javascript', gulp.series('bower', gulp.parallel(function javascriptAp
 	.pipe(babel({
 		compact: false,
 		presets: ['es2015']
-	}))
+	}).on("error", notifyAboutError))
 	.pipe(uglify())
 	.pipe(gulp.dest(config.public.javascript));
 }, function javascriptDependencies() {
