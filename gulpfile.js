@@ -2,6 +2,7 @@ const gulp = require('gulp');
 const less = require('gulp-less');
 const autoprefix = require('gulp-autoprefixer');
 const csso = require('gulp-csso');
+const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const notify = require("gulp-notify");
@@ -53,6 +54,10 @@ gulp.task('javascript', gulp.series('bower', function() {
 		config.assets.vendor + '/nette.ajax.js/nette.ajax.js',
 		config.assets.javascript + '/**/*.js'
 	])
+	.pipe(babel({
+		compact: false,
+		presets: ['es2015']
+	}))
 	.pipe(uglify())
 	.pipe(gulp.dest(config.public.javascript));
 }));
