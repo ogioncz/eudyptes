@@ -1,7 +1,80 @@
 $(function() {
+	let activeContentArea = null;
+
 	function htmlSpecialChars(text) {
 		return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 	}
+
+	$('body').append(
+		`<div class="modal fade" id="link-insertion-dialog" tabindex="-1" role="dialog" aria-labelledby="link-insertion-dialog-label">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Zavřít"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="link-insertion-dialog-label">Vložení odkazu na stránku</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="form-group">
+								<label for="link-target" class="control-label">Cíl odkazu:</label>
+								<input type="text" class="form-control" id="link-target">
+							</div>
+							<div class="form-group">
+								<label for="link-text" class="control-label">Text:</label>
+								<input type="text" class="form-control" id="link-text">
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Zrušit</button>
+						<button type="button" class="btn btn-primary" id="link-insert">Vložit odkaz</button>
+					</div>
+				</div>
+			</div>
+		</div>`
+	);
+
+	$('#link-insertion-dialog').on('shown.bs.modal', () => $('#link-target').focus());
+
+	$('#link-target, #link-text').on('keydown', (e) => {
+		if (e.which == 13) { // ENTER_KEY
+			submitLinkDialog();
+		}
+	});
+
+	$('#link-insert').on('click', submitLinkDialog);
+
+	function submitLinkDialog() {
+		const target = $('#link-target').val().trim();
+		const text = $('#link-text').val().trim();
+
+		if (!target) {
+			alert('Cíl odkazu je nutné zadat.');
+			$('#link-target').focus();
+			return;
+		}
+
+		let link = null;
+		if (target.match(/^((http|ftp)s?:\/\/|mailto:)/)) {
+			if (!text || text === target) {
+				link = `${target}`;
+			} else {
+				link = `[${text}](${target})`;
+			}
+		} else {
+			if (!text || text === target) {
+				link = `[[${target}]]`;
+			} else {
+				link = `[[${target}|${text}]]`;
+			}
+		}
+
+		activeContentArea.insert5(link);
+		$('#link-insertion-dialog').modal('hide');
+		$('#link-target').val('');
+		$('#link-text').val('');
+	}
+
 	$('textarea.editor').each(function() {
 		var contentArea = $(this);
 		var quickbar = $('<div class="quickbar" class="btn-toolbar"></div>');
@@ -11,6 +84,7 @@ $(function() {
 			[
 				{opening: '**', closing: '**', title: 'důležitý text (ctrl+b)', body: '<span class="glyphicon glyphicon-bold"></span>', shortcut: 66},
 				{opening: '*', closing: '*', title: 'zvýrazněný text (ctrl+i)', body: '<span class="glyphicon glyphicon-italic"></span>', shortcut: 73},
+				{toggle: 'modal', target: '#link-insertion-dialog', title: 'odkaz na stránku (ctrl+o)', body: '<span class="glyphicon glyphicon-link"></span>', shortcut: 79},
 				{opening: '[', closing: ']()', title: 'odkaz (ctrl+l)', body: '<span class="glyphicon glyphicon-globe"></span>', shortcut: 76},
 				{opening: '¡¡¡\n', closing: '\n!!!', title: 'spoiler (ctrl+s)', body: '<span class="glyphicon glyphicon-eye-close"></span>', shortcut: 83}
 			],
@@ -42,6 +116,12 @@ $(function() {
 				if (button.closing) {
 					quickbarContent += ' data-closing="' + htmlSpecialChars(button.closing) + '"';
 				}
+				if (button.toggle) {
+					quickbarContent += ' data-toggle="' + htmlSpecialChars(button.toggle) + '"';
+				}
+				if (button.target) {
+					quickbarContent += ' data-target="' + htmlSpecialChars(button.target) + '"';
+				}
 				if (button.title) {
 					quickbarContent += ' title="' + htmlSpecialChars(button.title) + '"';
 				}
@@ -59,6 +139,7 @@ $(function() {
 		quickbar.html(quickbarContent);
 		quickbarContent.find('button').click((function(ca) {
 			return function(e) {
+				activeContentArea = ca;
 				var btn = $(this);
 				var action = btn.attr('data-action');
 				var opening = btn.attr('data-opening');
@@ -84,5 +165,5 @@ $(function() {
 				}
 			};
 		})(contentArea));
-	})
+	});
 });
