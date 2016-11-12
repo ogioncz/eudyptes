@@ -41,7 +41,17 @@ gulp.task('css', gulp.series('bower', function() {
 	.pipe(gulp.dest(config.public.css));
 }));
 
-gulp.task('javascript', gulp.series('bower', function() {
+gulp.task('javascript', gulp.series('bower', gulp.parallel(function javascriptApp() {
+	return gulp.src([
+		config.assets.javascript + '/**/*.js'
+	])
+	.pipe(babel({
+		compact: false,
+		presets: ['es2015']
+	}))
+	.pipe(uglify())
+	.pipe(gulp.dest(config.public.javascript));
+}, function javascriptDependencies() {
 	return gulp.src([
 		config.assets.vendor + '/jquery/dist/jquery.js',
 		config.assets.vendor + '/bootstrap/dist/js/bootstrap.js',
@@ -51,16 +61,13 @@ gulp.task('javascript', gulp.series('bower', function() {
 		config.assets.vendor + '/smalot-bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.cs.js',
 		config.assets.vendor + '/nextras-forms/js/nextras.datetimepicker.init.js',
 		config.assets.vendor + '/nextras-forms/js/nextras.netteForms.js',
+		config.assets.vendor + '/typeahead.js/dist/bloodhound.js',
+		config.assets.vendor + '/typeahead.js/dist/typeahead.jquery.js',
 		config.assets.vendor + '/nette.ajax.js/nette.ajax.js',
-		config.assets.javascript + '/**/*.js'
 	])
-	.pipe(babel({
-		compact: false,
-		presets: ['es2015']
-	}))
 	.pipe(uglify())
 	.pipe(gulp.dest(config.public.javascript));
-}));
+})));
 
 gulp.task('watch', function() {
 	gulp.watch(config.assets.less + '/**/*.less', gulp.series('css'));

@@ -4,6 +4,7 @@ namespace App\Presenters;
 use Nette;
 use Nette\Caching\Cache;
 use Nette\Forms\Controls\SubmitButton;
+use Nette\Utils\Strings;
 use Nextras\Forms\Rendering;
 use Tracy\Debugger;
 use App;
@@ -74,6 +75,21 @@ class PagePresenter extends BasePresenter {
 	public function renderList() {
 		$pages = $this->pages->findAll();
 		$this->template->pages = $pages;
+	}
+
+	public function renderTitles() {
+		$titles = [];
+
+		$pages = $this->pages->findAll();
+		foreach ($pages as $page) {
+			if (isset($page->redirect) || $page->slug !== Strings::webalize($page->title, '/')) {
+				continue;
+			}
+
+			$titles[] = $page->title;
+		}
+
+		$this->sendJson($titles);
 	}
 
 	public function renderLinks() {

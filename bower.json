@@ -8,6 +8,8 @@
 		"jquery-details": "mathiasbynens/jquery-details#~0.1.0",
 		"smalot-bootstrap-datetimepicker": "~2.3.11",
 		"nextras-forms": "git@github.com:nextras/forms.git#master",
-		"nette.ajax.js": "~2.0.0"
+		"nette.ajax.js": "~2.0.0",
+		"typeahead.js": "^0.11.1",
+		"typeahead.js-bootstrap-css": "^1.2.1"
 	}
 }

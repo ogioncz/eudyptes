@@ -34,7 +34,7 @@
 	{block head}{/block}
 </head>
 
-<body>
+<body data-basepath="{$basePath}">
 	<script> document.documentElement.className+=' js' </script>
 	<nav class="navbar navbar-default" role="navigation">
 		<div class="container container-fluid">
@@ -127,6 +127,8 @@
 	<script src="{$basePath}/javascript/nextras.datetimepicker.init.js"></script>
 	<script src="{$basePath}/javascript/nette.ajax.js"></script>
 	<script src="{$basePath}/javascript/insert5.js"></script>
+	<script src="{$basePath}/javascript/bloodhound.js"></script>
+	<script src="{$basePath}/javascript/typeahead.jquery.js"></script>
 	{if $user->loggedIn && $user->isAllowed('chat', 'read')}<script src="{$basePath}/javascript/chat.js"></script>{/if}
 	<script src="{$basePath}/javascript/lightbox.js"></script>
 	<script src="{$basePath}/javascript/main.js"></script>

@@ -6,7 +6,7 @@ $(function() {
 	}
 
 	$('body').append(
-		`<div class="modal fade" id="link-insertion-dialog" tabindex="-1" role="dialog" aria-labelledby="link-insertion-dialog-label">
+		`<div class="modal fade" id="link-insertion-dialog" tabindex="-1" role="dialog" aria-labelledby="link-insertion-dialog-label" data-keyboard="false">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -17,7 +17,7 @@ $(function() {
 						<form>
 							<div class="form-group">
 								<label for="link-target" class="control-label">Cíl odkazu:</label>
-								<input type="text" class="form-control" id="link-target">
+								<input type="text" class="form-control" id="link-target" autocomplete="off">
 							</div>
 							<div class="form-group">
 								<label for="link-text" class="control-label">Text:</label>
@@ -34,18 +34,44 @@ $(function() {
 		</div>`
 	);
 
+	$.getJSON($('body').attr('data-basepath') + '/page/titles', (data) => {
+		var titles = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.whitespace,
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			local: data
+		});
+		$("#link-target").typeahead({
+			hint: false,
+			highlight: true,
+			minLength: 1
+		},
+		{
+			name: 'titles',
+			source: titles
+		});
+	});
+
 	$('#link-insertion-dialog').on('shown.bs.modal', () => $('#link-target').focus());
+	$('#link-insertion-dialog').on('hidden.bs.modal', () => {
+		$('#link-target').typeahead('val', '');
+		$('#link-text').val('');
+	});
 
 	$('#link-target, #link-text').on('keydown', (e) => {
-		if (e.which == 13) { // ENTER_KEY
-			submitLinkDialog();
+		const typeahead_open = $('#link-target ~ .tt-menu').is('.tt-open');
+		if (!typeahead_open) {
+			if (e.which == 13) { // ENTER_KEY
+				submitLinkDialog();
+			} else if (e.which == 27) { // ESCAPE_KEY
+				$('#link-insertion-dialog').modal('hide');
+			}
 		}
 	});
 
 	$('#link-insert').on('click', submitLinkDialog);
 
 	function submitLinkDialog() {
-		const target = $('#link-target').val().trim();
+		const target = $('#link-target').typeahead('val').trim();
 		const text = $('#link-text').val().trim();
 
 		if (!target) {
@@ -71,8 +97,6 @@ $(function() {
 
 		activeContentArea.insert5(link);
 		$('#link-insertion-dialog').modal('hide');
-		$('#link-target').val('');
-		$('#link-text').val('');
 	}
 
 	$('textarea.editor').each(function() {
