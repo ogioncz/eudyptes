@@ -17,9 +17,13 @@ class ChatControl extends Control {
 	/** @var App\Model\UserRepository @inject */
 	public $users;
 
-	public function __construct(App\Model\ChatRepository $chats, App\Model\UserRepository $users) {
+	/** @var App\Model\TelegramNotifier @inject */
+	public $telegramNotifier;
+
+	public function __construct(App\Model\ChatRepository $chats, App\Model\UserRepository $users, App\Model\TelegramNotifier $telegramNotifier) {
 		$this->chats = $chats;
 		$this->users = $users;
+		$this->telegramNotifier = $telegramNotifier;
 	}
 
 
@@ -98,6 +102,9 @@ EOT;
 		$chat->ip = $this->presenter->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$chat->user = $this->users->getById($this->presenter->user->identity->id);
 		$this->chats->persistAndFlush($chat);
+		try {
+			$this->telegramNotifier->chatMessage($this->presenter->user->identity->username, trim(preg_replace('/\{#([0-9]+)\}/', '', $values->content)));
+		} catch (Exception $e) {}
 		if (!$this->presenter->isAjax()) {
 			$this->redirect('this');
 		} else {

@@ -3,6 +3,11 @@ parameters:
 	avatarStorage: '%wwwDir%/avatars'
 	avatarStoragePublic: '♥basePath♥/avatars'
 
+	telegram:
+		chatId:
+		apiKey:
+		botName:
+
 dbal:
 	driver: mysqli
 	host:

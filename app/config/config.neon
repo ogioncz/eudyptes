@@ -37,6 +37,7 @@ services:
 	- App\Model\UserManager
 	- App\RouterFactory
 	- App\Model\PurifierFactory
+	- App\Model\TelegramNotifier(%telegram.apiKey%, %telegram.chatId%, %telegram.botName%)
 	oembed: Alb\OEmbed\Simple
 	parsedown: ParsedownExtended
 	formatter: App\Model\Formatter

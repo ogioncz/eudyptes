@@ -41,7 +41,8 @@
 		"alb/oembed": "dev-master",
 		"kdyby/forms-replicator": "@dev",
 		"nextras/orm": "@dev",
-		"actinarium/php-diff": "dev-master"
+		"actinarium/php-diff": "dev-master",
+		"longman/telegram-bot": "^0.35.0"
 	},
 	"require-dev": {
 		"nette/tester": "~1.7"

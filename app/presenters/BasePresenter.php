@@ -22,6 +22,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	/** @var App\Model\ChatRepository @inject */
 	public $chats;
 
+	/** @var App\Model\TelegramNotifier @inject */
+	public $telegramNotifier;
+
 	protected function createComponentPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
 		$vp->getPaginator()->itemsPerPage = 10;
@@ -89,7 +92,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	* @return App\Components\ChatControl
 	*/
 	protected function createComponentChat() {
-		$chat = new App\Components\ChatControl($this->chats, $this->users);
+		$chat = new App\Components\ChatControl($this->chats, $this->users, $this->telegramNotifier);
 		return $chat;
 	}
 }
