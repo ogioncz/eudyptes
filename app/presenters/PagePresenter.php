@@ -117,7 +117,10 @@ class PagePresenter extends BasePresenter {
 		$form->addProtection();
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
-		$form->addText('slug', 'Adresa:')->setRequired()->setType('url');
+		$slug = $form->addText('slug', 'Adresa:')->setRequired()->setType('url');
+		if ($this->action == 'edit') {
+			$slug->setDisabled(true);
+		}
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$previewButton = $form->addSubmit('preview', 'Náhled');
@@ -152,7 +155,6 @@ class PagePresenter extends BasePresenter {
 			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		$page->slug = $values->slug;
 		$page->title = $values->title;
 		$formatted = $this->formatter->format($values['markdown']);
 
@@ -161,6 +163,7 @@ class PagePresenter extends BasePresenter {
 		}
 
 		if ($this->action === 'create') {
+			$page->slug = $values->slug;
 			$page->user = $this->users->getById($this->user->identity->id);
 		}
 
@@ -181,7 +184,7 @@ class PagePresenter extends BasePresenter {
 			$cache->save($page->slug, $formatted['text']);
 
 			$this->flashMessage('Stránka byla odeslána.', 'success');
-			$this->redirect('show', $values->slug);
+			$this->redirect('show', $page->slug);
 		} catch (\Nextras\Dbal\UniqueConstraintViolationException $e) {
 			$this->flashMessage('Stránka s tímto slugem již existuje.', 'danger');
 		}
