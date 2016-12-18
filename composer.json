@@ -34,7 +34,6 @@
 		"nette/utils": "dev-master",
 		"latte/latte": "dev-master",
 		"tracy/tracy": "dev-master",
-		"erusev/parsedown-extra": "dev-master",
 		"flaptor/indextank-php": "dev-master",
 		"nextras/forms": "dev-master",
 		"ezyang/htmlpurifier": "dev-master",
@@ -42,7 +41,8 @@
 		"kdyby/forms-replicator": "@dev",
 		"nextras/orm": "@dev",
 		"actinarium/php-diff": "dev-master",
-		"longman/telegram-bot": "^0.35.0"
+		"longman/telegram-bot": "^0.35.0",
+		"league/commonmark": "~0.15"
 	},
 	"require-dev": {
 		"nette/tester": "~1.7"

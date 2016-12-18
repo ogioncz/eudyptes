@@ -39,8 +39,7 @@ services:
 	- App\Model\PurifierFactory
 	- App\Model\TelegramNotifier(%telegram.apiKey%, %telegram.chatId%, %telegram.botName%)
 	oembed: Alb\OEmbed\Simple
-	parsedown: ParsedownExtended
-	formatter: App\Model\Formatter
+	formatter: App\Helpers\Formatting\Formatter
 	router: @App\RouterFactory::createRouter
 	purifier: @App\Model\PurifierFactory::createPurifier(@Nette\Application\Application, '%tempDir%/cache')
 	authorizator:

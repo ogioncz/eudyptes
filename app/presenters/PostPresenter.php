@@ -6,6 +6,7 @@ use Nette\Caching\Cache;
 use Nette\Forms\Controls\SubmitButton;
 use Nextras\Forms\Rendering;
 use App;
+use App\Helpers\Formatting;
 use App\Model\Post;
 use App\Model\PostRevision;
 
@@ -13,7 +14,7 @@ use App\Model\PostRevision;
  * PostPresenter handles news posts.
  */
 class PostPresenter extends BasePresenter {
-	/** @var App\Model\Formatter @inject */
+	/** @var Formatting\Formatter @inject */
 	public $formatter;
 
 	/** @var App\Model\PostRepository @inject */

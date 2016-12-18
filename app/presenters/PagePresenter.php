@@ -8,13 +8,14 @@ use Nette\Utils\Strings;
 use Nextras\Forms\Rendering;
 use Tracy\Debugger;
 use App;
+use App\Helpers\Formatting;
 use App\Model;
 
 /**
  * PagePresenter handles wiki articles.
  */
 class PagePresenter extends BasePresenter {
-	/** @var Model\Formatter @inject */
+	/** @var Formatting\Formatter @inject */
 	public $formatter;
 
 	/** @var Model\PageRepository @inject */

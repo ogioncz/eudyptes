@@ -8,13 +8,14 @@ use Nette\Mail\SendmailMailer;
 use Nette\Forms\Controls\SubmitButton;
 use Nextras\Forms\Rendering;
 use App;
+use App\Helpers\Formatting;
 use App\Model\Mail;
 
 /**
  * MailPresenter handles messages sent between users.
  */
 class MailPresenter extends BasePresenter {
-	/** @var App\Model\Formatter @inject */
+	/** @var Formatting\Formatter @inject */
 	public $formatter;
 
 	/** @var App\Model\MailRepository @inject */

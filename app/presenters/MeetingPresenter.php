@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use Nette;
 use App;
+use App\Helpers\Formatting;
 use App\Model\Meeting;
 use Nextras\Forms\Rendering;
 use Nette\Utils\Json;
@@ -15,7 +16,7 @@ use Nette\Application\UI\Multiplier;
  * MeetingPresenter handles user-organised meetings and events.
  */
 class MeetingPresenter extends BasePresenter {
-	/** @var App\Model\Formatter @inject */
+	/** @var Formatting\Formatter @inject */
 	public $formatter;
 
 	/** @var App\Model\MeetingRepository @inject */
