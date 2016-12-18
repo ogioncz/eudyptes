@@ -14,7 +14,7 @@ use Nette\Utils\Strings;
 class Formatter extends Nette\Object {
 	public static $OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be', 'vimeo.com', 'soundcloud.com', 'twitter.com'];
 
-	private static $images = [
+	public static $images = [
 		'meh' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/meh.svg', 'alt' => '😕', 'width' => 30, 'height' => 29],
 		'angry' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/angry.svg', 'alt' => '😠', 'width' => 30, 'height' => 29],
 		'cake' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/cake.svg', 'alt' => '🎂', 'width' => 30, 'height' => 29],
@@ -45,7 +45,7 @@ class Formatter extends Nette\Object {
 		'strawberry-ice-cream' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/strawberry-ice-cream.svg', 'alt' => '(icepink)', 'width' => 30, 'height' => 29]
 	];
 
-	private static $emoticons = [
+	public static $emoticons = [
 		'😕' => 'meh',
 		':-/' => 'meh',
 		'😠' => 'angry',
@@ -152,15 +152,15 @@ class Formatter extends Nette\Object {
 	}
 
 	public function format($markdown) {
-		$document = $this->parser->parse($markdown);
+		$markdown = $this->replaceGalleries($markdown);
 
-		// $text = $this->replaceGalleries($text);
-		//
-		// $text = $this->replaceProps($text);
-		//
-		// $text = $this->replaceWikiLinks($text);
-		//
-		// $text = $this->replaceCustomTags($text);
+		$markdown = $this->replaceProps($markdown);
+
+		$markdown = $this->replaceWikiLinks($markdown);
+
+		$markdown = $this->replaceCustomTags($markdown);
+
+		$document = $this->parser->parse($markdown);
 
 		$text = $this->htmlRenderer->renderBlock($document);
 
@@ -264,22 +264,6 @@ EOT;
 
 			return '<a href="page:' . $link . '"' . ($redlink ? ' class="redlink"' : '') . '>' . $label . '</a>';
 		}, $text);
-
-		return $text;
-	}
-
-	public function urlsToLinks($text) {
-		$re = '/\bhttps?:[\/]{2}[^\s<]+\b\/*/ui';
-		$offset = 0;
-		while (strpos($text, '://', $offset) && preg_match($re, $text, $matches, PREG_OFFSET_CAPTURE, $offset)) {
-			$url = $matches[0][0];
-			$urlLength = strlen($url);
-			$urlPosition = $matches[0][1];
-			$markup = '<a href="'.$url.'">'.$url.'</a>';
-			$markupLength = strlen($markup);
-			$text = substr_replace($text, $markup, $urlPosition, $urlLength);
-			$offset = $urlPosition + $markupLength;
-		}
 
 		return $text;
 	}

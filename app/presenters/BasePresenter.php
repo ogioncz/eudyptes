@@ -42,7 +42,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	protected function createTemplate($class=null) {
 		$template = parent::createTemplate($class);
-		$template->getLatte()->addFilter(null, [new App\Model\HelperLoader($this), 'loader']);
+		$template->getLatte()->addFilter(null, [$this->context->getByType('App\Model\HelperLoader'), 'loader']);
 		return $template;
 	}
 

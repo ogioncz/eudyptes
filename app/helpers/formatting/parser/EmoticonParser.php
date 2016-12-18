@@ -46,7 +46,6 @@ class EmoticonParser extends AbstractInlineParser {
 
 		$previousState = $cursor->saveState();
 		$emoticon = $cursor->match($this->regex);
-		\Tracy\Debugger::barDump($emoticon);
 
 		if (is_null($emoticon)) {
 			$cursor->restoreState($previousState);

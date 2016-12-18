@@ -6,10 +6,11 @@ use Nette;
 use Nette\Utils\Html;
 
 class HelperLoader extends Nette\Object {
-	private $presenter;
+	/** @var Nette\Application\Application */
+	private $app;
 
-	public function __construct(Nette\Application\UI\Presenter $presenter) {
-		$this->presenter = $presenter;
+	public function __construct(Nette\Application\Application $app) {
+		$this->app = $app;
 	}
 
 	public function loader($args) {
@@ -25,7 +26,7 @@ class HelperLoader extends Nette\Object {
 	}
 
 	public function userLink(User $user, $visual = false) {
-		return Html::el('a', $user->username)->href($this->presenter->link('Profile:show', $user->id))->class('role-' . $user->role . ($visual ? ' role-visual' : ''));
+		return Html::el('a', $user->username)->href($this->app->getPresenter()->link('Profile:show', $user->id))->class('role-' . $user->role . ($visual ? ' role-visual' : ''));
 	}
 
 	public function relDate(\DateTime $date) {

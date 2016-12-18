@@ -28,6 +28,6 @@ class SpoilerRenderer implements BlockRendererInterface {
 		foreach ($block->getData('attributes', []) as $key => $value) {
 			$attrs[$key] = $htmlRenderer->escape($value, true);
 		}
-		return new HtmlElement('details', $attrs, $summary . PHP_EOL . $htmlRenderer->renderBlocks($block->children()));
+		return new HtmlElement('details', $attrs, $summary . "\n" . $htmlRenderer->renderBlocks($block->children()));
 	}
 }

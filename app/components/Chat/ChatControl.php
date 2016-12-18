@@ -3,6 +3,7 @@
 namespace App\Components;
 
 use App;
+use App\Helpers\Formatting\ChatFormatter;
 use App\Model\Chat;
 use Nette;
 use Nette\Application\UI\Control;
@@ -28,7 +29,7 @@ class ChatControl extends Control {
 
 
 	public function render() {
-		$this->template->getLatte()->addFilter(null, [new \App\Model\HelperLoader($this->presenter), 'loader']);
+		$this->template->getLatte()->addFilter(null, [$this->presenter->context->getByType('App\Model\HelperLoader'), 'loader']);
 		$this->template->setFile(__DIR__ . '/chat.latte');
 		$allChats = $this->chats->findAll()->orderBy(['timestamp' => 'ASC']);
 		$this->template->chats = $allChats->limitBy(51, max(0, $allChats->countStored() - 51));
@@ -56,7 +57,7 @@ class ChatControl extends Control {
 		if (!$this->presenter->isAjax()) {
 			$this->redirect('this');
 		} else {
-			$this->template->getLatte()->addFilter(null, [new \App\Model\HelperLoader($this->presenter), 'loader']);
+			$this->template->getLatte()->addFilter(null, [$this->presenter->context->getByType('App\Model\HelperLoader'), 'loader']);
 			$this->template->setFile(__DIR__ . '/chat-messages.latte');
 			$this->template->chats = $this->chats->findBy(['id>=' => $id]);
 			$this->presenter->sendResponse(new TextResponse($this->template));
@@ -72,33 +73,10 @@ class ChatControl extends Control {
 		}
 		$values = $form->values;
 
-		$formatter = $this->presenter->context->getService('formatter');
+		$formatter = $this->presenter->context->getService('chatFormatter');
 
 		$chat = new Chat;
-		$chat->content = $formatter->urlsToLinks(htmlSpecialChars($values->content));
-		$chat->content = $formatter->replaceEmoticons($chat->content);
-		$chat->content = preg_replace_callback('/\{#([0-9]+)\}/', function($m) {
-			$original = $this->chats->getById($m[1]);
-			if (!$original) {
-				return '';
-			}
-
-			$dom = new \Ogion\Utils\DarnDOMDocument;
-			$dom->loadHTML($original->content);
-			$xpath = new \DOMXPath($dom);
-			$nodes = $xpath->query('//blockquote');
-			foreach ($nodes as $node) {
-				$node->parentNode->removeChild($node);
-			}
-			$quoted = $dom->saveHTML();
-
-			return <<<EOT
-<blockquote>
-<strong>{$this->presenter->createTemplate()->getLatte()->invokeFilter('userLink', [$original->user, true])}</strong>
-{$quoted}
-</blockquote>
-EOT;
-		}, $chat->content);
+		$chat->content = $formatter->format($values->content);
 		$chat->ip = $this->presenter->context->getByType('Nette\Http\IRequest')->remoteAddress;
 		$chat->user = $this->users->getById($this->presenter->user->identity->id);
 		$this->chats->persistAndFlush($chat);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Model;
+namespace App\Helpers\Formatting;
 
 use Nette;
 use Nette\Utils\Json;
