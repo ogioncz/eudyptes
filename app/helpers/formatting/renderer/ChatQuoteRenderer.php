@@ -58,9 +58,11 @@ class ChatQuoteRenderer implements BlockRendererInterface {
 		}
 		$quotedText = $dom->saveHTML();
 
+		$separator = $htmlRenderer->getOption('inner_separator', "\n");
 		$userLink = $this->helperLoader->userLink($original->user, true);
 		$userHeading = new HtmlElement('strong', [], $userLink);
-		$quote = new HtmlElement('blockquote', [], $userHeading . "\n" . trim($quotedText));
+		$content = $userHeading . $separator . trim($quotedText);
+		$quote = new HtmlElement('blockquote', [], $content);
 
 		return $quote;
 	}

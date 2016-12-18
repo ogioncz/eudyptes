@@ -22,12 +22,9 @@ class SpoilerRenderer implements BlockRendererInterface {
 			throw new \InvalidArgumentException('Incompatible block type: ' . get_class($block));
 		}
 
+		$separator = $htmlRenderer->getOption('inner_separator', "\n");
 		$summary = new HtmlElement('summary', [], $block->getSummary() ?: 'Pro zobrazení zápletky klikni');
-
-		$attrs = [];
-		foreach ($block->getData('attributes', []) as $key => $value) {
-			$attrs[$key] = $htmlRenderer->escape($value, true);
-		}
-		return new HtmlElement('details', $attrs, $summary . "\n" . $htmlRenderer->renderBlocks($block->children()));
+		$content = $summary . $separator . $htmlRenderer->renderBlocks($block->children());
+		return new HtmlElement('details', [], $content);
 	}
 }
