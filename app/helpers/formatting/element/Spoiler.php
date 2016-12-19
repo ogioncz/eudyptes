@@ -49,7 +49,7 @@ class Spoiler extends AbstractBlock {
 	 * @return bool
 	 */
 	public function acceptsLines() {
-		return true;
+		return false;
 	}
 
 	/**

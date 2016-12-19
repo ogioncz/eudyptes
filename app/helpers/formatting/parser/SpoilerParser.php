@@ -36,7 +36,7 @@ class SpoilerParser extends AbstractBlockParser {
 				do {
 					if ($container instanceof Spoiler) {
 						$context->setContainer($container);
-						$context->setTip($container);
+						$container->finalize($context, $context->getLineNumber());
 						$context->getBlockCloser()->setLastMatchedContainer($container);
 						return true;
 					}

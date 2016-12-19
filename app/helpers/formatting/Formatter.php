@@ -164,9 +164,6 @@ class Formatter extends Nette\Object {
 
 		$text = $this->htmlRenderer->renderBlock($document);
 
-		// A hack until I figure out how to make the parser not insert arbitrary empty paragraphs.
-		$text = preg_replace("(\n<p></p>)", '', $text);
-
 		$text = $this->purifier->purify($text);
 
 		return ['text' => $text, 'errors' => $this->purifier->context->get('ErrorCollector')->getRaw()];
