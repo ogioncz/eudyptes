@@ -52,6 +52,27 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal($ret, $this->formatter->format($markdown));
 	}
 
+	function testSpoilerNested() {
+		$markdown = "¡¡¡\n¡¡¡\n¡¡¡\nHello\n!!!\n!!!\n!!!";
+		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details></details></details>\n";
+		$ret = ['text' => $html, 'errors' => []];
+		Assert::equal($ret, $this->formatter->format($markdown));
+	}
+
+	function testSpoilerNestedInText() {
+		$markdown = "¡¡¡\n1\n¡¡¡\n2\n¡¡¡\nHello\n!!!\n3\n!!!\n4\n!!!";
+		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>1</p>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>2</p>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n<p>3</p></details>\n<p>4</p></details>\n";
+		$ret = ['text' => $html, 'errors' => []];
+		Assert::equal($ret, $this->formatter->format($markdown));
+	}
+
+	function testMultipleSpoilers() {
+		$markdown = "¡¡¡\nHello\n!!!\n¡¡¡\nBye\n!!!";
+		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Bye</p></details>\n";
+		$ret = ['text' => $html, 'errors' => []];
+		Assert::equal($ret, $this->formatter->format($markdown));
+	}
+
 	function testEmoji() {
 		$markdown = ':-)';
 		$html = "<p><img src=\"https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg\" alt=\"\" width=\"30\" height=\"29\" /></p>\n";

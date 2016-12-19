@@ -21,18 +21,30 @@ class SpoilerParser extends AbstractBlockParser {
 
 		$previousState = $cursor->saveState();
 		$spoiler = $cursor->match('(^¡¡¡(\s*.+)?)');
-		if (is_null($spoiler)) {
-			$cursor->restoreState($previousState);
-			return false;
-		}
-
-		$summary = trim(mb_substr($spoiler, mb_strlen('¡¡¡')));
-		if ($summary !== '') {
-			$context->addBlock(new Spoiler($summary));
+		if (!is_null($spoiler)) {
+			$summary = trim(mb_substr($spoiler, mb_strlen('¡¡¡')));
+			if ($summary !== '') {
+				$context->addBlock(new Spoiler($summary));
+			} else {
+				$context->addBlock(new Spoiler());
+			}
+			return true;
 		} else {
-			$context->addBlock(new Spoiler());
+			$cursor->restoreState($previousState);
+			if (!is_null($cursor->match('/^!!!$/'))) {
+				$container = $context->getContainer();
+				do {
+					if ($container instanceof Spoiler) {
+						$context->setContainer($container);
+						$context->setTip($container);
+						$context->getBlockCloser()->setLastMatchedContainer($container);
+						return true;
+					}
+				} while ($container = $container->parent());
+			}
 		}
 
-		return true;
+		$cursor->restoreState($previousState);
+		return false;
 	}
 }

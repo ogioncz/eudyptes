@@ -6,7 +6,7 @@ use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\InlineContainer;
 use League\CommonMark\Cursor;
 
-class Spoiler extends AbstractBlock implements InlineContainer {
+class Spoiler extends AbstractBlock {
 	/**
 	 * @var ?string
 	 */
@@ -62,12 +62,6 @@ class Spoiler extends AbstractBlock implements InlineContainer {
 	}
 
 	public function matchesNextLine(Cursor $cursor) {
-		if ($cursor->match('(^!!!$)')) {
-			$this->lastLineBlank = true;
-
-			return false;
-		}
-
 		return true;
 	}
 }
