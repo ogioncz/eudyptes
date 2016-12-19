@@ -49,6 +49,9 @@
 		"mockery/mockery": "^0.9.6"
 	},
 	"minimum-stability": "dev",
+	"autoload": {
+		"classmap": ["app", "vendor/others"]
+	},
 	"scripts": {
 		"test": "php vendor/bin/tester tests/unit"
 	}
