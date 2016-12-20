@@ -19,7 +19,7 @@ class HelperLoader extends Nette\Object {
 		unset($args[0]);
 
 		if (method_exists($this, $func)) {
-			return call_user_func_array(array($this, $func), $args);
+			return call_user_func_array([$this, $func], $args);
 		} else {
 			return null;
 		}
@@ -53,10 +53,10 @@ class HelperLoader extends Nette\Object {
 	* @copyright Jakub Vrána, http://php.vrana.cz
 	*/
 	public function htmlTruncate($text, $limit) {
-		static $empty_tags = array('area', 'base', 'basefont', 'br', 'col', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param');
+		static $empty_tags = ['area', 'base', 'basefont', 'br', 'col', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param'];
 		$length = 0;
 		$textLength = strLen($text);
-		$tags = array(); // not yet closed tags
+		$tags = []; // not yet closed tags
 		for ($i = 0; $i < $textLength && $length < $limit; $i++) {
 			switch ($text{$i}) {
 			case '<':

@@ -5,7 +5,7 @@ php:
   - 5.6
 
 script:
-  - php code-checker/src/code-checker.php -d app
+  - php code-checker/src/code-checker.php --short-arrays -d app
   - composer test
 
 before_script:

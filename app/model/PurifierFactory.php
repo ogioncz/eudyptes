@@ -48,7 +48,7 @@ class PurifierFactory extends Nette\Object {
 			$def->addElement('figcaption', 'Inline', 'Flow', 'Common');
 
 			// http://developers.whatwg.org/the-video-element.html#the-video-element
-			$def->addElement('video', 'Block', 'Optional: (source, Flow | #PCDATA) | Flow | #PCDATA', 'Common', array(
+			$def->addElement('video', 'Block', 'Optional: (source, Flow | #PCDATA) | Flow | #PCDATA', 'Common', [
 				'src' => 'URI',
 				'type' => 'Text',
 				'width' => 'Length',
@@ -58,8 +58,8 @@ class PurifierFactory extends Nette\Object {
 				'controls' => 'Bool',
 				'autoplay' => 'Bool',
 				'loop' => 'Bool',
-			));
-			$def->addElement('audio', 'Block', 'Optional: (source, Flow | #PCDATA) | Flow | #PCDATA', 'Common', array(
+			]);
+			$def->addElement('audio', 'Block', 'Optional: (source, Flow | #PCDATA) | Flow | #PCDATA', 'Common', [
 				'src' => 'URI',
 				'type' => 'Text',
 				'preload' => 'Enum#auto,metadata,none',
@@ -67,18 +67,18 @@ class PurifierFactory extends Nette\Object {
 				'autoplay' => 'Bool',
 				'loop' => 'Bool',
 				'muted' => 'Bool',
-			));
-			$def->addElement('source', 'Block', 'Empty', 'Common', array(
+			]);
+			$def->addElement('source', 'Block', 'Empty', 'Common', [
 				'src' => 'URI',
 				'type' => 'Text',
-			));
-			$def->addElement('track', 'Block', 'Empty', 'Common', array(
+			]);
+			$def->addElement('track', 'Block', 'Empty', 'Common', [
 				'src' => 'URI',
 				'srclang' => 'Text',
 				'kind' => 'Enum#subtitles,captions,descriptions,chapters,metadata',
 				'label' => 'Text',
 				'default' => 'Bool',
-			));
+			]);
 
 			// http://developers.whatwg.org/interactive-elements.html#the-details-element
 			$def->addElement('details', 'Block', 'Required: (summary, Flow)', 'Common', ['open' => 'Bool']);
@@ -96,8 +96,8 @@ class PurifierFactory extends Nette\Object {
 			$def->addElement('meter', 'Inline', 'Inline', 'Common', ['value' => 'Length', 'min' => 'Length', 'max' => 'Length', 'low' => 'Length', 'high' => 'Length', 'optimum' => 'Length']);
 
 			// http://developers.whatwg.org/edits.html
-			$def->addElement('ins', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'CDATA'));
-			$def->addElement('del', 'Block', 'Flow', 'Common', array('cite' => 'URI', 'datetime' => 'CDATA'));
+			$def->addElement('ins', 'Block', 'Flow', 'Common', ['cite' => 'URI', 'datetime' => 'CDATA']);
+			$def->addElement('del', 'Block', 'Flow', 'Common', ['cite' => 'URI', 'datetime' => 'CDATA']);
 
 			// Custom data attributes
 			$def->addAttribute('a', 'data-lightbox', 'Enum#true');
