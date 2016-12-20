@@ -3,6 +3,7 @@
 namespace App\Helpers\Formatting\Renderer;
 
 use App\Helpers\Formatting\Element\ChatQuote;
+use App\Model\ChatRepository;
 use App\Model\HelperLoader;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
@@ -11,23 +12,19 @@ use League\CommonMark\HtmlElement;
 
 
 class ChatQuoteRenderer implements BlockRendererInterface {
-	/**
-	 * @var ChatRepository
-	 */
+	/** @var ChatRepository */
 	private $chats;
 
-	/**
-	 * @var HelperLoader
-	 */
+	/** @var HelperLoader */
 	private $helperLoader;
 
 	/**
 	 * Constructor
 	 *
-	 * @param array $chats
+	 * @param ChatRepository $chats
 	 * @param HelperLoader $helperLoader
 	 */
-	public function __construct($chats, HelperLoader $helperLoader) {
+	public function __construct(ChatRepository $chats, HelperLoader $helperLoader) {
 		$this->chats = $chats;
 		$this->helperLoader = $helperLoader;
 	}

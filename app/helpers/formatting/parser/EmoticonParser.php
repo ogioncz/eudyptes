@@ -8,21 +8,23 @@ use League\CommonMark\Inline\Element\Image;
 
 
 class EmoticonParser extends AbstractInlineParser {
-	/**
-	 * @var array
-	 */
+	/** @var array[] */
 	private $images;
 
-	/**
-	 * @var array
-	 */
+	/** @var string[] */
 	private $emoticons;
+
+	/** @var string[] */
+	private $characters;
+
+	/** @var string */
+	private $regex;
 
 	/**
 	 * Constructor
 	 *
-	 * @param array $images
-	 * @param array $emoticons
+	 * @param array[] $images
+	 * @param string[] $emoticons
 	 */
 	public function __construct($images, $emoticons) {
 		$this->images = $images;

@@ -7,9 +7,7 @@ use League\CommonMark\Block\Element\InlineContainer;
 use League\CommonMark\Cursor;
 
 class Spoiler extends AbstractBlock {
-	/**
-	 * @var ?string
-	 */
+	/** @var ?string */
 	private $summary;
 
 	/**

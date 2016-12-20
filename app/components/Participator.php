@@ -15,22 +15,25 @@ class Participator extends Control {
 	/** @var bool */
 	public $youParticipate;
 
-	/** @var callback */
+	/** @var callable */
 	public $callback;
 
-	public function __construct(App\Model\Meeting $meeting, $youParticipate, $callback) {
+	public function __construct(App\Model\Meeting $meeting, $youParticipate, callable $callback) {
+		parent::__construct();
 		$this->meeting = $meeting;
 		$this->youParticipate = $youParticipate;
 		$this->callback = $callback;
 	}
 
 	public function render() {
-		$this->template->getLatte()->addFilter(null, [new App\Model\HelperLoader($this->presenter), 'loader']);
-		$this->template->setFile(__DIR__ . '/participator.latte');
+		$template = $this->getTemplate();
 
-		$this->template->participants = $this->meeting->visitors;
+		$template->getLatte()->addFilter(null, [new App\Model\HelperLoader($this->getPresenter()), 'loader']);
+		$template->setFile(__DIR__ . '/participator.latte');
 
-		$this->template->render();
+		$template->participants = $this->meeting->visitors;
+
+		$template->render();
 	}
 
 
@@ -39,8 +42,8 @@ class Participator extends Control {
 		$form->addProtection();
 		$form->getElementPrototype()->class('ajax');
 		$form->setRenderer(new Bs3FormRenderer);
-		$form->form->getElementPrototype()->removeClass('form-horizontal');
-		$form->form->getElementPrototype()->addClass('form-inline');
+		$form->getElementPrototype()->removeClass('form-horizontal');
+		$form->getElementPrototype()->addClass('form-inline');
 		$form->addHidden('action', $this->youParticipate ? 'unparticipate' : 'participate');
 		$form->addHidden('id', $this->meeting->id);
 		$form->addSubmit('send', $this->youParticipate ? 'Zrušit účast' : 'Zúčastnit se');

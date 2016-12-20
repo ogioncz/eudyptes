@@ -22,6 +22,7 @@ class ChatControl extends Control {
 	public $telegramNotifier;
 
 	public function __construct(App\Model\ChatRepository $chats, App\Model\UserRepository $users, App\Model\TelegramNotifier $telegramNotifier) {
+		parent::__construct();
 		$this->chats = $chats;
 		$this->users = $users;
 		$this->telegramNotifier = $telegramNotifier;
@@ -29,13 +30,14 @@ class ChatControl extends Control {
 
 
 	public function render() {
-		$this->template->getLatte()->addFilter(null, [$this->presenter->context->getByType('App\Model\HelperLoader'), 'loader']);
-		$this->template->setFile(__DIR__ . '/chat.latte');
+		$template = $this->getTemplate();
+		$template->getLatte()->addFilter(null, [$this->getPresenter()->getContext()->getByType('App\Model\HelperLoader'), 'loader']);
+		$template->setFile(__DIR__ . '/chat.latte');
 		$allChats = $this->chats->findAll()->orderBy(['timestamp' => 'ASC']);
-		$this->template->chats = $allChats->limitBy(51, max(0, $allChats->countStored() - 51));
-		$this->template->activeUsers = $this->users->findActive();
+		$template->chats = $allChats->limitBy(51, max(0, $allChats->countStored() - 51));
+		$template->activeUsers = $this->users->findActive();
 
-		$this->template->render();
+		$template->render();
 	}
 
 	protected function createComponentChatForm() {
@@ -54,39 +56,42 @@ class ChatControl extends Control {
 	}
 
 	public function handleRefresh($id) {
-		if (!$this->presenter->isAjax()) {
+		$presenter = $this->getPresenter();
+		if (!$presenter->isAjax()) {
 			$this->redirect('this');
 		} else {
-			$this->template->getLatte()->addFilter(null, [$this->presenter->context->getByType('App\Model\HelperLoader'), 'loader']);
-			$this->template->setFile(__DIR__ . '/chat-messages.latte');
-			$this->template->chats = $this->chats->findBy(['id>=' => $id]);
-			$this->presenter->sendResponse(new TextResponse($this->template));
+			$template = $this->getTemplate();
+			$template->getLatte()->addFilter(null, [$presenter->getContext()->getByType('App\Model\HelperLoader'), 'loader']);
+			$template->setFile(__DIR__ . '/chat-messages.latte');
+			$template->chats = $this->chats->findBy(['id>=' => $id]);
+			$presenter->sendResponse(new TextResponse($template));
 		}
 	}
 
 	public function chatFormSucceeded(Nette\Application\UI\Form $form) {
-		if (!$this->presenter->user->loggedIn) {
-			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
+		$presenter = $this->getPresenter();
+		if (!$presenter->getUser()->isLoggedIn()) {
+			$this->redirect('Sign:in', ['backlink' => $presenter->storeRequest()]);
 		}
-		if (!$this->presenter->user->isAllowed('chat', 'send')) {
-			$this->error('Pro odesílání do chatu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+		if (!$presenter->getUser()->isAllowed('chat', 'send')) {
+			$presenter->error('Pro odesílání do chatu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
-		$values = $form->values;
+		$values = $form->getValues();
 
-		$formatter = $this->presenter->context->getService('chatFormatter');
+		$formatter = $presenter->getContext()->getService('chatFormatter');
 
 		$chat = new Chat;
 		$chat->content = $formatter->format($values->content);
-		$chat->ip = $this->presenter->context->getByType('Nette\Http\IRequest')->remoteAddress;
-		$chat->user = $this->users->getById($this->presenter->user->identity->id);
+		$chat->ip = $presenter->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+		$chat->user = $this->users->getById($presenter->getUser()->getIdentity()->id);
 		$this->chats->persistAndFlush($chat);
 		try {
-			$this->telegramNotifier->chatMessage($this->presenter->user->identity->username, trim(preg_replace('/\{#([0-9]+)\}/', '', $values->content)));
-		} catch (Exception $e) {}
-		if (!$this->presenter->isAjax()) {
+			$this->telegramNotifier->chatMessage($presenter->getUser()->getIdentity()->username, trim(preg_replace('/\{#([0-9]+)\}/', '', $values->content)));
+		} catch (\Exception $e) {}
+		if (!$presenter->isAjax()) {
 			$this->redirect('this');
 		} else {
-			$this->presenter->sendResponse(new TextResponse('ok'));
+			$presenter->sendResponse(new TextResponse('ok'));
 		}
 	}
 }

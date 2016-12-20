@@ -7,9 +7,7 @@ use League\CommonMark\Block\Element\InlineContainer;
 use League\CommonMark\Cursor;
 
 class ChatQuote extends AbstractBlock implements InlineContainer {
-	/**
-	 * @var int
-	 */
+	/** @var int */
 	private $id;
 
 	/**

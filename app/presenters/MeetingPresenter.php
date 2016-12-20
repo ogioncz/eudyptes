@@ -26,13 +26,13 @@ class MeetingPresenter extends BasePresenter {
 	public $users;
 
 	public function renderList() {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (isset($this->params['do']) && $this->params['do'] === 'participator-participation') {
-			$this->template->meetings = $this->meetings->findById($this['participator']->params['meetingId']);
+			$this->getTemplate()->meetings = $this->meetings->findById($this['participator']->params['meetingId']);
 		} else {
-			$this->template->meetings = $this->meetings->findUpcoming();
+			$this->getTemplate()->meetings = $this->meetings->findUpcoming();
 		}
 	}
 
@@ -55,13 +55,13 @@ class MeetingPresenter extends BasePresenter {
 			$time->addText('event', 'činnost')->setRequired();
 
 			$time->addSubmit('remove', 'Odebrat')->setValidationScope(false)->onClick[] = function(SubmitButton $button) {
-				$form = $button->parent->parent;
-				$form->remove($button->parent, true);
+				$replicator = $button->getParent()->getParent();
+				$replicator->remove($button->getParent(), true);
 			};
 		}, 1, true);
 
 		$form->addSubmit('add', 'Přidat')->setValidationScope(false)->onClick[] = function(SubmitButton $button) {
-			$button->parent['times']->createOne();
+			$button->getParent()['times']->createOne();
 		};
 
 		$form->addTextArea('markdown', 'Popis:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
@@ -78,18 +78,18 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function meetingFormSucceeded(SubmitButton $submit) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $submit->form->values;
+		$values = $submit->getForm()->getValues();
 		$formatted = $this->formatter->format($values->markdown);
 
 		if (count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		if ($this->action === 'create') {
+		if ($this->getAction() === 'create') {
 			$meeting = new Meeting();
 		} else {
 			$id = $this->getParameter('id');
@@ -97,7 +97,7 @@ class MeetingPresenter extends BasePresenter {
 			if (!$meeting) {
 				$this->error('Sraz nenalezen.');
 			}
-			if (!$this->allowed($meeting, $this->action)) {
+			if (!$this->allowed($meeting, $this->getAction())) {
 				$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
 		}
@@ -116,9 +116,9 @@ class MeetingPresenter extends BasePresenter {
 		$meeting->program = Json::encode($program);
 		$meeting->date = $values->date->setTime($hour, $minute);
 
-		if ($this->action === 'create') {
-			$meeting->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
-			$meeting->user = $this->users->getById($this->user->identity->id);
+		if ($this->getAction() === 'create') {
+			$meeting->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+			$meeting->user = $this->users->getById($this->getUser()->getIdentity()->id);
 		}
 		$this->meetings->persistAndFlush($meeting);
 
@@ -127,11 +127,11 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function meetingFormPreview(SubmitButton $button) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $button->form->values;
+		$values = $button->getForm()->getValues();
 
 		$formatted = $this->formatter->format($values['markdown']);
 
@@ -154,9 +154,9 @@ class MeetingPresenter extends BasePresenter {
 		list($hour, $minute) = explode(':', $program[0]['time']);
 		$meeting->program = Json::encode($program);
 		$meeting->date = $values->date->setTime($hour, $minute);
-		$meeting->user = $this->users->getById($this->user->identity->id);
+		$meeting->user = $this->users->getById($this->getUser()->getIdentity()->id);
 
-		$this->template->preview = $meeting;
+		$this->getTemplate()->preview = $meeting;
 
 		$this->flashMessage('Toto je jen náhled, sraz zatím nebyl uložen.', 'info');
 
@@ -165,16 +165,16 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function actionCreate() {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->allowed('meeting', $this->action)) {
+		if (!$this->allowed('meeting', $this->getAction())) {
 			$this->error('Pro založení srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
 
 	public function actionEdit($id) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		/** @var Meeting $meeting */
@@ -203,14 +203,14 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function deleteFormSucceeded() {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		$meeting = $this->meetings->getById($this->getParameter('id'));
 		if (!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
-		if (!$this->allowed($meeting, $this->action)) {
+		if (!$this->allowed($meeting, $this->getAction())) {
 			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
@@ -221,27 +221,27 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function actionDelete($id) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		$meeting = $this->meetings->getById($id);
 		if (!$meeting) {
 			$this->error('Sraz nenalezen.');
 		}
-		if (!$this->allowed('meeting', $this->action)) {
+		if (!$this->allowed('meeting', $this->getAction())) {
 			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		$this->template->meeting = $meeting;
+		$this->getTemplate()->meeting = $meeting;
 	}
 
 	/**
 	* Participator control factory.
-	* @return App\Components\Participator
+	* @return Multiplier
 	*/
 	protected function createComponentParticipator() {
 		return new Multiplier(function($meetingId) {
-			$userId = $this->user->identity->id;
+			$userId = $this->getUser()->getIdentity()->id;
 			$meeting = $this->meetings->getById($meetingId);
 			$youParticipate = array_reduce(iterator_to_array($meeting->visitors->get()), function($carry, $visitor) use ($userId) {
 				if($visitor->id === $userId) {
@@ -255,12 +255,12 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	public function participatorClicked(Nette\Application\UI\Form $form, $values) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
 		$meeting = $this->meetings->getById($values->id);
-		$userId = $this->user->identity->id;
+		$userId = $this->getUser()->getIdentity()->id;
 		$youParticipate = $values->action === 'unparticipate';
 		try {
 			if ($youParticipate) {
@@ -274,8 +274,8 @@ class MeetingPresenter extends BasePresenter {
 			\Tracy\Debugger::log($e);
 		}
 
-		$form->components['action']->value = $youParticipate ? 'unparticipate' : 'participate';
-		$form->components['send']->caption = $youParticipate ? 'Zrušit účast' : 'Zúčastnit se';
+		$form->getComponents('action')->value = $youParticipate ? 'unparticipate' : 'participate';
+		$form->getComponents('send')->caption = $youParticipate ? 'Zrušit účast' : 'Zúčastnit se';
 		if (!$this->isAjax()) {
 			$this->redirect('this');
 		} else {

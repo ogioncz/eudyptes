@@ -15,10 +15,7 @@
  */
 
 use Nette\Application\UI\Control;
-
 use Nette\Utils\Paginator;
-
-
 
 /**
  * Visual paginator control.
@@ -34,10 +31,8 @@ class VisualPaginator extends Control {
 	/** @persistent */
 	public $page = 1;
 
-
-
 	/**
-	 * @return Nette\Paginator
+	 * @return Paginator
 	 */
 	public function getPaginator() 	{
 		if(!$this->paginator) {
@@ -45,8 +40,6 @@ class VisualPaginator extends Control {
 		}
 		return $this->paginator;
 	}
-
-
 
 	/**
 	 * Renders paginator.
@@ -74,8 +67,6 @@ class VisualPaginator extends Control {
 		$this->template->render();
 	}
 
-
-
 	/**
 	 * Loads state informations.
 	 * @param  array
@@ -85,5 +76,4 @@ class VisualPaginator extends Control {
 		parent::loadState($params);
 		$this->getPaginator()->page = $this->page;
 	}
-
 }

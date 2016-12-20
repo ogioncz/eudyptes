@@ -7,6 +7,7 @@ use App\Helpers\Formatting\Parser\EmoticonParser;
 use App\Helpers\Formatting\Parser\UrlParser;
 use App\Helpers\Formatting\Parser\ChatQuoteParser;
 use App\Helpers\Formatting\Renderer\ChatQuoteRenderer;
+use App\Model\ChatRepository;
 use App\Model\HelperLoader;
 use League\CommonMark\Block\Parser as BlockParser;
 use League\CommonMark\Extension\Extension;
@@ -16,23 +17,19 @@ use League\CommonMark\Inline\Processor as InlineProcessor;
 use League\CommonMark\Inline\Renderer as InlineRenderer;
 
 class CommonMarkChatExtension extends Extension {
-	/**
-	 * @var ChatRepository
-	 */
+	/** @var ChatRepository */
 	private $chats;
 
-	/**
-	 * @var HelperLoader
-	 */
+	/** @var HelperLoader */
 	private $helperLoader;
 
 	/**
 	 * Constructor
 	 *
-	 * @param array $chats
+	 * @param ChatRepository $chats
 	 * @param HelperLoader $helperLoader
 	 */
-	public function __construct($chats, HelperLoader $helperLoader) {
+	public function __construct(ChatRepository $chats, HelperLoader $helperLoader) {
 		$this->chats = $chats;
 		$this->helperLoader = $helperLoader;
 	}

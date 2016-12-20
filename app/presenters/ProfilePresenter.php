@@ -11,7 +11,7 @@ use Nette\Utils\Strings;
 use Nette\Utils\Image;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
-use Nette\Database\UniqueConstraintViolationException;
+use Nextras\Dbal\UniqueConstraintViolationException;
 use Tracy\Debugger;
 use Nextras\Forms\Rendering;
 use Exception;
@@ -39,7 +39,8 @@ class ProfilePresenter extends BasePresenter {
 	public $profile = null;
 
 	public function renderList() {
-		$this->template->profiles = $this->users->findAll()->orderBy('username');
+		$template = $this->getTemplate();
+		$template->profiles = $this->users->findAll()->orderBy('username');
 	}
 
 	public function renderShow($id) {
@@ -47,17 +48,18 @@ class ProfilePresenter extends BasePresenter {
 		if (!$this->profile) {
 			$this->error('Uživatel nenalezen');
 		}
-		if (file_exists($this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png')) {
-			$this->template->avatar = str_replace('♥basePath♥', $this->context->getByType('Nette\Http\IRequest')->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $this->profile->id . 'm.png';
+		$template = $this->getTemplate();
+		if (file_exists($this->getContext()->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png')) {
+			$template->avatar = str_replace('♥basePath♥', $this->getContext()->getByType('Nette\Http\IRequest')->url->baseUrl, $this->getContext()->parameters['avatarStoragePublic']) . '/' . $this->profile->id . 'm.png';
 		}
 
-		$this->template->ipAddress = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
-		$this->template->profile = $this->profile;
-		$this->template->stamps = $this->stamps->findAll();
+		$template->ipAddress = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+		$template->profile = $this->profile;
+		$template->stamps = $this->stamps->findAll();
 	}
 
 	public function actionEdit($id) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		$this->profile = $this->users->getById($id);
@@ -79,12 +81,12 @@ class ProfilePresenter extends BasePresenter {
 		$username = $form->addText('username', 'Přezdívka:');
 
 		if (!$this->allowed($this->profile, 'rename')) {
-			$username->disabled = true;
+			$username->setDisabled(true);
 		}
 
 		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::FILLED)->addRule(Form::MIME_TYPE, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
 
-		$medium = $this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png';
+		$medium = $this->getContext()->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png';
 		if (file_exists($medium)) {
 			$form->addCheckbox('removeAvatar', 'Odstranit avatar');
 		}
@@ -110,7 +112,7 @@ class ProfilePresenter extends BasePresenter {
 	}
 
 	public function profileFormSucceeded(Form $form) {
-		$values = $form->values;
+		$values = $form->getValues();
 		if (!$this->allowed($this->profile, 'edit')) {
 			$this->error('Nemáš oprávnění upravovat tohoto uživatele.');
 		}
@@ -126,8 +128,8 @@ class ProfilePresenter extends BasePresenter {
 		$user->member = (bool) $values->member;
 		$user->notifyByMail = $values->notifyByMail;
 
-		$original = $this->context->parameters['avatarStorage'] . '/' . $user->id . '.png';
-		$medium = $this->context->parameters['avatarStorage'] . '/' . $user->id . 'm.png';
+		$original = $this->getContext()->parameters['avatarStorage'] . '/' . $user->id . '.png';
+		$medium = $this->getContext()->parameters['avatarStorage'] . '/' . $user->id . 'm.png';
 
 		if (isset($values->removeAvatar) && $values->removeAvatar) {
 			@unlink($original);
@@ -155,7 +157,7 @@ class ProfilePresenter extends BasePresenter {
 			$this->redirect('show', $user->id);
 		} catch (UniqueConstraintViolationException $e) {
 			$form->addError($this->allowed($user, 'rename') ? 'Tento e-mail nebo přezdívka jsou již obsazeny.' : 'Tento e-mail je již obsazen.');
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			$file = Debugger::log($e);
 			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename($file));
 		}
@@ -190,7 +192,7 @@ class ProfilePresenter extends BasePresenter {
 	}
 
 	public function signUpFormSucceeded(Form $form) {
-		$values = $form->values;
+		$values = $form->getValues();
 
 		$user = new App\Model\User;
 		$user->username = $values->username;
@@ -203,19 +205,20 @@ class ProfilePresenter extends BasePresenter {
 			$this->redirect('Homepage:');
 		} catch (UniqueConstraintViolationException $e) {
 			$form->addError('Toto uživatelské jméno nebo e-mail je již obsazeno.');
-		} catch (PDOException $e) {
+		} catch (\PDOException $e) {
 			$file = Debugger::log($e);
 			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename($file));
 		}
 	}
 
 	public function renderResetPassword($tid = null, $token = null) {
-		$this->template->robots = 'noindex';
+		$template = $this->getTemplate();
+		$template->robots = 'noindex';
 		if ($token && $tid) {
 			$storedToken = $this->tokens->getById($tid);
 			if ($storedToken && Passwords::verify($token, $storedToken->token)) {
-				$this->template->token = $this->token = $token;
-				$this->template->tid = $this->tid = $tid;
+				$template->token = $this->token = $token;
+				$template->tid = $this->tid = $tid;
 			} else {
 				$this->flashMessage('Neplatný kód na změnu hesla.', 'danger');
 			}
@@ -248,8 +251,8 @@ class ProfilePresenter extends BasePresenter {
 	}
 
 	public function passwordResetRequestFormSucceeded(Form $form) {
-		$type = $form->values->type === 'username' ? 'username' : 'email';
-		$handle = $form->values->handle;
+		$type = $form->getValues()->type === 'username' ? 'username' : 'email';
+		$handle = $form->getValues()->handle;
 
 		$user = $this->users->getBy([$type => $handle]);
 
@@ -257,7 +260,7 @@ class ProfilePresenter extends BasePresenter {
 			$t = Strings::random();
 			$token = new Token;
 			$token->token = Passwords::hash($t);
-			$token->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
+			$token->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
 			$token->expiration = (new Nette\Utils\DateTime())->add(\DateInterval::createFromDateString('2 day'));
 			$token->type = Token::PASSWORD;
 			$user->tokens->add($token);
@@ -265,7 +268,7 @@ class ProfilePresenter extends BasePresenter {
 
 			$mailTemplate = $this->createTemplate();
 
-			$appDir = $this->context->parameters['appDir'];
+			$appDir = $this->getContext()->parameters['appDir'];
 			$mailTemplate->setFile($appDir . '/templates/Profile/resetPasswordMail.latte');
 
 			$mailTemplate->url = $this->link('//Profile:resetPassword', ['tid' => $token->id, 'token' => $t]);
@@ -306,9 +309,9 @@ class ProfilePresenter extends BasePresenter {
 	}
 
 	public function passwordResetFormSucceeded(Form $form) {
-		$token = $form->values->token;
-		$tid = $form->values->tid;
-		$password = $form->values->password;
+		$token = $form->getValues()->token;
+		$tid = $form->getValues()->tid;
+		$password = $form->getValues()->password;
 
 		if ($token && $tid) {
 			$storedToken = $this->tokens->getById($tid);

@@ -29,11 +29,11 @@ class PostPresenter extends BasePresenter {
 			$this->error('Aktuálka nenalezena');
 		}
 
-		$this->template->post = $post;
+		$this->getTemplate()->post = $post;
 	}
 
 	public function actionPurge($id) {
-		$post = $this->posts->getByID($id);
+		$post = $this->posts->getById($id);
 		if (!$post) {
 			$this->error('Aktuálka nenalezena');
 		}
@@ -42,7 +42,7 @@ class PostPresenter extends BasePresenter {
 			$this->error('Nemáš právo vymazat cache!', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'posts');
+		$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'posts');
 		$cache->remove($post->id);
 
 		$this->flashMessage('Cache byla vymazána.', 'success');
@@ -51,7 +51,7 @@ class PostPresenter extends BasePresenter {
 
 	public function renderList() {
 		$posts = $this->posts->findAll()->orderBy(['createdAt' => 'DESC']);
-		$this->template->posts = $posts;
+		$this->getTemplate()->posts = $posts;
 	}
 
 	protected function createComponentPostForm() {
@@ -68,19 +68,19 @@ class PostPresenter extends BasePresenter {
 
 		$submitButton = $form->addSubmit('save', 'Uložit');
 		$submitButton->onClick[] = [$this, 'postFormSucceeded'];
-		$form->renderer->primaryButton = $submitButton;
+		$form->getRenderer()->primaryButton = $submitButton;
 
 		return $form;
 	}
 
 	public function postFormSucceeded(SubmitButton $button) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $button->form->values;
+		$values = $button->getForm()->getValues();
 
-		if ($this->action === 'create') {
+		if ($this->getAction() === 'create') {
 			$post = new Post;
 		} else {
 			$id = $this->getParameter('id');
@@ -90,7 +90,7 @@ class PostPresenter extends BasePresenter {
 			}
 		}
 
-		if (!$this->allowed($this->action === 'create' ? 'post' : $post, $this->action)) {
+		if (!$this->allowed($this->getAction() === 'create' ? 'post' : $post, $this->getAction())) {
 			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
@@ -101,8 +101,8 @@ class PostPresenter extends BasePresenter {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		if ($this->action === 'create') {
-			$post->user = $this->users->getById($this->user->identity->id);
+		if ($this->getAction() === 'create') {
+			$post->user = $this->users->getById($this->getUser()->getIdentity()->id);
 		}
 
 		$this->posts->persistAndFlush($post);
@@ -112,11 +112,11 @@ class PostPresenter extends BasePresenter {
 		$revision->title = $values->title;
 		$revision->post = $post;
 		$revision->content = $formatted['text'];
-		$revision->user = $this->user->identity->id;
-		$revision->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
+		$revision->user = $this->getUser()->getIdentity()->id;
+		$revision->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
 		$post->revisions->add($revision);
 
-		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'posts');
+		$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'posts');
 		$cache->save($post->id, $formatted['text']);
 
 		$this->posts->persistAndFlush($post);
@@ -126,11 +126,11 @@ class PostPresenter extends BasePresenter {
 	}
 
 	public function postFormPreview(SubmitButton $button) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $button->form->values;
+		$values = $button->getForm()->getValues();
 
 		$formatted = $this->formatter->format($values['markdown']);
 
@@ -138,7 +138,7 @@ class PostPresenter extends BasePresenter {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		$this->template->preview = $formatted['text'];
+		$this->getTemplate()->preview = $formatted['text'];
 
 		$this->flashMessage('Toto je jen náhled, aktuálka zatím nebyla uložena.', 'info');
 
@@ -147,19 +147,19 @@ class PostPresenter extends BasePresenter {
 	}
 
 	public function actionCreate() {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->allowed('post', $this->action)) {
+		if (!$this->allowed('post', $this->getAction())) {
 			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 	}
 
 	public function actionEdit($id) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->allowed('post', $this->action)) {
+		if (!$this->allowed('post', $this->getAction())) {
 			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$post = $this->posts->getById($id);
@@ -176,6 +176,6 @@ class PostPresenter extends BasePresenter {
 
 	public function renderRss() {
 		$posts = $this->posts->findAll()->orderBy(['createdAt' => 'DESC'])->limitBy(15);
-		$this->template->posts = $posts;
+		$this->getTemplate()->posts = $posts;
 	}
 }

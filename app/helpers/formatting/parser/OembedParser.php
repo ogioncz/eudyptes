@@ -12,9 +12,7 @@ use League\CommonMark\Inline\Element\Link;
 
 
 class OembedParser extends AbstractBlockParser {
-	/**
-	* @var array
-	*/
+	/** @var string[] */
 	private $whitelistedDomains;
 
 	/** @var OEmbed\Simple */
@@ -24,7 +22,7 @@ class OembedParser extends AbstractBlockParser {
 	 * Constructor
 	 *
 	 * @param OEmbed\Simple $oembed
-	 * @param array $whitelistedDomains
+	 * @param string[] $whitelistedDomains
 	 */
 	public function __construct($oembed, $whitelistedDomains) {
 		$this->oembed = $oembed;

@@ -16,7 +16,7 @@ class SearchPresenter extends BasePresenter {
 			$page = $paginator->page;
 			$paginator->itemsPerPage = $this->itemsPerPage;
 
-			$client = new \Indextank_Api($this->context->parameters['indextank']);
+			$client = new \Indextank_Api($this->getContext()->parameters['indextank']);
 			$index = $client->get_index('web');
 
 			$fetch_fields = 'title,timestamp';
@@ -34,8 +34,8 @@ class SearchPresenter extends BasePresenter {
 			}
 
 			$paginator->itemCount = $response->matches;
-			$this->template->query = $query;
-			$this->template->results = $response->results;
+			$this->getTemplate()->query = $query;
+			$this->getTemplate()->results = $response->results;
 		}
 	}
 }

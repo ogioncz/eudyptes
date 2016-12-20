@@ -9,7 +9,7 @@ use Longman\TelegramBot\Telegram;
 class TelegramNotifier {
 	use Nette\SmartObject;
 
-	/** @var Longman\TelegramBot\Telegram */
+	/** @var Telegram */
 	public $telegram;
 
 	/** @var int */

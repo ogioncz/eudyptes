@@ -28,9 +28,9 @@ class PagePresenter extends BasePresenter {
 		$page = $this->pages->getBy(['slug' => $slug]);
 		if (!$page) {
 			if ($this->allowed('page', 'create')) {
-				$httpResponse = $this->context->getByType('Nette\Http\Response');
+				$httpResponse = $this->getContext()->getByType('Nette\Http\Response');
 				$httpResponse->setCode(Nette\Http\Response::S404_NOT_FOUND);
-				$this->template->slug = $slug;
+				$this->getTemplate()->slug = $slug;
 				$this->setView('@no-page');
 				$this->sendTemplate();
 			} else {
@@ -42,10 +42,10 @@ class PagePresenter extends BasePresenter {
 			$this->redirectUrl($page->redirect);
 		}
 
-		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
+		$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'pages');
 
-		$this->template->page = $page;
-		$this->template->content = $cache->load($page->slug, function() use ($page) {
+		$this->getTemplate()->page = $page;
+		$this->getTemplate()->content = $cache->load($page->slug, function() use ($page) {
 			$formatted = $this->formatter->format($page->markdown);
 
 			if (count($formatted['errors'])) {
@@ -57,7 +57,7 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionPurge($id) {
-		$page = $this->pages->getByID($id);
+		$page = $this->pages->getById($id);
 		if (!$page) {
 			$this->error('Stránka nenalezena');
 		}
@@ -66,7 +66,7 @@ class PagePresenter extends BasePresenter {
 			$this->error('Nemáš právo vymazat cache!', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
+		$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'pages');
 		$cache->remove($page->slug);
 
 		$this->flashMessage('Cache byla vymazána.', 'success');
@@ -75,7 +75,7 @@ class PagePresenter extends BasePresenter {
 
 	public function renderList() {
 		$pages = $this->pages->findAll();
-		$this->template->pages = $pages;
+		$this->getTemplate()->pages = $pages;
 	}
 
 	public function renderTitles() {
@@ -110,7 +110,7 @@ class PagePresenter extends BasePresenter {
 			$pagesJson[] = array('slug' => $page->slug, 'title' => $page->title, 'links' => $links, 'path' => $this->link('show', ['slug' => $page->slug]));
 		}
 
-		$this->template->pages = $pagesJson;
+		$this->getTemplate()->pages = $pagesJson;
 	}
 
 	protected function createComponentPageForm() {
@@ -119,7 +119,7 @@ class PagePresenter extends BasePresenter {
 		$form->setRenderer(new Rendering\Bs3FormRenderer);
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$slug = $form->addText('slug', 'Adresa:')->setRequired()->setType('url');
-		if ($this->action == 'edit') {
+		if ($this->getAction() == 'edit') {
 			$slug->setDisabled(true);
 		}
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
@@ -130,19 +130,19 @@ class PagePresenter extends BasePresenter {
 
 		$submitButton = $form->addSubmit('send', 'Odeslat a zveřejnit');
 		$submitButton->onClick[] = [$this, 'pageFormSucceeded'];
-		$form->renderer->primaryButton = $submitButton;
+		$form->getRenderer()->primaryButton = $submitButton;
 
 		return $form;
 	}
 
 	public function pageFormSucceeded(SubmitButton $button) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $button->form->values;
+		$values = $button->getForm()->getValues();
 
-		if ($this->action === 'create') {
+		if ($this->getAction() === 'create') {
 			$page = new Model\Page;
 		} else {
 			$id = $this->getParameter('id');
@@ -152,7 +152,7 @@ class PagePresenter extends BasePresenter {
 			}
 		}
 
-		if (!$this->allowed($this->action === 'create' ? 'page' : $page, $this->action)) {
+		if (!$this->allowed($this->getAction() === 'create' ? 'page' : $page, $this->getAction())) {
 			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
@@ -163,9 +163,9 @@ class PagePresenter extends BasePresenter {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		if ($this->action === 'create') {
+		if ($this->getAction() === 'create') {
 			$page->slug = $values->slug;
-			$page->user = $this->users->getById($this->user->identity->id);
+			$page->user = $this->users->getById($this->getUser()->getIdentity()->id);
 		}
 
 		try {
@@ -175,13 +175,13 @@ class PagePresenter extends BasePresenter {
 			$revision->markdown = $values->markdown;
 			$revision->page = $page;
 			$revision->content = $formatted['text'];
-			$revision->user = $this->users->getById($this->user->identity->id);
-			$revision->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
+			$revision->user = $this->users->getById($this->getUser()->getIdentity()->id);
+			$revision->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
 			$page->revisions->add($revision);
 
 			$this->pages->persistAndFlush($page);
 
-			$cache = new Cache($this->context->getByType('Nette\Caching\IStorage'), 'pages');
+			$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'pages');
 			$cache->save($page->slug, $formatted['text']);
 
 			$this->flashMessage('Stránka byla odeslána.', 'success');
@@ -192,11 +192,11 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function pageFormPreview(SubmitButton $button) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $button->form->values;
+		$values = $button->getForm()->getValues();
 
 		$formatted = $this->formatter->format($values['markdown']);
 
@@ -204,7 +204,7 @@ class PagePresenter extends BasePresenter {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		$this->template->preview = $formatted['text'];
+		$this->getTemplate()->preview = $formatted['text'];
 
 		$this->flashMessage('Toto je jen náhled, stránka zatím nebyla uložena.', 'info');
 
@@ -213,10 +213,10 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionCreate($slug = null) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		if (!$this->allowed('page', $this->action)) {
+		if (!$this->allowed('page', $this->getAction())) {
 			$this->error('Pro vytváření stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
@@ -226,14 +226,14 @@ class PagePresenter extends BasePresenter {
 	}
 
 	public function actionEdit($id) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		$page = $this->pages->getById($id);
 		if (!$page) {
 			$this->error('Stránka nenalezena');
 		}
-		if (!$this->allowed($page, $this->action)) {
+		if (!$this->allowed($page, $this->getAction())) {
 			$this->error('Pro úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
@@ -247,7 +247,7 @@ class PagePresenter extends BasePresenter {
 		if (!$page) {
 			$this->error('Stránka nenalezena.');
 		}
-		$this->template->page = $page;
-		$this->template->revisions = $page->revisions->get()->orderBy(['timestamp' => 'DESC']);
+		$this->getTemplate()->page = $page;
+		$this->getTemplate()->revisions = $page->revisions->get()->orderBy(['timestamp' => 'DESC']);
 	}
 }

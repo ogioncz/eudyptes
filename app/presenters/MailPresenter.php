@@ -27,24 +27,27 @@ class MailPresenter extends BasePresenter {
 	private $itemsPerPage = 25;
 
 	public function renderList($sent = false) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$this->template->sent = $sent;
+		$template = $this->getTemplate();
+		$template->sent = $sent;
 		$paginator = $this['paginator']->getPaginator();
 		$paginator->itemsPerPage = $this->itemsPerPage;
-		$mails = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->user->identity->id]);
+		$mails = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->getUser()->getIdentity()->id]);
 		$paginator->itemCount = $mails->countStored();
-		$this->template->mails = $mails->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
+		$template->mails = $mails->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 
 	public function actionShow($id, $tree = false) {
+		$template = $this->getTemplate();
+
 		if ($tree) {
-			$this->template->setFile(__DIR__ . '/../templates/Mail/tree.latte');
+			$template->setFile(__DIR__ . '/../templates/Mail/tree.latte');
 		}
 
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
@@ -58,12 +61,12 @@ class MailPresenter extends BasePresenter {
 			$this->error('Toto není tvá zpráva', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		if (!$mail->read && $mail->recipient->id === $this->user->identity->id) {
+		if (!$mail->read && $mail->recipient->id === $this->getUser()->getIdentity()->id) {
 			$mail->read = true;
 			$this->mails->persistAndFlush($mail);
 		}
 
-		$this->template->mail = $mail;
+		$template->mail = $mail;
 	}
 
 	protected function createComponentMailForm() {
@@ -74,8 +77,8 @@ class MailPresenter extends BasePresenter {
 		$subject = $form->addText('subject', 'Předmět:')->setRequired();
 		$subject->getControlPrototype()->autofocus = true;
 		$subject->getControlPrototype()->addClass('mail-subject')->data('content', 'Předmět zprávy má výstižně charakterizovat, čeho se zpráva týká.');
-		if ($this->action === 'reply') {
-			$subject->setDefaultValue('re: ' . preg_replace('/^(?:re: )+/i', '', $this->template->original->subject));
+		if ($this->getAction() === 'reply') {
+			$subject->setDefaultValue('re: ' . preg_replace('/^(?:re: )+/i', '', $this->getTemplate()->original->subject));
 		}
 
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
@@ -86,17 +89,17 @@ class MailPresenter extends BasePresenter {
 
 		$submitButton = $form->addSubmit('send', 'Odeslat');
 		$submitButton->onClick[] = [$this, 'mailFormSucceeded'];
-		$form->renderer->primaryButton = $submitButton;
+		$form->getRenderer()->primaryButton = $submitButton;
 
 		return $form;
 	}
 
 	public function mailFormSucceeded(SubmitButton $button) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $button->form->values;
+		$values = $button->getForm()->getValues();
 		$formatted = $this->formatter->format($values->markdown);
 
 		if (count($formatted['errors'])) {
@@ -107,10 +110,10 @@ class MailPresenter extends BasePresenter {
 		$mail->subject = $values->subject;
 		$mail->markdown = $values->markdown;
 		$mail->content = $formatted['text'];
-		$mail->sender = $this->users->getById($this->user->identity->id);
-		$mail->ip = $this->context->getByType('Nette\Http\IRequest')->remoteAddress;
+		$mail->sender = $this->users->getById($this->getUser()->getIdentity()->id);
+		$mail->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
 
-		if ($this->action === 'reply') {
+		if ($this->getAction() === 'reply') {
 			$original_id = $this->getParameter('id');
 			if (!$original_id) {
 				$this->error('Zadej id zprávy, na kterou chceš odpovědět.');
@@ -121,7 +124,7 @@ class MailPresenter extends BasePresenter {
 				$this->error('Zpráva s tímto id neexistuje.');
 			}
 
-			if ($original->recipient->id !== $this->user->identity->id) {
+			if ($original->recipient->id !== $this->getUser()->getIdentity()->id) {
 				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
 
@@ -157,11 +160,11 @@ class MailPresenter extends BasePresenter {
 	}
 
 	public function mailFormPreview(SubmitButton $button) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
-		$values = $button->form->values;
+		$values = $button->getForm()->getValues();
 
 		$formatted = $this->formatter->format($values['markdown']);
 
@@ -169,7 +172,7 @@ class MailPresenter extends BasePresenter {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		$this->template->preview = $formatted['text'];
+		$this->getTemplate()->preview = $formatted['text'];
 
 		$this->flashMessage('Toto je jen náhled, zpráva zatím nebyla uložena.', 'info');
 
@@ -181,11 +184,11 @@ class MailPresenter extends BasePresenter {
 		$messageTemplate = $this->createTemplate();
 		$messageTemplate->sentMail = $mail;
 		$messageTemplate->sender = $mail->sender->username;
-		$messageTemplate->setFile($this->context->parameters['appDir'] . '/templates/Mail/@notification.latte');
+		$messageTemplate->setFile($this->getContext()->parameters['appDir'] . '/templates/Mail/@notification.latte');
 
 		$message = new Message;
 		$message->setFrom($messageTemplate->sender . ' <neodpovidat@fan-club-penguin.cz>');
-		$message->subject = 'Nová zpráva ' . $mail->subject . ' (fan-club-penguin.cz)';
+		$message->setSubject('Nová zpráva ' . $mail->subject . ' (fan-club-penguin.cz)');
 		$message->addTo($mail->recipient->email);
 		$message->setBody($messageTemplate);
 
@@ -194,7 +197,7 @@ class MailPresenter extends BasePresenter {
 	}
 
 	public function actionCreate($recipient) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
@@ -211,11 +214,11 @@ class MailPresenter extends BasePresenter {
 			$this->error('Tomuto uživateli nemůžeš poslat zprávu.');
 		}
 
-		$this->template->addressee = $addressee;
+		$this->getTemplate()->addressee = $addressee;
 	}
 
 	public function actionReply($id) {
-		if (!$this->user->loggedIn) {
+		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 
@@ -228,9 +231,9 @@ class MailPresenter extends BasePresenter {
 			$this->error('Zpráva s tímto id neexistuje.');
 		}
 
-		if ($original->recipient->id !== $this->user->identity->id) {
+		if ($original->recipient->id !== $this->getUser()->getIdentity()->id) {
 			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
-		$this->template->original = $original;
+		$this->getTemplate()->original = $original;
 	}
 }

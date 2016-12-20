@@ -15,8 +15,9 @@ class RevisionPresenter extends BasePresenter {
 		if (!$revision) {
 			$this->error('Revize nenalezena.');
 		}
-		$this->template->page = $revision->page;
-		$this->template->revision = $revision;
+		$template = $this->getTemplate();
+		$template->page = $revision->page;
+		$template->revision = $revision;
 	}
 
 	public function renderDiff($id, $and, $type = 'side') {
@@ -38,10 +39,11 @@ class RevisionPresenter extends BasePresenter {
 
 		$diff = $differ->render($renderer);
 
-		$this->template->page = $old->page;
-		$this->template->diff = $diff;
-		$this->template->old = $old;
-		$this->template->new = $new;
+		$template = $this->getTemplate();
+		$template->page = $old->page;
+		$template->diff = $diff;
+		$template->old = $old;
+		$template->new = $new;
 	}
 
 	public function renderList() {
@@ -49,6 +51,7 @@ class RevisionPresenter extends BasePresenter {
 		$paginator->itemsPerPage = 50;
 		$revisions = $this->revisions->findAll();
 		$paginator->itemCount = $revisions->countStored();
-		$this->template->revisions = $revisions->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
+		$template = $this->getTemplate();
+		$template->revisions = $revisions->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 }

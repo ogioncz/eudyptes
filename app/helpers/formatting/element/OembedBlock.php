@@ -8,9 +8,7 @@ use League\CommonMark\Block\Element\InlineContainer;
 use League\CommonMark\Cursor;
 
 class OembedBlock extends AbstractBlock implements InlineContainer {
-	/**
-	 * @var Response
-	 */
+	/** @var Response */
 	private $response;
 
 	/**

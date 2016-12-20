@@ -27,13 +27,13 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	protected function createComponentPaginator($name) {
 		$vp = new \VisualPaginator($this, $name);
-		$vp->getPaginator()->itemsPerPage = 10;
+		$vp->getPaginator()->setItemsPerPage(10);
 		return $vp;
 	}
 
 	protected function startup() {
-		if ($this->user->loggedIn) {
-			$user = $this->users->getById($this->user->identity->id);
+		if ($this->getUser()->isLoggedIn()) {
+			$user = $this->users->getById($this->getUser()->getIdentity()->id);
 			$user->lastActivity = new DateTime();
 			$this->users->persistAndFlush($user);
 		}
@@ -42,32 +42,33 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	protected function createTemplate($class=null) {
 		$template = parent::createTemplate($class);
-		$template->getLatte()->addFilter(null, [$this->context->getByType('App\Model\HelperLoader'), 'loader']);
+		$template->getLatte()->addFilter(null, [$this->getContext()->getByType('App\Model\HelperLoader'), 'loader']);
 		return $template;
 	}
 
 	public function beforeRender() {
 		parent::beforeRender();
-		if ($this->user->loggedIn) {
-			$user = $this->users->getById($this->user->identity->id);
-			$this->template->unreadMails = $user->receivedMail->get()->findBy(['read' => false])->countStored();
-			$this->template->upcomingMeetings = $this->meetings->findUpcoming()->countStored();
+		$template = $this->getTemplate();
+		if ($this->getUser()->isLoggedIn()) {
+			$user = $this->users->getById($this->getUser()->getIdentity()->id);
+			$template->unreadMails = $user->receivedMail->get()->findBy(['read' => false])->countStored();
+			$template->upcomingMeetings = $this->meetings->findUpcoming()->countStored();
 		}
 
-		$this->template->menu = $this->pages->findBy(['menu' => true])->orderBy(['title' => 'ASC']);
-		$this->template->logo = file_get_contents(__DIR__ . '/../../www/images/bar.svg');
+		$template->menu = $this->pages->findBy(['menu' => true])->orderBy(['title' => 'ASC']);
+		$template->logo = file_get_contents(__DIR__ . '/../../www/images/bar.svg');
 
 
-		$this->template->customStyles = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/custom'), function($f, $_k) {
+		$template->customStyles = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/custom'), function($f, $_k) {
 			return $f->isFile() && $f->getExtension() == 'css';
-		}), function($f, $_k) {
-			return $this->template->basePath . '/custom/' . $f->getFileName();
+		}), function($f, $_k) use ($template) {
+			return $template->basePath . '/custom/' . $f->getFileName();
 		}));
 
-		$this->template->customScripts = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/custom'), function($f, $_k) {
+		$template->customScripts = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/custom'), function($f, $_k) {
 			return $f->isFile() && $f->getExtension() == 'js';
-		}), function($f, $_k) {
-			return $this->template->basePath . '/custom/' . $f->getFileName();
+		}), function($f, $_k) use ($template) {
+			return $template->basePath . '/custom/' . $f->getFileName();
 		}));
 
 		$headers = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/images/header'), function($f, $_k) {
@@ -77,14 +78,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		}));
 		shuffle($headers);
 
-		$this->template->headerStyle = count($headers) > 0 ? 'background-image: url(' . $this->template->basePath . '/images/header/' . $headers[0] . ');' : '';
+		$template->headerStyle = count($headers) > 0 ? 'background-image: url(' . $template->basePath . '/images/header/' . $headers[0] . ');' : '';
 
-		$this->template->allowed = [$this, 'allowed'];
+		$template->allowed = [$this, 'allowed'];
 	}
 
 	public function allowed($resource, $action) {
-		$user = $this->user->loggedIn ? $this->users->getById($this->user->identity->id) : null;
-		return $this->context->getService('authorizator')->isAllowed($user, $resource, $action);
+		$user = $this->getUser()->isLoggedIn() ? $this->users->getById($this->getUser()->getIdentity()->id) : null;
+		return $this->getContext()->getService('authorizator')->isAllowed($user, $resource, $action);
 	}
 
 	/**
