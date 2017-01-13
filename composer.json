@@ -45,8 +45,10 @@
 		"league/commonmark": "~0.15"
 	},
 	"require-dev": {
+		"mockery/mockery": "^0.9.6",
 		"nette/tester": "~1.7",
-		"mockery/mockery": "^0.9.6"
+		"nextras/migrations": "^3.0",
+		"symfony/console": "^3.2"
 	},
 	"minimum-stability": "dev",
 	"autoload": {

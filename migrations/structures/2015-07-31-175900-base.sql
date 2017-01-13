@@ -1,3 +1,5 @@
+SET sql_mode = '';
+
 CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(35) COLLATE utf8_czech_ci NOT NULL,
