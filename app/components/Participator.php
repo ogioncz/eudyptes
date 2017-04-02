@@ -28,7 +28,7 @@ class Participator extends Control {
 	public function render() {
 		$template = $this->getTemplate();
 
-		$template->getLatte()->addFilter(null, [new App\Model\HelperLoader($this->getPresenter()), 'loader']);
+		$template->getLatte()->addFilter(null, [$this->getPresenter()->getContext()->getByType('App\Model\HelperLoader'), 'loader']);
 		$template->setFile(__DIR__ . '/participator.latte');
 
 		$template->participants = $this->meeting->visitors;
