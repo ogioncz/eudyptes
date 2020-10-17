@@ -42,7 +42,7 @@
 		"nextras/orm": "~3.0",
 		"actinarium/php-diff": "dev-master",
 		"longman/telegram-bot": "^0.35.0",
-		"league/commonmark": "~0.17.0"
+		"league/commonmark": "~0.18.3"
 	},
 	"require-dev": {
 		"mockery/mockery": "^0.9.6",
