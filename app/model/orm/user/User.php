@@ -3,7 +3,7 @@
 namespace App\Model;
 
 use Nette;
-use Nette\Utils\DateTime;
+use DateTimeImmutable;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\ManyHasMany;
@@ -18,8 +18,8 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property bool $member {default false}
  * @property bool $notifyByMail {default true}
  * @property string|null $skype
- * @property DateTime|null $registered {default now}
- * @property DateTime $lastActivity {default now}
+ * @property DateTimeImmutable|null $registered {default now}
+ * @property DateTimeImmutable $lastActivity {default now}
  * @property string|null $profile
  *
  * @property OneHasMany|Token[] $tokens {1:m Token::$user}
@@ -31,8 +31,8 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property OneHasMany|Mail[] $sentMail {1:m Mail::$sender, orderBy=[timestamp, DESC]}
  * @property OneHasMany|Chat[] $createdChats {1:m Chat::$user, orderBy=[timestamp, DESC]}
  * @property OneHasMany|Meeting[] $createdMeetings {1:m Meeting::$user, orderBy=[date, DESC]}
- * @property ManyHasMany|Meeting[] $visitedMeetings {m:n Meeting::$visitors}
- * @property ManyHasMany|Stamp[] $ownedStamps {m:n Stamp::$owners , isMain=true}
+ * @property ManyHasMany|Meeting[] $visitedMeetings {m:m Meeting::$visitors}
+ * @property ManyHasMany|Stamp[] $ownedStamps {m:m Stamp::$owners , isMain=true}
  */
 class User extends Entity implements Nette\Security\IRole, Nette\Security\IResource {
 	public function getRoleId() {

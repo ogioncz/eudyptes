@@ -4,10 +4,10 @@ namespace App\Helpers\Formatting\Element;
 
 use Alb\OEmbed\Response;
 use League\CommonMark\Block\Element\AbstractBlock;
-use League\CommonMark\Block\Element\InlineContainer;
+use League\CommonMark\Block\Element\InlineContainerInterface;
 use League\CommonMark\Cursor;
 
-class OembedBlock extends AbstractBlock implements InlineContainer {
+class OembedBlock extends AbstractBlock implements InlineContainerInterface {
 	/** @var Response */
 	private $response;
 

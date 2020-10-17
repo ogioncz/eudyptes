@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use Nette\Utils\DateTime;
+use DateTimeImmutable;
 use Nextras\Orm\Entity\Entity;
 
 /**
@@ -11,8 +11,8 @@ use Nextras\Orm\Entity\Entity;
  * @property User $user {m:1 User::$tokens}
  * @property string $token
  * @property string $type {default self::REGISTRATION} {enum self::REGISTRATION, self::LOGIN, self::PASSWORD}
- * @property DateTime $timestamp {default now}
- * @property DateTime $expiration
+ * @property DateTimeImmutable $timestamp {default now}
+ * @property DateTimeImmutable $expiration
  * @property string $ip
  */
 class Token extends Entity {

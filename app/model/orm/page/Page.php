@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use Nette;
-use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 

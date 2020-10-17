@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the Nextras community extensions of Nette Framework
+ * This file is based on the Nextras community extensions of Nette Framework
  *
  * @license    MIT
  * @link       https://github.com/nextras/forms
@@ -10,7 +10,7 @@
 
 namespace App\Components;
 
-use Nette;
+use DateTimeImmutable;
 
 class TimePicker extends \Nextras\Forms\Controls\DateTimePickerPrototype {
 	/** @link http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#valid-time-string */
@@ -32,9 +32,8 @@ class TimePicker extends \Nextras\Forms\Controls\DateTimePickerPrototype {
 			$HH = $matches['HH'];
 			$mm = $matches['mm'];
 
-			$value = new Nette\Utils\DateTime;
-			$value->setTime($HH, $mm, 0);
-			return $value;
+			$value = new DateTimeImmutable;
+			return $value->setTime($HH, $mm);
 		};
 	}
 

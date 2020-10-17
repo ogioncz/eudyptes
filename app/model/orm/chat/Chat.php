@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use Nette\Utils\DateTime;
+use DateTimeImmutable;
 use Nextras\Orm\Entity\Entity;
 
 /**
@@ -10,7 +10,7 @@ use Nextras\Orm\Entity\Entity;
  * @property int $id {primary}
  * @property User $user {m:1 User::$createdChats}
  * @property string $content
- * @property DateTime $timestamp {default now}
+ * @property DateTimeImmutable $timestamp {default now}
  * @property string $ip
  * @property int $board {default 0}
  */

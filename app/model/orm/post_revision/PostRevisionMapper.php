@@ -3,7 +3,7 @@
 namespace App\Model;
 
 class PostRevisionMapper extends BaseMapper {
-	public function getTableName() {
+	public function getTableName(): string {
 		return 'post_revision';
 	}
 }

@@ -5,7 +5,9 @@ namespace App\Model;
 use Nette;
 use Nette\Utils\Html;
 
-class HelperLoader extends Nette\Object {
+class HelperLoader {
+	use Nette\SmartObject;
+
 	/** @var Nette\Application\Application */
 	private $app;
 
@@ -29,16 +31,16 @@ class HelperLoader extends Nette\Object {
 		return Html::el('a', $user->username)->href($this->app->getPresenter()->link('Profile:show', $user->id))->class('role-' . $user->role . ($visual ? ' role-visual' : ''));
 	}
 
-	public function relDate(\DateTime $date) {
-		if ($date == (new \DateTime('today'))) {
+	public function relDate(\DateTimeImmutable $date) {
+		if ($date == (new \DateTimeImmutable('today'))) {
 			return '(dnes)';
-		} else if ($date == (new \DateTime('tomorrow'))) {
+		} else if ($date == (new \DateTimeImmutable('tomorrow'))) {
 			return '(zítra)';
 		}
 		return '';
 	}
 
-	public function dateNA(\DateTime $time = null, $format = null) {
+	public function dateNA(\DateTimeImmutable $time = null, $format = null) {
 		if ($time) {
 			return \Latte\Runtime\Filters::date($time, $format);
 		} else {
@@ -58,33 +60,33 @@ class HelperLoader extends Nette\Object {
 		$textLength = strLen($text);
 		$tags = []; // not yet closed tags
 		for ($i = 0; $i < $textLength && $length < $limit; $i++) {
-			switch ($text{$i}) {
+			switch ($text[$i]) {
 			case '<':
 				// load tag
 				$start = $i + 1;
-				while ($i < $textLength && $text{$i} !== '>' && !ctype_space($text{$i})) {
+				while ($i < $textLength && $text[$i] !== '>' && !ctype_space($text[$i])) {
 					$i++;
 				}
 				$tag = strToLower(subStr($text, $start, $i - $start));
 				// skip potential attributes
 				$in_quote = '';
-				while ($i < $textLength && ($in_quote || $text{$i} !== '>')) {
-					if (($text{$i} === '"' || $text{$i} === "'") && !$in_quote) {
-						$in_quote = $text{$i};
-					} else if ($in_quote === $text{$i}) {
+				while ($i < $textLength && ($in_quote || $text[$i] !== '>')) {
+					if (($text[$i] === '"' || $text[$i] === "'") && !$in_quote) {
+						$in_quote = $text[$i];
+					} else if ($in_quote === $text[$i]) {
 						$in_quote = '';
 					}
 					$i++;
 				}
-				if ($text{$start} === '/') { // closing tag
+				if ($text[$start] === '/') { // closing tag
 					$tags = array_slice($tags, array_search(subStr($tag, 1), $tags) + 1);
-				} else if ($text{$i - 1} != '/' && !in_array($tag, $empty_tags)) { // opening tag
+				} else if ($text[$i - 1] != '/' && !in_array($tag, $empty_tags)) { // opening tag
 					array_unshift($tags, $tag);
 				}
 				break;
 			case '&':
 				$length++;
-				while ($i < $textLength && $text{$i} != ';') {
+				while ($i < $textLength && $text[$i] != ';') {
 					$i++;
 				}
 				break;

@@ -11,7 +11,9 @@ use Nette;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
 
-class Formatter extends Nette\Object {
+class Formatter {
+	use Nette\SmartObject;
+
 	public static $OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be', 'vimeo.com', 'soundcloud.com', 'twitter.com'];
 
 	public static $images = [

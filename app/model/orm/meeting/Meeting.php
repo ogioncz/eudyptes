@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
+use DateTimeImmutable;
 use Nette;
-use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
 
@@ -13,13 +13,13 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property User $user {m:1 User::$createdMeetings}
  * @property string $title
  * @property string $server
- * @property DateTime $date
+ * @property DateTimeImmutable $date
  * @property string $program
  * @property string $markdown
  * @property string $description
  * @property string $ip
  *
- * @property ManyHasMany|User[] $visitors {m:n User::$visitedMeetings, isMain=true}
+ * @property ManyHasMany|User[] $visitors {m:m User::$visitedMeetings, isMain=true}
  */
 class Meeting extends Entity implements Nette\Security\IResource {
 	public function getResourceId() {

@@ -3,7 +3,6 @@
 namespace App\Model;
 
 use Nette;
-use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
 
@@ -16,7 +15,7 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property string $icon
  * @property bool $obtainable
  *
- * @property ManyHasMany|User[] $owners {m:n User::$ownedStamps}
+ * @property ManyHasMany|User[] $owners {m:m User::$ownedStamps}
  */
 class Stamp extends Entity implements Nette\Security\IResource {
 	const DIFFICULTY_NOTHING = '0';

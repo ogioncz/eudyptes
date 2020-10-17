@@ -3,10 +3,10 @@
 namespace App\Helpers\Formatting\Element;
 
 use League\CommonMark\Block\Element\AbstractBlock;
-use League\CommonMark\Block\Element\InlineContainer;
+use League\CommonMark\Block\Element\InlineContainerInterface;
 use League\CommonMark\Cursor;
 
-class ChatQuote extends AbstractBlock implements InlineContainer {
+class ChatQuote extends AbstractBlock implements InlineContainerInterface {
 	/** @var int */
 	private $id;
 

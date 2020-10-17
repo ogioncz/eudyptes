@@ -3,7 +3,6 @@
 namespace App\Helpers\Formatting\Element;
 
 use League\CommonMark\Block\Element\AbstractBlock;
-use League\CommonMark\Block\Element\InlineContainer;
 use League\CommonMark\Cursor;
 
 class Spoiler extends AbstractBlock {

@@ -7,7 +7,9 @@ use Nette\Security\Permission;
 use Nette\Security\IRole;
 use Nette\Security\IResource;
 
-class OwnershipAssertions extends Nette\Object {
+class OwnershipAssertions {
+	use Nette\SmartObject;
+
 	public static function ownsPage(Permission $acl) {
 		return $acl->getQueriedResource() instanceof IResource && $acl->getQueriedRole() instanceof IRole && $acl->getQueriedRole()->id === $acl->getQueriedResource()->user->id;
 	}

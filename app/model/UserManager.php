@@ -6,7 +6,9 @@ use Nette;
 use Nette\Security\Passwords;
 use App;
 
-class UserManager extends Nette\Object implements Nette\Security\IAuthenticator {
+class UserManager implements Nette\Security\IAuthenticator {
+	use Nette\SmartObject;
+
 	/** @var App\Model\UserRepository */
 	private $users;
 

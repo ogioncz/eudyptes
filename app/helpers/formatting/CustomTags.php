@@ -2,11 +2,13 @@
 
 namespace App\Helpers\Formatting;
 
+use DateTimeImmutable;
 use Nette;
 use Nette\Utils\Json;
-use Nette\Utils\DateTime;
 
-class CustomTags extends Nette\Object {
+class CustomTags {
+	use Nette\SmartObject;
+
 	public static function item($text) {
 		$text = preg_replace_callback('/<(?P<prefix>cp-)(?P<type>(?:item|furniture|igloo|floor|location|puffleitem))(?P<attr>[^>]*)>(?P<id>\d+)<\/(?P=prefix)(?P=type)>/sU', function($match) {
 			if($match['type'] === 'item') {
@@ -49,8 +51,8 @@ class CustomTags extends Nette\Object {
 
 	public static function age($text) {
 		$text = preg_replace_callback('/<cp-age>(\d{4}-\d{2}-\d{2})<\/cp-age>/sU', function($match) {
-			$today = new DateTime();
-			$registration = new DateTime($match[1]);
+			$today = new DateTimeImmutable();
+			$registration = new DateTimeImmutable($match[1]);
 			return $today->diff($registration)->format('%a');
 		}, $text);
 		return $text;

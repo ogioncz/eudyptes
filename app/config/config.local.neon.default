@@ -11,7 +11,7 @@ parameters:
 dbal:
 	driver: mysqli
 	host:
-	dbname: eudyptes
+	database: eudyptes
 	username:
 	password:
 	options:

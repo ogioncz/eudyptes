@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
+use DateTimeImmutable;
 use Nette;
-use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 
 /**
@@ -13,7 +13,7 @@ use Nextras\Orm\Entity\Entity;
  * @property string $title {virtual}
  * @property string $markdown {virtual}
  * @property string $content {virtual}
- * @property DateTime $createdAt {default now}
+ * @property DateTimeImmutable $createdAt {default now}
  * @property bool $likeable {default false}
  * @property bool $published {default true}
  *

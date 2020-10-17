@@ -3,7 +3,7 @@
 namespace App\Presenters;
 
 use Nette;
-use Nette\Utils\DateTime;
+use DateTimeImmutable;
 use App;
 
 /**
@@ -26,15 +26,16 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	public $telegramNotifier;
 
 	protected function createComponentPaginator($name) {
-		$vp = new \VisualPaginator($this, $name);
+		$vp = new \VisualPaginator();
 		$vp->getPaginator()->setItemsPerPage(10);
+		$this->addComponent($vp, $name);
 		return $vp;
 	}
 
 	protected function startup() {
 		if ($this->getUser()->isLoggedIn()) {
 			$user = $this->users->getById($this->getUser()->getIdentity()->id);
-			$user->lastActivity = new DateTime();
+			$user->lastActivity = new DateTimeImmutable();
 			$this->users->persistAndFlush($user);
 		}
 		parent::startup();
@@ -72,7 +73,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		}));
 
 		$headers = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/images/header'), function($f, $_k) {
-			return $f->isFile();
+			return $f->isFile() && in_array($f->getExtension(), ['png', 'jpg', 'jpeg', 'gif'], true);
 		}), function($f, $_k) {
 			return $f->getFileName();
 		}));

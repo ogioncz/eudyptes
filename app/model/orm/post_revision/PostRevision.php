@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use Nette\Utils\DateTime;
+use DateTimeImmutable;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Collection\ICollection;
 
@@ -13,7 +13,7 @@ use Nextras\Orm\Collection\ICollection;
  * @property string $title
  * @property string $markdown
  * @property string $content
- * @property DateTime|null $timestamp {default now}
+ * @property DateTimeImmutable|null $timestamp {default now}
  * @property User $user {m:1 User::$createdPostRevisions}
  * @property string $ip
  *

@@ -13,7 +13,9 @@ use Nette;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
 
-class ChatFormatter extends Nette\Object {
+class ChatFormatter {
+	use Nette\SmartObject;
+
 	/** @var ChatRepository */
 	public $chats;
 

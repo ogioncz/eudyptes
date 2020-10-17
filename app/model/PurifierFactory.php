@@ -6,7 +6,9 @@ use Nette;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 
-class PurifierFactory extends Nette\Object {
+class PurifierFactory {
+	use Nette\SmartObject;
+
 	/**
 	 * @return HTMLPurifier
 	 */

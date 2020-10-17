@@ -2,8 +2,8 @@
 
 namespace App\Model;
 
+use DateTimeImmutable;
 use Nette;
-use Nette\Utils\DateTime;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
@@ -16,7 +16,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property string $subject
  * @property string $markdown
  * @property string $content
- * @property DateTime $timestamp {default now}
+ * @property DateTimeImmutable $timestamp {default now}
  * @property string $ip
  * @property bool $read {default false}
  *

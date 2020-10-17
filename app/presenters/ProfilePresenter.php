@@ -4,6 +4,7 @@ namespace App\Presenters;
 
 use App;
 use App\Model\Token;
+use DateTimeImmutable;
 use Nette;
 use Nette\Application\UI\Form;
 use Nette\Security\Passwords;
@@ -261,7 +262,7 @@ class ProfilePresenter extends BasePresenter {
 			$token = new Token;
 			$token->token = Passwords::hash($t);
 			$token->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
-			$token->expiration = (new Nette\Utils\DateTime())->add(\DateInterval::createFromDateString('2 day'));
+			$token->expiration = (new DateTimeImmutable())->add(\DateInterval::createFromDateString('2 day'));
 			$token->type = Token::PASSWORD;
 			$user->tokens->add($token);
 			$this->users->persistAndFlush($user);
