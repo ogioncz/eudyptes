@@ -26,7 +26,7 @@ class PurifierFactory {
 		// o Vimeo.com
 		// o soundcloud.com
 		$config->set('HTML.SafeIframe', true);
-		$config->set('URI.SafeIframeRegexp', '%^(http:|https:)?//(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/|w.soundcloud.com/player/)%');
+		$config->set('URI.SafeIframeRegexp', '%^(http:|https:)?//(www.youtube(?:-nocookie)?.com/embed/|player.vimeo.com/video/|w.soundcloud.com/player/|upload.fan-club-penguin.cz/(?!public/))%');
 
 		// Set some HTML5 properties
 		$config->set('HTML.DefinitionID', 'html5-definitions'); // unique id
