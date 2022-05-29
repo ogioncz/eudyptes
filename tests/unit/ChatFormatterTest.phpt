@@ -2,9 +2,10 @@
 
 namespace Test;
 
+use App;
 use App\Helpers\Formatting\ChatFormatter;
 use Mockery;
-use Nette;
+use Nette\Utils\Html;
 use Tester;
 use Tester\Assert;
 
@@ -26,8 +27,8 @@ class ChatFormatterTest extends Tester\TestCase {
 		$chats->shouldReceive('getById')->with(1)->andReturn($chat1);
 		$chats->shouldReceive('getById')->with(2)->andReturn($chat2);
 		$helperLoader = Mockery::mock('App\Model\HelperLoader');
-		$helperLoader->shouldReceive('userLink')->with($adam, true)->andReturn('<a href="adam">Adam</a>');
-		$helperLoader->shouldReceive('userLink')->with($eve, true)->andReturn('<a href="adam">Eve</a>');
+		$helperLoader->shouldReceive('userLink')->with($adam, true)->andReturn(Html::fromHtml('<a href="adam">Adam</a>'));
+		$helperLoader->shouldReceive('userLink')->with($eve, true)->andReturn(Html::fromHtml('<a href="adam">Eve</a>'));
 		$this->formatter = new ChatFormatter($chats, $helperLoader);
 	}
 

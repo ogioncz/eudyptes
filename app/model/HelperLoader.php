@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use Nette;
@@ -8,30 +10,22 @@ use Nette\Utils\Html;
 class HelperLoader {
 	use Nette\SmartObject;
 
-	/** @var Nette\Application\Application */
-	private $app;
-
-	public function __construct(Nette\Application\Application $app) {
-		$this->app = $app;
+	public function __construct(private Nette\Application\Application $app) {
 	}
 
-	public function loader($args) {
-		$args = func_get_args();
-		$func = $args[0];
-		unset($args[0]);
-
-		if (method_exists($this, $func)) {
-			return call_user_func_array([$this, $func], $args);
-		} else {
-			return null;
+	public function loader(string $filter): ?callable {
+		if (method_exists($this, $filter)) {
+			return [$this, $filter];
 		}
+
+		return null;
 	}
 
-	public function userLink(User $user, $visual = false) {
+	public function userLink(User $user, $visual = false): Html {
 		return Html::el('a', $user->username)->href($this->app->getPresenter()->link('Profile:show', $user->id))->class('role-' . $user->role . ($visual ? ' role-visual' : ''));
 	}
 
-	public function relDate(\DateTimeImmutable $date) {
+	public function relDate(\DateTimeImmutable $date): string {
 		if ($date == (new \DateTimeImmutable('today'))) {
 			return '(dnes)';
 		} else if ($date == (new \DateTimeImmutable('tomorrow'))) {
@@ -54,7 +48,7 @@ class HelperLoader {
 	* @return string shortened string with properly closed tags
 	* @copyright Jakub Vrána, http://php.vrana.cz
 	*/
-	public function htmlTruncate($text, $limit) {
+	public function htmlTruncate(string $text, int $limit): string {
 		static $empty_tags = ['area', 'base', 'basefont', 'br', 'col', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param'];
 		$length = 0;
 		$textLength = strLen($text);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presenters;
 
 use Nette;
@@ -8,15 +10,18 @@ use Nette;
  * SearchPresenter shows search results.
  */
 class SearchPresenter extends BasePresenter {
-	private $itemsPerPage = 15;
+	#[Nette\DI\Attributes\Inject]
+	public Nette\DI\Container $context;
 
-	public function renderResult($query) {
+	private int $itemsPerPage = 15;
+
+	public function renderResult($query): void {
 		if ($query) {
 			$paginator = $this['paginator']->getPaginator();
 			$page = $paginator->page;
 			$paginator->itemsPerPage = $this->itemsPerPage;
 
-			$client = new \Indextank_Api($this->getContext()->parameters['indextank']);
+			$client = new \Indextank_Api($this->context->parameters['indextank']);
 			$index = $client->get_index('web');
 
 			$fetch_fields = 'title,timestamp';

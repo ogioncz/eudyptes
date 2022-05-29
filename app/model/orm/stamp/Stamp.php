@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use Nette;
@@ -17,15 +19,15 @@ use Nextras\Orm\Relationships\ManyHasMany;
  *
  * @property ManyHasMany|User[] $owners {m:m User::$ownedStamps}
  */
-class Stamp extends Entity implements Nette\Security\IResource {
-	const DIFFICULTY_NOTHING = '0';
-	const DIFFICULTY_EASY = '1';
-	const DIFFICULTY_MODERATE = '2';
-	const DIFFICULTY_MEDIUM = '3';
-	const DIFFICULTY_HARD = '4';
-	const DIFFICULTY_CRAZY = '5';
+class Stamp extends Entity implements Nette\Security\Resource {
+	public const DIFFICULTY_NOTHING = '0';
+	public const DIFFICULTY_EASY = '1';
+	public const DIFFICULTY_MODERATE = '2';
+	public const DIFFICULTY_MEDIUM = '3';
+	public const DIFFICULTY_HARD = '4';
+	public const DIFFICULTY_CRAZY = '5';
 
-	public function getResourceId() {
+	public function getResourceId(): string {
 		return 'stamp';
 	}
 }

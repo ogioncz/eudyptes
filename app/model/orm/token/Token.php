@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use DateTimeImmutable;
@@ -16,7 +18,7 @@ use Nextras\Orm\Entity\Entity;
  * @property string $ip
  */
 class Token extends Entity {
-	const REGISTRATION = 'registration';
-	const LOGIN = 'login';
-	const PASSWORD = 'password';
+	public const REGISTRATION = 'registration';
+	public const LOGIN = 'login';
+	public const PASSWORD = 'password';
 }

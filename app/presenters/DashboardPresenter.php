@@ -1,8 +1,8 @@
 <?php
-namespace App\Presenters;
 
-use App;
-use Nette;
+declare(strict_types=1);
+
+namespace App\Presenters;
 
 /**
  * DashboardPresenter displays administration dashboard.

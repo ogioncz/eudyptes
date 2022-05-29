@@ -1,31 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presenters;
 
-use Nette;
 use App;
 use App\Helpers\Formatting;
 use App\Model\Meeting;
-use Nextras\Forms\Rendering;
-use Nette\Utils\Json;
+use Nette;
+use Nette\Application\UI\Multiplier;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
-use Nette\Application\UI\Multiplier;
+use Nette\Utils\Json;
+use Nextras\FormsRendering\Renderers;
 
 /**
  * MeetingPresenter handles user-organised meetings and events.
  */
 class MeetingPresenter extends BasePresenter {
-	/** @var Formatting\Formatter @inject */
-	public $formatter;
+	#[Nette\DI\Attributes\Inject]
+	public Formatting\Formatter $formatter;
 
-	/** @var App\Model\MeetingRepository @inject */
-	public $meetings;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\MeetingRepository $meetings;
 
-	/** @var App\Model\UserRepository @inject */
-	public $users;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\UserRepository $users;
 
-	public function renderList() {
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Http\IRequest $request;
+
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\HelperLoader $helperLoader;
+
+	public function renderList(): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -36,10 +44,10 @@ class MeetingPresenter extends BasePresenter {
 		}
 	}
 
-	protected function createComponentMeetingForm() {
-		$form = new Nette\Application\UI\Form;
+	protected function createComponentMeetingForm(): Nette\Application\UI\Form {
+		$form = new Nette\Application\UI\Form();
 		$form->addProtection();
-		$renderer = new Rendering\Bs3FormRenderer;
+		$renderer = new Renderers\Bs3FormRenderer();
 		$form->setRenderer($renderer);
 
 		$submit = $form->addSubmit('firstsend', 'Odeslat a zveřejnit');
@@ -47,20 +55,21 @@ class MeetingPresenter extends BasePresenter {
 		$submit->onClick[] = [$this, 'meetingFormSucceeded'];
 
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
-		$form->addDatePicker('date', 'Datum:')->setRequired();
+		$dateDateControl = $form['date'] = new \Nextras\FormComponents\Controls\DateControl('Datum:');
+		$dateDateControl->setRequired();
 		$form->addText('server', 'Server:')->setRequired();
 
-		$form->addDynamic('times', function (Container $time) {
+		$form->addDynamic('times', function(Container $time): void {
 			$time->addTimePicker('time', 'čas')->setRequired();
 			$time->addText('event', 'činnost')->setRequired();
 
-			$time->addSubmit('remove', 'Odebrat')->setValidationScope(false)->onClick[] = function(SubmitButton $button) {
+			$time->addSubmit('remove', 'Odebrat')->setValidationScope([])->onClick[] = function(SubmitButton $button): void {
 				$replicator = $button->getParent()->getParent();
 				$replicator->remove($button->getParent(), true);
 			};
 		}, 1, true);
 
-		$form->addSubmit('add', 'Přidat')->setValidationScope(false)->onClick[] = function(SubmitButton $button) {
+		$form->addSubmit('add', 'Přidat')->setValidationScope([])->onClick[] = function(SubmitButton $button): void {
 			$button->getParent()['times']->createOne();
 		};
 
@@ -77,7 +86,7 @@ class MeetingPresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function meetingFormSucceeded(SubmitButton $submit) {
+	public function meetingFormSucceeded(SubmitButton $submit): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -85,7 +94,7 @@ class MeetingPresenter extends BasePresenter {
 		$values = $submit->getForm()->getValues();
 		$formatted = $this->formatter->format($values->markdown);
 
-		if (count($formatted['errors'])) {
+		if (is_countable($formatted['errors']) ? \count($formatted['errors']) : 0) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
@@ -112,12 +121,12 @@ class MeetingPresenter extends BasePresenter {
 			$program[] = ['time' => $time['time']->format('H:i'), 'event' => $time['event']];
 		}
 
-		list($hour, $minute) = explode(':', $program[0]['time']);
+		[$hour, $minute] = explode(':', $program[0]['time']);
 		$meeting->program = Json::encode($program);
-		$meeting->date = $values->date->setTime($hour, $minute);
+		$meeting->date = $values->date->setTime((int) $hour, (int) $minute);
 
 		if ($this->getAction() === 'create') {
-			$meeting->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+			$meeting->ip = $this->request->remoteAddress;
 			$meeting->user = $this->users->getById($this->getUser()->getIdentity()->id);
 		}
 		$this->meetings->persistAndFlush($meeting);
@@ -126,7 +135,7 @@ class MeetingPresenter extends BasePresenter {
 		$this->redirect('list');
 	}
 
-	public function meetingFormPreview(SubmitButton $button) {
+	public function meetingFormPreview(SubmitButton $button): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -135,7 +144,7 @@ class MeetingPresenter extends BasePresenter {
 
 		$formatted = $this->formatter->format($values['markdown']);
 
-		if (count($formatted['errors'])) {
+		if (is_countable($formatted['errors']) ? \count($formatted['errors']) : 0) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
@@ -151,9 +160,9 @@ class MeetingPresenter extends BasePresenter {
 			$program[] = ['time' => $time['time']->format('H:i'), 'event' => $time['event']];
 		}
 
-		list($hour, $minute) = explode(':', $program[0]['time']);
+		[$hour, $minute] = explode(':', $program[0]['time']);
 		$meeting->program = Json::encode($program);
-		$meeting->date = $values->date->setTime($hour, $minute);
+		$meeting->date = $values->date->setTime((int) $hour, (int) $minute);
 		$meeting->user = $this->users->getById($this->getUser()->getIdentity()->id);
 
 		$this->getTemplate()->preview = $meeting;
@@ -164,7 +173,7 @@ class MeetingPresenter extends BasePresenter {
 		$this->redrawControl('preview');
 	}
 
-	public function actionCreate() {
+	public function actionCreate(): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -173,7 +182,7 @@ class MeetingPresenter extends BasePresenter {
 		}
 	}
 
-	public function actionEdit($id) {
+	public function actionEdit($id): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -190,10 +199,10 @@ class MeetingPresenter extends BasePresenter {
 		$this['meetingForm']->setDefaults($data);
 	}
 
-	protected function createComponentDeleteForm() {
-		$form = new Nette\Application\UI\Form;
+	protected function createComponentDeleteForm(): Nette\Application\UI\Form {
+		$form = new Nette\Application\UI\Form();
 		$form->addProtection();
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$form->setRenderer(new Renderers\Bs3FormRenderer());
 
 		$submit = $form->addSubmit('send', 'Ano, smazat');
 		$submit->getControlPrototype()->removeClass('btn-primary')->addClass('btn-danger');
@@ -202,7 +211,7 @@ class MeetingPresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function deleteFormSucceeded() {
+	public function deleteFormSucceeded(): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -220,7 +229,7 @@ class MeetingPresenter extends BasePresenter {
 		$this->redirect('list');
 	}
 
-	public function actionDelete($id) {
+	public function actionDelete($id): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -236,25 +245,25 @@ class MeetingPresenter extends BasePresenter {
 	}
 
 	/**
-	* Participator control factory.
-	* @return Multiplier
-	*/
-	protected function createComponentParticipator() {
+	 * Participator control factory.
+	 */
+	protected function createComponentParticipator(): Multiplier {
 		return new Multiplier(function($meetingId) {
 			$userId = $this->getUser()->getIdentity()->id;
 			$meeting = $this->meetings->getById($meetingId);
 			$youParticipate = array_reduce(iterator_to_array($meeting->visitors->get()), function($carry, $visitor) use ($userId) {
-				if($visitor->id === $userId) {
+				if ($visitor->id === $userId) {
 					return true;
 				}
+
 				return $carry;
 			}, false);
 
-			return new App\Components\Participator($meeting, $youParticipate, [$this, 'participatorClicked']);
+			return new App\Components\Participator($meeting, $youParticipate, [$this, 'participatorClicked'], $this->helperLoader);
 		});
 	}
 
-	public function participatorClicked(Nette\Application\UI\Form $form, $values) {
+	public function participatorClicked(Nette\Application\UI\Form $form, $values): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -274,8 +283,8 @@ class MeetingPresenter extends BasePresenter {
 			\Tracy\Debugger::log($e);
 		}
 
-		$form->getComponents('action')->value = $youParticipate ? 'unparticipate' : 'participate';
-		$form->getComponents('send')->caption = $youParticipate ? 'Zrušit účast' : 'Zúčastnit se';
+		$form->getComponent('action')->value = $youParticipate ? 'unparticipate' : 'participate';
+		$form->getComponent('send')->caption = $youParticipate ? 'Zrušit účast' : 'Zúčastnit se';
 		if (!$this->isAjax()) {
 			$this->redirect('this');
 		} else {

@@ -1,42 +1,42 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use Nette;
 use Nette\Security\Passwords;
-use App;
 
 class UserManager implements Nette\Security\IAuthenticator {
 	use Nette\SmartObject;
 
-	/** @var App\Model\UserRepository */
-	private $users;
-
-
-	public function __construct(App\Model\UserRepository $users) {
-		$this->users = $users;
+	public function __construct(
+		private UserRepository $users,
+		private Passwords $passwords,
+	) {
 	}
-
 
 	/**
 	 * Performs an authentication.
-	 * @return Nette\Security\Identity
+	 *
 	 * @throws Nette\Security\AuthenticationException
+	 *
+	 * @return Nette\Security\SimpleIdentity
 	 */
-	public function authenticate(array $credentials) {
-		list($username, $password) = $credentials;
+	public function authenticate(array $credentials): Nette\Security\IIdentity {
+		[$username, $password] = $credentials;
 
 		$user = $this->users->getBy(['username' => $username]);
 
 		if (!$user) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi neexistující uživatelské jméno.', self::IDENTITY_NOT_FOUND);
-		} else if (!Passwords::verify($password, $user->password)) {
+		} else if (!$this->passwords->verify($password, $user->password)) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi nesprávné heslo.', self::INVALID_CREDENTIAL);
-		} else if (Passwords::needsRehash($user->password)) {
-			$user->password = Passwords::hash($password);
+		} else if ($this->passwords->needsRehash($user->password)) {
+			$user->password = $this->passwords->hash($password);
 			$this->users->persistAndFlush($user);
 		}
 
-		return new Nette\Security\Identity($user->id, $user->role, ['username' => $user->username, 'registered' => $user->registered]);
+		return new Nette\Security\SimpleIdentity($user->id, $user->role, ['username' => $user->username, 'registered' => $user->registered]);
 	}
 }

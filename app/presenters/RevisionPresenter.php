@@ -1,16 +1,20 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Presenters;
 
 use App;
+use Nette;
 
 /**
  * RevisionPresenter displays and diffs revisions.
  */
 class RevisionPresenter extends BasePresenter {
-	/** @var App\Model\RevisionRepository @inject */
-	public $revisions;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\RevisionRepository $revisions;
 
-	public function renderShow($id) {
+	public function renderShow($id): void {
 		$revision = $this->revisions->getById($id);
 		if (!$revision) {
 			$this->error('Revize nenalezena.');
@@ -20,7 +24,7 @@ class RevisionPresenter extends BasePresenter {
 		$template->revision = $revision;
 	}
 
-	public function renderDiff($id, $and, $type = 'side') {
+	public function renderDiff($id, $and, $type = 'side'): void {
 		$old = $this->revisions->getById($id);
 		if (!$old) {
 			$this->error('Revize nenalezena.');
@@ -46,7 +50,7 @@ class RevisionPresenter extends BasePresenter {
 		$template->new = $new;
 	}
 
-	public function renderList() {
+	public function renderList(): void {
 		$paginator = $this['paginator']->getPaginator();
 		$paginator->itemsPerPage = 50;
 		$revisions = $this->revisions->findAll();

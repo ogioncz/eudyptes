@@ -13,46 +13,45 @@
 		{
 			"type": "vcs",
 			"url": "https://github.com/flaptor/indextank-php"
-		},
-		{
-			"type": "vcs",
-			"url": "https://github.com/Trejjam/Replicator"
 		}
 	],
 	"require": {
-		"php": ">= 5.4",
-		"nette/application": "~2.3",
-		"nette/bootstrap": "~2.4",
-		"nette/caching": "~2.3",
-		"nette/di": "~2.4",
-		"nette/finder": "~2.2",
-		"nette/forms": "~2.4",
-		"nette/http": "~2.4",
-		"nette/mail": "~2.4",
-		"nette/robot-loader": "~2.4",
-		"nette/security": "~2.4",
-		"nette/utils": "~2.4",
-		"latte/latte": "~2.4",
-		"tracy/tracy": "~2.4",
+		"php": ">= 8.0",
+		"nette/application": "^3.0",
+		"nette/bootstrap": "^3.0",
+		"nette/caching": "^3.0",
+		"nette/di": "^3.0",
+		"nette/finder": "^2.5",
+		"nette/forms": "^3.0",
+		"nette/http": "^3.0",
+		"nette/mail": "^3.0",
+		"nette/robot-loader": "^3.0",
+		"nette/security": "^3.0",
+		"nette/utils": "^3.0",
+		"nextras/form-components": "^1.0",
+		"nextras/forms-rendering": "^1.0",
+		"latte/latte": "^2.9",
+		"tracy/tracy": "^2.9",
 		"flaptor/indextank-php": "dev-master",
-		"nextras/forms": "~2.0",
 		"ezyang/htmlpurifier": "dev-master",
 		"alb/oembed": "dev-master",
-		"kdyby/forms-replicator": "~1.4",
-		"nextras/orm": "~3.0",
+		"kdyby/forms-replicator": "^2.0",
+		"nextras/orm": "^4.0",
 		"actinarium/php-diff": "dev-master",
 		"longman/telegram-bot": "^0.35.0",
-		"league/commonmark": "~0.17.0"
+		"league/commonmark": "^1.0.0"
 	},
 	"require-dev": {
-		"mockery/mockery": "^0.9.6",
-		"nette/tester": "~1.7",
+		"mockery/mockery": "^1.5",
+		"nette/tester": "^2.4",
 		"nextras/migrations": "^3.0",
 		"symfony/console": "^3.2"
 	},
-	"minimum-stability": "dev",
 	"autoload": {
 		"classmap": ["app", "vendor/others"]
+	},
+	"config": {
+		"sort-packages": true
 	},
 	"scripts": {
 		"test": "php vendor/bin/tester tests/unit"

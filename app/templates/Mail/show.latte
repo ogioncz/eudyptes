@@ -7,5 +7,5 @@
 		<li class="previous" n:if="$mail->reaction"><a n:href="show $mail->reaction->id">« Předchozí zpráva</a></li>
 		<li class="next" n:foreach="$mail->replies as $reaction"><a n:href="show $reaction->id">Reagující zpráva »</a></li>
 	</ul>
-	<p><a n:href="show#mail$mail->id $mail->root->id, tree => true"><span class="glyphicon glyphicon-tree-deciduous"></span> Zobrazit ve stromu</a></p>
+	<p><a n:href='"show#mail$mail->id" $mail->root->id, tree => true'><span class="glyphicon glyphicon-tree-deciduous"></span> Zobrazit ve stromu</a></p>
 </div>

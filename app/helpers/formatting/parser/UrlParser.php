@@ -1,29 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers\Formatting\Parser;
 
-use League\CommonMark\Inline\Parser\AbstractInlineParser;
-use League\CommonMark\InlineParserContext;
 use League\CommonMark\Inline\Element\Link;
+use League\CommonMark\Inline\Parser\InlineParserInterface;
+use League\CommonMark\InlineParserContext;
 
-
-class UrlParser extends AbstractInlineParser {
-	public function getCharacters() {
+class UrlParser implements InlineParserInterface {
+	public function getCharacters(): array {
 		return ['h'];
 	}
 
-	public function parse(InlineParserContext $inlineContext) {
+	public function parse(InlineParserContext $inlineContext): bool {
 		$cursor = $inlineContext->getCursor();
 
 		$previous = $cursor->peek(-1);
-		if ($previous !== null && !in_array($previous, [' ', '('])) {
+		if ($previous !== null && !\in_array($previous, [' ', '('], true)) {
 			return false;
 		}
 
 		$previousState = $cursor->saveState();
 		$url = $cursor->match(self::getUrlRegex());
 
-		if (is_null($url)) {
+		if ($url === null) {
 			$cursor->restoreState($previousState);
 			return false;
 		}
@@ -34,7 +35,7 @@ class UrlParser extends AbstractInlineParser {
 		return true;
 	}
 
-	private static function getUrlRegex() {
+	private static function getUrlRegex(): string {
 		$alphaRegex = "a-z\x80-\xFF";
 		$domainRegex = "[0-9$alphaRegex](?:[-0-9$alphaRegex]{0,61}[0-9$alphaRegex])?";
 		$topDomainRegex = "[$alphaRegex][-0-9$alphaRegex]{0,17}[$alphaRegex]";

@@ -1,18 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
-use Nette;
 use HTMLPurifier;
 use HTMLPurifier_Config;
+use Nette;
 
 class PurifierFactory {
 	use Nette\SmartObject;
 
-	/**
-	 * @return HTMLPurifier
-	 */
-	public function createPurifier(Nette\Application\Application $app, $cacheDir) {
+	public function createPurifier(Nette\Application\Application $app, $cacheDir): HTMLPurifier {
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');
 		$config->set('CSS.AllowTricky', true);

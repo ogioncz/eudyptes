@@ -10,7 +10,7 @@ class DarnDOMDocument extends DOMDocument {
 		return $this->saveHTMLExact();
 	}
 
-	public function loadHTML($html, $options = null) {
+	public function loadHTML(string $html, int $options = 0) {
 		// $options |= LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD; // don’t wrap document fragments
 
 		libxml_use_internal_errors(true); // prevent warning when using html5 tags
@@ -23,7 +23,7 @@ class DarnDOMDocument extends DOMDocument {
 		return $dom;
 	}
 
-	public function saveHTML(DOMNode $element = null) {
+	public function saveHTML(DOMNode $element = null): string|false {
 		return preg_replace('~^<body[^>]*>(.*)</body>$~s', '$1', parent::saveHTML($this->getElementsByTagName('body')->item(0)));
 	}
 }

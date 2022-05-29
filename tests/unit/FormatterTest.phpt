@@ -4,7 +4,6 @@ namespace Test;
 
 use App\Helpers\Formatting\Formatter;
 use Mockery;
-use Nette;
 use Tester;
 use Tester\Assert;
 

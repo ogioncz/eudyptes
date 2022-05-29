@@ -1,27 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers\Formatting\Parser;
 
 use App\Helpers\Formatting\Element\Spoiler;
-use League\CommonMark\Block\Parser\AbstractBlockParser;
+use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
 use League\CommonMark\Cursor;
 
-class SpoilerParser extends AbstractBlockParser {
-	/**
-	 * @param ContextInterface $context
-	 * @param Cursor $cursor
-	 *
-	 * @return bool
-	 */
-	public function parse(ContextInterface $context, Cursor $cursor) {
+class SpoilerParser implements BlockParserInterface {
+	public function parse(ContextInterface $context, Cursor $cursor): bool {
 		if ($cursor->isIndented()) {
 			return false;
 		}
 
 		$previousState = $cursor->saveState();
 		$spoiler = $cursor->match('(^¡¡¡(\s*.+)?)');
-		if (!is_null($spoiler)) {
+		if ($spoiler !== null) {
 			$summary = trim(mb_substr($spoiler, mb_strlen('¡¡¡')));
 			if ($summary !== '') {
 				$context->addBlock(new Spoiler($summary));
@@ -31,7 +27,7 @@ class SpoilerParser extends AbstractBlockParser {
 			return true;
 		} else {
 			$cursor->restoreState($previousState);
-			if (!is_null($cursor->match('/^!!!$/'))) {
+			if ($cursor->match('/^!!!$/') !== null) {
 				$container = $context->getContainer();
 				do {
 					if ($container instanceof Spoiler) {

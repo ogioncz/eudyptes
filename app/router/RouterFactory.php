@@ -1,35 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
-use Nette;
-use Nette\Application\Routers\RouteList;
 use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
 
 class RouterFactory {
-	/**
-	 * @return Nette\Application\IRouter
-	 */
-	public function createRouter() {
+	public function createRouter(): RouteList {
 		$router = new RouteList();
-		$router[] = new Route('post/<id \d+>', 'Post:show', Route::ONE_WAY);
-		$router[] = new Route('post/<id \d+>/edit', 'Post:edit', Route::ONE_WAY);
-		$router[] = new Route('<slug .+>.html', 'Page:show', Route::ONE_WAY);
-		$router[] = new Route('user/login', 'Sign:in', Route::ONE_WAY);
-		$router[] = new Route('user/logout', 'Sign:out', Route::ONE_WAY);
-		$router[] = new Route('user/register', 'Profile:create', Route::ONE_WAY);
-		$router[] = new Route('user/edit', 'Profile:edit', Route::ONE_WAY);
-		$router[] = new Route('profile/<id \d+>', 'Profile:show', Route::ONE_WAY);
-		$router[] = new Route('profile', 'Profile:list', Route::ONE_WAY);
-		$router[] = new Route('meeting', 'Meeting:list', Route::ONE_WAY);
-		$router[] = new Route('meeting/new', 'Meeting:create', Route::ONE_WAY);
-		$router[] = new Route('meeting/<id \d+>/<action (edit|delete)>', ['presenter' => 'Meeting'], Route::ONE_WAY);
-		$router[] = new Route('rss.xml', 'Post:rss', Route::ONE_WAY);
-		$router[] = new Route('mail', 'Mail:list', Route::ONE_WAY);
-		$router[] = new Route('mail/sent', ['presenter' => 'Mail', 'action' => 'list', 'sent' => true], Route::ONE_WAY);
-		$router[] = new Route('mail/<id \d+>', 'Mail:show', Route::ONE_WAY);
-		$router[] = new Route('page/show/<slug .*>', ['presenter' => 'Page', 'action' => 'show']);
-		$router[] = new Route('<presenter>/<action>[/<id>]', 'Homepage:default');
+		$router->addRoute('post/<id \d+>', 'Post:show', Route::ONE_WAY);
+		$router->addRoute('post/<id \d+>/edit', 'Post:edit', Route::ONE_WAY);
+		$router->addRoute('<slug .+>.html', 'Page:show', Route::ONE_WAY);
+		$router->addRoute('user/login', 'Sign:in', Route::ONE_WAY);
+		$router->addRoute('user/logout', 'Sign:out', Route::ONE_WAY);
+		$router->addRoute('user/register', 'Profile:create', Route::ONE_WAY);
+		$router->addRoute('user/edit', 'Profile:edit', Route::ONE_WAY);
+		$router->addRoute('profile/<id \d+>', 'Profile:show', Route::ONE_WAY);
+		$router->addRoute('profile', 'Profile:list', Route::ONE_WAY);
+		$router->addRoute('meeting', 'Meeting:list', Route::ONE_WAY);
+		$router->addRoute('meeting/new', 'Meeting:create', Route::ONE_WAY);
+		$router->addRoute('meeting/<id \d+>/<action (edit|delete)>', ['presenter' => 'Meeting'], Route::ONE_WAY);
+		$router->addRoute('rss.xml', 'Post:rss', Route::ONE_WAY);
+		$router->addRoute('mail', 'Mail:list', Route::ONE_WAY);
+		$router->addRoute('mail/sent', ['presenter' => 'Mail', 'action' => 'list', 'sent' => true], Route::ONE_WAY);
+		$router->addRoute('mail/<id \d+>', 'Mail:show', Route::ONE_WAY);
+		$router->addRoute('page/show/<slug .*>', ['presenter' => 'Page', 'action' => 'show']);
+		$router->addRoute('<presenter>/<action>[/<id>]', 'Homepage:default');
 		return $router;
 	}
 }

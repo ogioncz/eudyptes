@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use DateTimeImmutable;
@@ -21,8 +23,8 @@ use Nextras\Orm\Relationships\ManyHasMany;
  *
  * @property ManyHasMany|User[] $visitors {m:m User::$visitedMeetings, isMain=true}
  */
-class Meeting extends Entity implements Nette\Security\IResource {
-	public function getResourceId() {
+class Meeting extends Entity implements Nette\Security\Resource {
+	public function getResourceId(): string {
 		return 'meeting';
 	}
 }

@@ -1,24 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers\Formatting\Parser;
 
 use App\Helpers\Formatting\Element\ChatQuote;
-use League\CommonMark\Block\Parser\AbstractBlockParser;
+use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
 use League\CommonMark\Cursor;
-use League\CommonMark\InlineParserContext;
 
+class ChatQuoteParser implements BlockParserInterface {
+	private static string $regex = '(^\{#([0-9]+)\}$)';
 
-class ChatQuoteParser extends AbstractBlockParser {
-	private static $regex = '(^\{#([0-9]+)\}$)';
-
-	/**
-	 * @param ContextInterface $context
-	 * @param Cursor $cursor
-	 *
-	 * @return bool
-	 */
-	public function parse(ContextInterface $context, Cursor $cursor) {
+	public function parse(ContextInterface $context, Cursor $cursor): bool {
 		if ($cursor->isIndented()) {
 			return false;
 		}
@@ -26,7 +20,7 @@ class ChatQuoteParser extends AbstractBlockParser {
 		$previousState = $cursor->saveState();
 		$quoteBlock = $cursor->match(self::$regex);
 
-		if (is_null($quoteBlock)) {
+		if ($quoteBlock === null) {
 			$cursor->restoreState($previousState);
 			return false;
 		}
@@ -35,8 +29,8 @@ class ChatQuoteParser extends AbstractBlockParser {
 		return true;
 	}
 
-	private static function getQuotedId($quote) {
+	private static function getQuotedId($quote): int {
 		preg_match(self::$regex, $quote, $match);
-		return $match[1];
+		return (int) $match[1];
 	}
 }

@@ -1,32 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presenters;
 
-use Nette;
-use Nette\Mail\Message;
-use Nette\Mail\SendmailMailer;
-use Nette\Forms\Controls\SubmitButton;
-use Nextras\Forms\Rendering;
 use App;
 use App\Helpers\Formatting;
 use App\Model\Mail;
+use Nette;
+use Nette\Forms\Controls\SubmitButton;
+use Nette\Mail\Message;
+use Nette\Mail\SendmailMailer;
+use Nextras\FormsRendering\Renderers;
 
 /**
  * MailPresenter handles messages sent between users.
  */
 class MailPresenter extends BasePresenter {
-	/** @var Formatting\Formatter @inject */
-	public $formatter;
+	#[Nette\DI\Attributes\Inject]
+	public Nette\DI\Container $context;
 
-	/** @var App\Model\MailRepository @inject */
-	public $mails;
+	#[Nette\DI\Attributes\Inject]
+	public Formatting\Formatter $formatter;
 
-	/** @var App\Model\UserRepository @inject */
-	public $users;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\MailRepository $mails;
 
-	private $itemsPerPage = 25;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\UserRepository $users;
 
-	public function renderList($sent = false) {
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Http\IRequest $request;
+
+	private int $itemsPerPage = 25;
+
+	public function renderList($sent = false): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -40,7 +48,7 @@ class MailPresenter extends BasePresenter {
 		$template->mails = $mails->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
 
-	public function actionShow($id, $tree = false) {
+	public function actionShow($id, $tree = false): void {
 		$template = $this->getTemplate();
 
 		if ($tree) {
@@ -69,10 +77,10 @@ class MailPresenter extends BasePresenter {
 		$template->mail = $mail;
 	}
 
-	protected function createComponentMailForm() {
-		$form = new Nette\Application\UI\Form;
+	protected function createComponentMailForm(): Nette\Application\UI\Form {
+		$form = new Nette\Application\UI\Form();
 		$form->addProtection();
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$form->setRenderer(new Renderers\Bs3FormRenderer());
 
 		$subject = $form->addText('subject', 'Předmět:')->setRequired();
 		$subject->getControlPrototype()->autofocus = true;
@@ -94,7 +102,7 @@ class MailPresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function mailFormSucceeded(SubmitButton $button) {
+	public function mailFormSucceeded(SubmitButton $button): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -102,16 +110,16 @@ class MailPresenter extends BasePresenter {
 		$values = $button->getForm()->getValues();
 		$formatted = $this->formatter->format($values->markdown);
 
-		if (count($formatted['errors'])) {
+		if (is_countable($formatted['errors']) ? \count($formatted['errors']) : 0) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
-		$mail = new Mail;
+		$mail = new Mail();
 		$mail->subject = $values->subject;
 		$mail->markdown = $values->markdown;
 		$mail->content = $formatted['text'];
 		$mail->sender = $this->users->getById($this->getUser()->getIdentity()->id);
-		$mail->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+		$mail->ip = $this->request->remoteAddress;
 
 		if ($this->getAction() === 'reply') {
 			$original_id = $this->getParameter('id');
@@ -159,7 +167,7 @@ class MailPresenter extends BasePresenter {
 		$this->redirect('show', $mail->id);
 	}
 
-	public function mailFormPreview(SubmitButton $button) {
+	public function mailFormPreview(SubmitButton $button): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -168,7 +176,7 @@ class MailPresenter extends BasePresenter {
 
 		$formatted = $this->formatter->format($values['markdown']);
 
-		if (count($formatted['errors'])) {
+		if (is_countable($formatted['errors']) ? \count($formatted['errors']) : 0) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
@@ -180,23 +188,23 @@ class MailPresenter extends BasePresenter {
 		$this->redrawControl('preview');
 	}
 
-	protected function notifyByMail(Mail $mail) {
+	protected function notifyByMail(Mail $mail): void {
 		$messageTemplate = $this->createTemplate();
 		$messageTemplate->sentMail = $mail;
 		$messageTemplate->sender = $mail->sender->username;
-		$messageTemplate->setFile($this->getContext()->parameters['appDir'] . '/templates/Mail/@notification.latte');
+		$messageTemplate->setFile($this->context->parameters['appDir'] . '/templates/Mail/@notification.latte');
 
-		$message = new Message;
+		$message = new Message();
 		$message->setFrom($messageTemplate->sender . ' <neodpovidat@fan-club-penguin.cz>');
 		$message->setSubject('Nová zpráva ' . $mail->subject . ' (fan-club-penguin.cz)');
 		$message->addTo($mail->recipient->email);
 		$message->setBody($messageTemplate);
 
-		$mailer = new SendmailMailer;
+		$mailer = new SendmailMailer();
 		$mailer->send($message);
 	}
 
-	public function actionCreate($recipient) {
+	public function actionCreate($recipient): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -217,7 +225,7 @@ class MailPresenter extends BasePresenter {
 		$this->getTemplate()->addressee = $addressee;
 	}
 
-	public function actionReply($id) {
+	public function actionReply($id): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}

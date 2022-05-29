@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use Nette;
@@ -20,20 +22,20 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property-read Revision $lastRevision {virtual}
  * @property OneHasMany|Revision[] $revisions {1:m Revision::$page, orderBy=[timestamp, DESC]}
  */
-class Page extends Entity implements Nette\Security\IResource {
-	public function getterLastRevision() {
+class Page extends Entity implements Nette\Security\Resource {
+	public function getterLastRevision(): Revision {
 		return $this->revisions->get()->orderBy(['timestamp' => 'DESC'])->fetch();
 	}
 
-	public function getterMarkdown() {
+	public function getterMarkdown(): string {
 		return $this->lastRevision ? $this->lastRevision->markdown : null;
 	}
 
-	public function getterRedirect() {
+	public function getterRedirect(): ?string {
 		return $this->lastRevision ? $this->lastRevision->redirect : null;
 	}
 
-	public function getResourceId() {
+	public function getResourceId(): string {
 		return 'page';
 	}
 }

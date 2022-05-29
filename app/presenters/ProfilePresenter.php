@@ -1,65 +1,75 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presenters;
 
 use App;
 use App\Model\Token;
 use DateTimeImmutable;
+use Exception;
 use Nette;
 use Nette\Application\UI\Form;
-use Nette\Security\Passwords;
-use Nette\Utils\Strings;
-use Nette\Utils\Image;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
+use Nette\Utils\Image;
+use Nette\Utils\Random;
 use Nextras\Dbal\UniqueConstraintViolationException;
+use Nextras\FormsRendering\Renderers;
 use Tracy\Debugger;
-use Nextras\Forms\Rendering;
-use Exception;
 
 /**
  * ProfilePresenter displays user profiles.
  */
 class ProfilePresenter extends BasePresenter {
-	/** @var App\Model\UserRepository @inject */
-	public $users;
+	#[Nette\DI\Attributes\Inject]
+	public Nette\DI\Container $context;
 
-	/** @var App\Model\TokenRepository @inject */
-	public $tokens;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\UserRepository $users;
 
-	/** @var App\Model\StampRepository @inject */
-	public $stamps;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\TokenRepository $tokens;
 
-	/** @persistent */
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\StampRepository $stamps;
+
+	#[Nette\Application\Attributes\Persistent]
 	public $token = null;
 
-	/** @persistent */
+	#[Nette\Application\Attributes\Persistent]
 	public $tid = null;
 
-	/** @var App\Model\User @persistent */
-	public $profile = null;
+	#[Nette\Application\Attributes\Persistent]
+	public ?App\Model\User $profile = null;
 
-	public function renderList() {
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Security\Passwords $passwords;
+
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Http\IRequest $request;
+
+	public function renderList(): void {
 		$template = $this->getTemplate();
 		$template->profiles = $this->users->findAll()->orderBy('username');
 	}
 
-	public function renderShow($id) {
+	public function renderShow($id): void {
 		$this->profile = $this->users->getById($id);
 		if (!$this->profile) {
 			$this->error('Uživatel nenalezen');
 		}
 		$template = $this->getTemplate();
-		if (file_exists($this->getContext()->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png')) {
-			$template->avatar = str_replace('♥basePath♥', $this->getContext()->getByType('Nette\Http\IRequest')->url->baseUrl, $this->getContext()->parameters['avatarStoragePublic']) . '/' . $this->profile->id . 'm.png';
+		if (file_exists($this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png')) {
+			$template->avatar = str_replace('♥basePath♥', $this->request->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $this->profile->id . 'm.png';
 		}
 
-		$template->ipAddress = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+		$template->ipAddress = $this->request->remoteAddress;
 		$template->profile = $this->profile;
 		$template->stamps = $this->stamps->findAll();
 	}
 
-	public function actionEdit($id) {
+	public function actionEdit($id): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -78,7 +88,7 @@ class ProfilePresenter extends BasePresenter {
 	protected function createComponentProfileForm() {
 		$form = new Form;
 		$form->addProtection();
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$form->setRenderer(new Renderers\Bs3FormRenderer());
 		$username = $form->addText('username', 'Přezdívka:');
 
 		if (!$this->allowed($this->profile, 'rename')) {
@@ -87,7 +97,7 @@ class ProfilePresenter extends BasePresenter {
 
 		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::FILLED)->addRule(Form::MIME_TYPE, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
 
-		$medium = $this->getContext()->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png';
+		$medium = $this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png';
 		if (file_exists($medium)) {
 			$form->addCheckbox('removeAvatar', 'Odstranit avatar');
 		}
@@ -112,7 +122,7 @@ class ProfilePresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function profileFormSucceeded(Form $form) {
+	public function profileFormSucceeded(Form $form): void {
 		$values = $form->getValues();
 		if (!$this->allowed($this->profile, 'edit')) {
 			$this->error('Nemáš oprávnění upravovat tohoto uživatele.');
@@ -129,8 +139,8 @@ class ProfilePresenter extends BasePresenter {
 		$user->member = (bool) $values->member;
 		$user->notifyByMail = $values->notifyByMail;
 
-		$original = $this->getContext()->parameters['avatarStorage'] . '/' . $user->id . '.png';
-		$medium = $this->getContext()->parameters['avatarStorage'] . '/' . $user->id . 'm.png';
+		$original = $this->context->parameters['avatarStorage'] . '/' . $user->id . '.png';
+		$medium = $this->context->parameters['avatarStorage'] . '/' . $user->id . 'm.png';
 
 		if (isset($values->removeAvatar) && $values->removeAvatar) {
 			@unlink($original);
@@ -149,7 +159,7 @@ class ProfilePresenter extends BasePresenter {
 		}
 
 		if ($values->password) {
-			$user->password = Passwords::hash($values->password);
+			$user->password = $this->passwords->hash($values->password);
 		}
 
 		try {
@@ -167,7 +177,7 @@ class ProfilePresenter extends BasePresenter {
 	protected function createComponentSignUpForm() {
 		$form = new Form;
 		$form->addProtection();
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$form->setRenderer(new Renderers\Bs3FormRenderer());
 		$username = $form->addText('username', 'Přezdívka:');
 		$username->getControlPrototype()->autofocus = true;
 		$username->setRequired('Zadej prosím své uživatelské jméno.');
@@ -192,12 +202,12 @@ class ProfilePresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function signUpFormSucceeded(Form $form) {
+	public function signUpFormSucceeded(Form $form): void {
 		$values = $form->getValues();
 
 		$user = new App\Model\User;
 		$user->username = $values->username;
-		$user->password = Passwords::hash($values->password);
+		$user->password = $this->passwords->hash($values->password);
 		$user->email = $values->email;
 
 		try {
@@ -212,12 +222,12 @@ class ProfilePresenter extends BasePresenter {
 		}
 	}
 
-	public function renderResetPassword($tid = null, $token = null) {
+	public function renderResetPassword($tid = null, $token = null): void {
 		$template = $this->getTemplate();
 		$template->robots = 'noindex';
 		if ($token && $tid) {
 			$storedToken = $this->tokens->getById($tid);
-			if ($storedToken && Passwords::verify($token, $storedToken->token)) {
+			if ($storedToken && $this->passwords->verify($token, $storedToken->token)) {
 				$template->token = $this->token = $token;
 				$template->tid = $this->tid = $tid;
 			} else {
@@ -229,9 +239,9 @@ class ProfilePresenter extends BasePresenter {
 	protected function createComponentPasswordResetRequestForm() {
 		$form = new Form;
 		$form->addProtection();
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$form->setRenderer(new Renderers\Bs3FormRenderer());
 		$type = $form->addRadioList('type', null, ['username' => 'Přezdívka', 'email' => 'E-Mail'])->setDefaultValue('username');
-		$type->getSeparatorPrototype()->setName(null);
+		$type->getSeparatorPrototype()->setName('');
 		$type->setRequired('Vyber si e-mail nebo přezdívku.');
 
 		$handle = $form->addText('handle');
@@ -251,17 +261,17 @@ class ProfilePresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function passwordResetRequestFormSucceeded(Form $form) {
+	public function passwordResetRequestFormSucceeded(Form $form): void {
 		$type = $form->getValues()->type === 'username' ? 'username' : 'email';
 		$handle = $form->getValues()->handle;
 
 		$user = $this->users->getBy([$type => $handle]);
 
 		if ($user) {
-			$t = Strings::random();
+			$t = Random::generate();
 			$token = new Token;
-			$token->token = Passwords::hash($t);
-			$token->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+			$token->token = $this->passwords->hash($t);
+			$token->ip = $this->request->remoteAddress;
 			$token->expiration = (new DateTimeImmutable())->add(\DateInterval::createFromDateString('2 day'));
 			$token->type = Token::PASSWORD;
 			$user->tokens->add($token);
@@ -269,7 +279,7 @@ class ProfilePresenter extends BasePresenter {
 
 			$mailTemplate = $this->createTemplate();
 
-			$appDir = $this->getContext()->parameters['appDir'];
+			$appDir = $this->context->parameters['appDir'];
 			$mailTemplate->setFile($appDir . '/templates/Profile/resetPasswordMail.latte');
 
 			$mailTemplate->url = $this->link('//Profile:resetPassword', ['tid' => $token->id, 'token' => $t]);
@@ -294,7 +304,7 @@ class ProfilePresenter extends BasePresenter {
 	protected function createComponentPasswordResetForm() {
 		$form = new Form;
 		$form->addProtection();
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$form->setRenderer(new Renderers\Bs3FormRenderer());
 
 		$token = $form->addHidden('token', $this->token);
 		$tid = $form->addHidden('tid', $this->tid);
@@ -309,16 +319,16 @@ class ProfilePresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function passwordResetFormSucceeded(Form $form) {
+	public function passwordResetFormSucceeded(Form $form): void {
 		$token = $form->getValues()->token;
 		$tid = $form->getValues()->tid;
 		$password = $form->getValues()->password;
 
 		if ($token && $tid) {
 			$storedToken = $this->tokens->getById($tid);
-			if ($storedToken && Passwords::verify($token, $storedToken->token)) {
+			if ($storedToken && $this->passwords->verify($token, $storedToken->token)) {
 				$user = $storedToken->user;
-				$user->password = Passwords::hash($password);
+				$user->password = $this->passwords->hash($password);
 				$this->users->persistAndFlush($user);
 
 				$this->tokens->removeAndFlush($storedToken);

@@ -1,41 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers\Formatting\Parser;
 
 use Alb\OEmbed;
 use App\Helpers\Formatting\Element\OembedBlock;
-use League\CommonMark\Block\Parser\AbstractBlockParser;
+use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
 use League\CommonMark\Cursor;
-use League\CommonMark\Inline\Element\Image;
 use League\CommonMark\Inline\Element\Link;
 
-
-class OembedParser extends AbstractBlockParser {
-	/** @var string[] */
-	private $whitelistedDomains;
-
-	/** @var OEmbed\Simple */
-	private $oembed;
-
-	/**
-	 * Constructor
-	 *
-	 * @param OEmbed\Simple $oembed
-	 * @param string[] $whitelistedDomains
-	 */
-	public function __construct($oembed, $whitelistedDomains) {
-		$this->oembed = $oembed;
-		$this->whitelistedDomains = $whitelistedDomains;
+class OembedParser implements BlockParserInterface {
+	public function __construct(
+		private OEmbed\Simple $oembed,
+		/** @param string[] */
+		private array $whitelistedDomains,
+	) {
 	}
 
-	/**
-	 * @param ContextInterface $context
-	 * @param Cursor $cursor
-	 *
-	 * @return bool
-	 */
-	public function parse(ContextInterface $context, Cursor $cursor) {
+	public function parse(ContextInterface $context, Cursor $cursor): bool {
 		if ($cursor->isIndented()) {
 			return false;
 		}
@@ -43,12 +27,12 @@ class OembedParser extends AbstractBlockParser {
 		$previousState = $cursor->saveState();
 		$url = $cursor->match(self::getUrlRegex());
 
-		if (is_null($url)) {
+		if ($url === null) {
 			$cursor->restoreState($previousState);
 			return false;
 		}
 
-		if (in_array(self::getDomain($url), $this->whitelistedDomains)) {
+		if (\in_array(self::getDomain($url), $this->whitelistedDomains, true)) {
 			try {
 				$response = $this->oembed->request($url);
 				if ($response) {
@@ -69,7 +53,7 @@ class OembedParser extends AbstractBlockParser {
 		return $match[1];
 	}
 
-	private static function getUrlRegex() {
+	private static function getUrlRegex(): string {
 		$alphaRegex = "a-z\x80-\xFF";
 		$domainRegex = "[0-9$alphaRegex](?:[-0-9$alphaRegex]{0,61}[0-9$alphaRegex])?";
 		$topDomainRegex = "[$alphaRegex][-0-9$alphaRegex]{0,17}[$alphaRegex]";

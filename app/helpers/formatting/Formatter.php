@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers\Formatting;
 
 use Alb\OEmbed;
@@ -123,37 +125,26 @@ class Formatter {
 		'(icepink)' => 'strawberry-ice-cream'
 	];
 
-	/** @var PageRepository */
-	public $pages;
+	private DocParser $parser;
 
-	/** @var \HTMLPurifier */
-	public $purifier;
+	private HtmlRenderer $htmlRenderer;
 
-	/** @var OEmbed\Simple */
-	public $oembed;
-
-	/** @var DocParser */
-	private $parser;
-
-	/** @var HtmlRenderer */
-	private $htmlRenderer;
-
-	public function __construct(PageRepository $pages, \HTMLPurifier $purifier, OEmbed\Simple $oembed) {
-		$this->pages = $pages;
-		$this->purifier = $purifier;
-		$this->oembed = $oembed;
-
+	public function __construct(
+		private PageRepository $pages,
+		private \HTMLPurifier $purifier,
+		private OEmbed\Simple $oembed,
+	) {
 		$environment = Environment::createCommonMarkEnvironment();
 		$environment->addInlineParser(new Parser\EmoticonParser(self::$images, self::$emoticons));
 		$environment->addBlockParser(new Parser\OembedParser($oembed, self::$OEMBED_WHITELIST));
 		$environment->addBlockParser(new Parser\SpoilerParser());
-		$environment->addBlockRenderer('App\Helpers\Formatting\Element\OembedBlock', new Renderer\OembedRenderer());
-		$environment->addBlockRenderer('App\Helpers\Formatting\Element\Spoiler', new Renderer\SpoilerRenderer());
+		$environment->addBlockRenderer(\App\Helpers\Formatting\Element\OembedBlock::class, new Renderer\OembedRenderer());
+		$environment->addBlockRenderer(\App\Helpers\Formatting\Element\Spoiler::class, new Renderer\SpoilerRenderer());
 		$this->parser = new DocParser($environment);
 		$this->htmlRenderer = new HtmlRenderer($environment);
 	}
 
-	public function format($markdown) {
+	public function format($markdown): array {
 		$markdown = $this->replaceGalleries($markdown);
 
 		$markdown = $this->replaceProps($markdown);
@@ -176,9 +167,9 @@ class Formatter {
 		$alpha = "a-z\x80-\xFF";
 		$domain = "[0-9$alpha](?:[-0-9$alpha]{0,61}[0-9$alpha])?";
 		$topDomain = "[$alpha][-0-9$alpha]{0,17}[$alpha]";
-		$text = preg_replace_callback("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", function($match) {
+		$text = preg_replace_callback("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", function($match) use (&$replacements) {
 			if (!isset($replacements[$match[0]])) {
-				if (in_array($match[1], Formatter::$OEMBED_WHITELIST)) {
+				if (\in_array($match[1], self::$OEMBED_WHITELIST, true)) {
 					try {
 						$request = $this->oembed->request($match[0]);
 						if ($request) {
@@ -205,15 +196,15 @@ class Formatter {
 			return $size;
 		};
 		$text = preg_replace_callback('/<gallery type="carousel">(.+?)<\/gallery>/s', function($match) use ($imageSize) {
-			$temp = sha1(mt_rand());
+			$temp = sha1(random_int(0, mt_getrandmax()));
 			$maxWidth = $maxHeight = 0;
 			$images = preg_replace_callback('/!\[(.*?)\]\(([^"]+?)(?: "([^"]+)")?\)/', function($match) use ($imageSize, &$maxWidth, &$maxHeight) {
 				$alt = $match[1];
 				$caption = !empty($match[3]) ? '<div class="carousel-caption"><p>' . $match[3] . '</p></div>' : '';
 				$url = $match[2];
 				$thumbUrl = preg_replace('/\.(png|jp[e]g|gif)$/', '.thumb.$1', $url);
-				list($width, $height) = $imageSize($url, $thumbUrl);
-				$code = '<div class="item' . ($maxHeight == 0 ? ' active' : '') . '"><a href="' . $url . '" data-lightbox="true"><img src="' . $thumbUrl . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '"></a>' . $caption . '</div>' . PHP_EOL;
+				[$width, $height] = $imageSize($url, $thumbUrl);
+				$code = '<div class="item' . ($maxHeight == 0 ? ' active' : '') . '"><a href="' . $url . '" data-lightbox="true"><img src="' . $thumbUrl . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '"></a>' . $caption . '</div>' . \PHP_EOL;
 				$maxWidth = max($maxWidth, $width);
 				$maxHeight = max($maxHeight, $height);
 				return $code;
@@ -256,7 +247,7 @@ EOT;
 	public function replaceWikiLinks($text) {
 		$text = preg_replace_callback('~\[\[([^\]|\n]+)(?:\|([^\]|\n]+))?\]\]~u', function($matches) {
 			$link = $label = $matches[1];
-			if (count($matches) === 3) {
+			if (\count($matches) === 3) {
 				$label = $matches[2];
 			}
 
@@ -270,11 +261,12 @@ EOT;
 		return $text;
 	}
 
-	public function formatErrors($errors) {
+	public function formatErrors($errors): Html {
 		$list = Html::el('ul');
 		foreach ($errors as $error) {
 			$list->addHtml(Html::el('li', 'Na řádku ' . $error[0] . ': ' . $error[2]));
 		}
+
 		return $list;
 	}
 }

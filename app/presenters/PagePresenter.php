@@ -1,34 +1,45 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Presenters;
 
+use App\Helpers\Formatting;
+use App\Model;
 use Nette;
 use Nette\Caching\Cache;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Utils\Strings;
-use Nextras\Forms\Rendering;
+use Nextras\FormsRendering\Renderers;
 use Tracy\Debugger;
-use App;
-use App\Helpers\Formatting;
-use App\Model;
 
 /**
  * PagePresenter handles wiki articles.
  */
 class PagePresenter extends BasePresenter {
-	/** @var Formatting\Formatter @inject */
-	public $formatter;
+	#[Nette\DI\Attributes\Inject]
+	public Formatting\Formatter $formatter;
 
-	/** @var Model\PageRepository @inject */
-	public $pages;
+	#[Nette\DI\Attributes\Inject]
+	public Model\PageRepository $pages;
 
-	/** @var Model\UserRepository @inject */
-	public $users;
+	#[Nette\DI\Attributes\Inject]
+	public Model\UserRepository $users;
 
-	public function renderShow($slug) {
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Http\Response $response;
+
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Http\IRequest $request;
+
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Caching\Storage $storage;
+
+	public function renderShow($slug): void {
 		$page = $this->pages->getBy(['slug' => $slug]);
 		if (!$page) {
 			if ($this->allowed('page', 'create')) {
-				$httpResponse = $this->getContext()->getByType('Nette\Http\Response');
+				$httpResponse = $this->response;
 				$httpResponse->setCode(Nette\Http\Response::S404_NOT_FOUND);
 				$this->getTemplate()->slug = $slug;
 				$this->setView('@no-page');
@@ -42,7 +53,7 @@ class PagePresenter extends BasePresenter {
 			$this->redirectUrl($page->redirect);
 		}
 
-		$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'pages');
+		$cache = new Cache($this->storage, 'pages');
 
 		$this->getTemplate()->page = $page;
 		$this->getTemplate()->content = $cache->load($page->slug, function() use ($page) {
@@ -56,7 +67,7 @@ class PagePresenter extends BasePresenter {
 		});
 	}
 
-	public function actionPurge($id) {
+	public function actionPurge($id): void {
 		$page = $this->pages->getById($id);
 		if (!$page) {
 			$this->error('Stránka nenalezena');
@@ -66,19 +77,19 @@ class PagePresenter extends BasePresenter {
 			$this->error('Nemáš právo vymazat cache!', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'pages');
+		$cache = new Cache($this->storage, 'pages');
 		$cache->remove($page->slug);
 
 		$this->flashMessage('Cache byla vymazána.', 'success');
 		$this->redirect('show', $page->slug);
 	}
 
-	public function renderList() {
+	public function renderList(): void {
 		$pages = $this->pages->findAll();
 		$this->getTemplate()->pages = $pages;
 	}
 
-	public function renderTitles() {
+	public function renderTitles(): void {
 		$titles = [];
 
 		$pages = $this->pages->findAll();
@@ -93,17 +104,17 @@ class PagePresenter extends BasePresenter {
 		$this->sendJson($titles);
 	}
 
-	public function renderLinks() {
+	public function renderLinks(): void {
 		$slugs = $this->pages->findAll()->fetchPairs(null, 'slug');
 		$pages = $this->pages->findAll();
 		$pagesJson = [];
 
 		foreach ($pages as $page) {
 			$last_revision = $page->lastRevision;
-			preg_match_all('~<a[^>]* href="(?:http://(?:www\.)fan-club-penguin.cz)?/([^"]+)\.html(?:#[^"]+)?"[^>]*>~', $last_revision->content, $links, PREG_PATTERN_ORDER);
+			preg_match_all('~<a[^>]* href="(?:http://(?:www\.)fan-club-penguin.cz)?/([^"]+)\.html(?:#[^"]+)?"[^>]*>~', $last_revision->content, $links, \PREG_PATTERN_ORDER);
 			$links = array_unique($links[1]);
 			$links = array_filter($links, function($item) use ($slugs) {
-				if (in_array($item, $slugs)) {
+				if (\in_array($item, $slugs, true)) {
 					return true;
 				}
 			});
@@ -113,10 +124,10 @@ class PagePresenter extends BasePresenter {
 		$this->getTemplate()->pages = $pagesJson;
 	}
 
-	protected function createComponentPageForm() {
+	protected function createComponentPageForm(): Nette\Application\UI\Form {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$form->setRenderer(new Renderers\Bs3FormRenderer());
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$slug = $form->addText('slug', 'Adresa:')->setRequired()->setType('url');
 		if ($this->getAction() == 'edit') {
@@ -135,7 +146,7 @@ class PagePresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function pageFormSucceeded(SubmitButton $button) {
+	public function pageFormSucceeded(SubmitButton $button): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -176,12 +187,12 @@ class PagePresenter extends BasePresenter {
 			$revision->page = $page;
 			$revision->content = $formatted['text'];
 			$revision->user = $this->users->getById($this->getUser()->getIdentity()->id);
-			$revision->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+			$revision->ip = $this->request->remoteAddress;
 			$page->revisions->add($revision);
 
 			$this->pages->persistAndFlush($page);
 
-			$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'pages');
+			$cache = new Cache($this->storage, 'pages');
 			$cache->save($page->slug, $formatted['text']);
 
 			$this->flashMessage('Stránka byla odeslána.', 'success');
@@ -191,7 +202,7 @@ class PagePresenter extends BasePresenter {
 		}
 	}
 
-	public function pageFormPreview(SubmitButton $button) {
+	public function pageFormPreview(SubmitButton $button): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -212,7 +223,7 @@ class PagePresenter extends BasePresenter {
 		$this->redrawControl('preview');
 	}
 
-	public function actionCreate($slug = null) {
+	public function actionCreate($slug = null): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -225,7 +236,7 @@ class PagePresenter extends BasePresenter {
 		}
 	}
 
-	public function actionEdit($id) {
+	public function actionEdit($id): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -242,7 +253,7 @@ class PagePresenter extends BasePresenter {
 		$this['pageForm']->setDefaults($data);
 	}
 
-	public function renderHistory($id) {
+	public function renderHistory($id): void {
 		$page = $this->pages->getById($id);
 		if (!$page) {
 			$this->error('Stránka nenalezena.');

@@ -1,29 +1,38 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Presenters;
 
-use Nette;
-use Nette\Caching\Cache;
-use Nette\Forms\Controls\SubmitButton;
-use Nextras\Forms\Rendering;
 use App;
 use App\Helpers\Formatting;
 use App\Model\Post;
 use App\Model\PostRevision;
+use Nette;
+use Nette\Caching\Cache;
+use Nette\Forms\Controls\SubmitButton;
+use Nextras\FormsRendering\Renderers;
 
 /**
  * PostPresenter handles news posts.
  */
 class PostPresenter extends BasePresenter {
-	/** @var Formatting\Formatter @inject */
-	public $formatter;
+	#[Nette\DI\Attributes\Inject]
+	public Formatting\Formatter $formatter;
 
-	/** @var App\Model\PostRepository @inject */
-	public $posts;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\PostRepository $posts;
 
-	/** @var App\Model\UserRepository @inject */
-	public $users;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\UserRepository $users;
 
-	public function renderShow($id) {
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Http\IRequest $request;
+
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Caching\Storage $storage;
+
+	public function renderShow($id): void {
 		$post = $this->posts->getById($id);
 		if (!$post) {
 			$this->error('Aktuálka nenalezena');
@@ -32,7 +41,7 @@ class PostPresenter extends BasePresenter {
 		$this->getTemplate()->post = $post;
 	}
 
-	public function actionPurge($id) {
+	public function actionPurge($id): void {
 		$post = $this->posts->getById($id);
 		if (!$post) {
 			$this->error('Aktuálka nenalezena');
@@ -42,14 +51,14 @@ class PostPresenter extends BasePresenter {
 			$this->error('Nemáš právo vymazat cache!', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'posts');
+		$cache = new Cache($this->storage, 'posts');
 		$cache->remove($post->id);
 
 		$this->flashMessage('Cache byla vymazána.', 'success');
 		$this->redirect('show', $post->id);
 	}
 
-	public function renderList() {
+	public function renderList(): void {
 		$posts = $this->posts->findAll()->orderBy(['createdAt' => 'DESC']);
 		$this->getTemplate()->posts = $posts;
 	}
@@ -57,7 +66,7 @@ class PostPresenter extends BasePresenter {
 	protected function createComponentPostForm() {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
-		$form->setRenderer(new Rendering\Bs3FormRenderer);
+		$form->setRenderer(new Renderers\Bs3FormRenderer());
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 		$form->addCheckbox('published', 'Zveřejnit')->setDefaultValue(true);
@@ -73,7 +82,7 @@ class PostPresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function postFormSucceeded(SubmitButton $button) {
+	public function postFormSucceeded(SubmitButton $button): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -113,10 +122,10 @@ class PostPresenter extends BasePresenter {
 		$revision->post = $post;
 		$revision->content = $formatted['text'];
 		$revision->user = $this->getUser()->getIdentity()->id;
-		$revision->ip = $this->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+		$revision->ip = $this->request->remoteAddress;
 		$post->revisions->add($revision);
 
-		$cache = new Cache($this->getContext()->getByType('Nette\Caching\IStorage'), 'posts');
+		$cache = new Cache($this->storage, 'posts');
 		$cache->save($post->id, $formatted['text']);
 
 		$this->posts->persistAndFlush($post);
@@ -125,7 +134,7 @@ class PostPresenter extends BasePresenter {
 		$this->redirect('show', $post->id);
 	}
 
-	public function postFormPreview(SubmitButton $button) {
+	public function postFormPreview(SubmitButton $button): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -146,7 +155,7 @@ class PostPresenter extends BasePresenter {
 		$this->redrawControl('preview');
 	}
 
-	public function actionCreate() {
+	public function actionCreate(): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -155,7 +164,7 @@ class PostPresenter extends BasePresenter {
 		}
 	}
 
-	public function actionEdit($id) {
+	public function actionEdit($id): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -174,7 +183,7 @@ class PostPresenter extends BasePresenter {
 		$this['postForm']->setDefaults($data);
 	}
 
-	public function renderRss() {
+	public function renderRss(): void {
 		$posts = $this->posts->findAll()->orderBy(['createdAt' => 'DESC'])->limitBy(15);
 		$this->getTemplate()->posts = $posts;
 	}

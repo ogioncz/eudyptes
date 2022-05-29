@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use DateTimeImmutable;
-use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Collection\ICollection;
+use Nextras\Orm\Entity\Entity;
 
 /**
  * Revision
@@ -21,11 +23,11 @@ use Nextras\Orm\Collection\ICollection;
  * @property-read Revision|null $next {virtual}
  */
 class Revision extends Entity {
-	public function getterPrevious() {
+	public function getterPrevious(): ?self {
 		return $this->getRepository()->findBy(['page' => $this->page->id, 'id<' => $this->getPersistedId()])->orderBy(['timestamp' => ICollection::DESC])->limitBy(1)->fetch();
 	}
 
-	public function getterNext() {
+	public function getterNext(): ?self {
 		return $this->getRepository()->findBy(['page' => $this->page->id, 'id>' => $this->getPersistedId()])->orderBy(['timestamp' => ICollection::ASC])->limitBy(1)->fetch();
 	}
 }

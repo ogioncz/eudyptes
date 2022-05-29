@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use DateTimeImmutable;
@@ -20,24 +22,24 @@ use Nextras\Orm\Entity\Entity;
  * @property-read PostRevision $lastRevision {virtual}
  * @property OneHasMany|PostRevision[] $revisions {1:m PostRevision::$post, orderBy=[timestamp, DESC]}
  */
-class Post extends Entity implements Nette\Security\IResource {
-	public function getterLastRevision() {
+class Post extends Entity implements Nette\Security\Resource {
+	public function getterLastRevision(): PostRevision {
 		return $this->revisions->get()->orderBy(['timestamp' => 'DESC'])->fetch();
 	}
 
-	public function getterTitle() {
+	public function getterTitle(): string {
 		return $this->lastRevision ? $this->lastRevision->title : null;
 	}
 
-	public function getterMarkdown() {
+	public function getterMarkdown(): string {
 		return $this->lastRevision ? $this->lastRevision->markdown : null;
 	}
 
-	public function getterContent() {
+	public function getterContent(): string {
 		return $this->lastRevision ? $this->lastRevision->content : null;
 	}
 
-	public function getResourceId() {
+	public function getResourceId(): string {
 		return 'post';
 	}
 }

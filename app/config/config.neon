@@ -24,7 +24,7 @@ session:
 
 forms:
 	messages:
-		PROTECTION: 'Pro větší bezpečnost prosím odešli tento formulář znovu.'
+		Nette\Forms\Controls\CsrfProtection::PROTECTION: 'Pro větší bezpečnost prosím odešli tento formulář znovu.'
 
 extensions:
 	orm: Nextras\Orm\Bridges\NetteDI\OrmExtension

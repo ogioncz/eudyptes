@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * This file is based on the Nextras community extensions of Nette Framework
  *
@@ -12,9 +14,9 @@ namespace App\Components;
 
 use DateTimeImmutable;
 
-class TimePicker extends \Nextras\Forms\Controls\DateTimePickerPrototype {
+class TimePicker extends \Nextras\FormComponents\Controls\DateTimeControlPrototype {
 	/** @link http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#valid-time-string */
-	const W3C_TIME_FORMAT = 'H:i';
+	protected const W3C_TIME_FORMAT = 'H:i';
 
 	/** @var string */
 	protected $htmlFormat = self::W3C_TIME_FORMAT;
@@ -23,7 +25,7 @@ class TimePicker extends \Nextras\Forms\Controls\DateTimePickerPrototype {
 	protected $htmlType = 'time';
 
 
-	protected function getDefaultParser() {
+	protected function getDefaultParser(): \Closure {
 		return function($value) {
 			if (!preg_match('#^(?P<HH>0?[0-9]|1[0-9]|2[0-3]):(?P<mm>[0-5][0-9])$#', $value, $matches)) {
 				return null;
@@ -33,7 +35,7 @@ class TimePicker extends \Nextras\Forms\Controls\DateTimePickerPrototype {
 			$mm = $matches['mm'];
 
 			$value = new DateTimeImmutable;
-			return $value->setTime($HH, $mm);
+			return $value->setTime((int) $HH, (int) $mm);
 		};
 	}
 

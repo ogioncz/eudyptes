@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use Nette;
@@ -8,20 +10,15 @@ class TransformCustomSchemesUriFilter extends \HTMLPurifier_URIFilter {
 	/** * @var string */
 	public $name = 'TransformCustomSchemes';
 
-	/** @var Nette\Application\Application */
-	protected $app;
-
-	public function __construct(Nette\Application\Application $app) {
-		$this->app = $app;
+	public function __construct(protected Nette\Application\Application $app) {
 	}
 
 	/**
 	 * @param \HTMLPurifier_URI $uri
 	 * @param \HTMLPurifier_Config $config
 	 * @param \HTMLPurifier_Context $context
-	 * @return bool
 	 */
-	public function filter(&$uri, $config, $context) {
+	public function filter(&$uri, $config, $context): bool {
 		if ($uri->scheme !== 'post' && $uri->scheme !== 'page') {
 			return true;
 		}

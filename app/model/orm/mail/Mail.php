@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
 use DateTimeImmutable;
@@ -23,12 +25,12 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property Mail $root {virtual}
  * @property OneHasMany|Mail[] $replies {1:m Mail::$reaction, orderBy=[timestamp, ASC]}
  */
-class Mail extends Entity implements Nette\Security\IResource {
-	public function getResourceId() {
+class Mail extends Entity implements Nette\Security\Resource {
+	public function getResourceId(): string {
 		return 'mail';
 	}
 
-	public function getterRoot() {
+	public function getterRoot(): self {
 		$mail = $this;
 		while ($mail->reaction) {
 			$mail = $mail->reaction;

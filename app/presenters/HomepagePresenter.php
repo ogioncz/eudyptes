@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presenters;
 
 use App;
+use Nette;
 
 /**
  * HomepagePresenter handles the front page of the site.
  */
 class HomepagePresenter extends BasePresenter {
-	/** @var App\Model\PostRepository @inject */
-	public $posts;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\PostRepository $posts;
 
-	public function renderDefault() {
+	public function renderDefault(): void {
 		$paginator = $this['paginator']->getPaginator();
 		$posts = $this->posts->findBy(['published' => true, 'createdAt<=' => new \DateTimeImmutable()]);
 		$paginator->itemCount = $posts->countStored();

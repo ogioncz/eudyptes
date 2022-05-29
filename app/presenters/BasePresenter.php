@@ -1,38 +1,54 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Presenters;
 
-use Nette;
-use DateTimeImmutable;
 use App;
+use DateTimeImmutable;
+use Nette;
 
 /**
  * BasePresenter is the mother of all presenters.
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter {
-	/** @var App\Model\UserRepository @inject */
-	public $users;
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Security\Permission $authorizator;
 
-	/** @var App\Model\MeetingRepository @inject */
-	public $meetings;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\UserRepository $users;
 
-	/** @var App\Model\PageRepository @inject */
-	public $pages;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\MeetingRepository $meetings;
 
-	/** @var App\Model\ChatRepository @inject */
-	public $chats;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\PageRepository $pages;
 
-	/** @var App\Model\TelegramNotifier @inject */
-	public $telegramNotifier;
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\ChatRepository $chats;
 
-	protected function createComponentPaginator($name) {
+	#[Nette\DI\Attributes\Inject]
+	public App\Model\TelegramNotifier $telegramNotifier;
+
+	#[Nette\DI\Attributes\Inject]
+	public Nette\Http\IRequest $request;
+
+	#[Nette\DI\Attributes\Inject]
+	public App\Helpers\Formatting\ChatFormatter $chatFormatter;
+
+	public function __construct(private \App\Model\HelperLoader $helperLoader) {
+		parent::__construct();
+	}
+
+	protected function createComponentPaginator($name): \VisualPaginator {
 		$vp = new \VisualPaginator();
 		$vp->getPaginator()->setItemsPerPage(10);
 		$this->addComponent($vp, $name);
+
 		return $vp;
 	}
 
-	protected function startup() {
+	protected function startup(): void {
 		if ($this->getUser()->isLoggedIn()) {
 			$user = $this->users->getById($this->getUser()->getIdentity()->id);
 			$user->lastActivity = new DateTimeImmutable();
@@ -41,13 +57,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		parent::startup();
 	}
 
-	protected function createTemplate($class=null) {
+	protected function createTemplate($class = null): Nette\Application\UI\Template {
 		$template = parent::createTemplate($class);
-		$template->getLatte()->addFilter(null, [$this->getContext()->getByType('App\Model\HelperLoader'), 'loader']);
+		$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
+
 		return $template;
 	}
 
-	public function beforeRender() {
+	public function beforeRender(): void {
 		parent::beforeRender();
 		$template = $this->getTemplate();
 		if ($this->getUser()->isLoggedIn()) {
@@ -59,42 +76,61 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$template->menu = $this->pages->findBy(['menu' => true])->orderBy(['title' => 'ASC']);
 		$template->logo = file_get_contents(__DIR__ . '/../../www/images/bar.svg');
 
+		$template->customStyles = iterator_to_array(
+			new Nette\Iterators\Mapper(
+				new \CallbackFilterIterator(
+					new \DirectoryIterator(__DIR__ . '/../../www/custom'),
+					fn($f, $_k) => $f->isFile() && $f->getExtension() == 'css'
+				),
+				fn($f, $_k) => $template->basePath . '/custom/' . $f->getFileName()
+			)
+		);
 
-		$template->customStyles = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/custom'), function($f, $_k) {
-			return $f->isFile() && $f->getExtension() == 'css';
-		}), function($f, $_k) use ($template) {
-			return $template->basePath . '/custom/' . $f->getFileName();
-		}));
+		$template->customScripts = iterator_to_array(
+			new Nette\Iterators\Mapper(
+				new \CallbackFilterIterator(
+					new \DirectoryIterator(__DIR__ . '/../../www/custom'),
+					fn($f, $_k) => $f->isFile() && $f->getExtension() == 'js'
+				),
+				fn($f, $_k) => $template->basePath . '/custom/' . $f->getFileName()
+			)
+		);
 
-		$template->customScripts = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/custom'), function($f, $_k) {
-			return $f->isFile() && $f->getExtension() == 'js';
-		}), function($f, $_k) use ($template) {
-			return $template->basePath . '/custom/' . $f->getFileName();
-		}));
-
-		$headers = iterator_to_array(new Nette\Iterators\Mapper(new \CallbackFilterIterator(new \DirectoryIterator(__DIR__ . '/../../www/images/header'), function($f, $_k) {
-			return $f->isFile() && in_array($f->getExtension(), ['png', 'jpg', 'jpeg', 'gif'], true);
-		}), function($f, $_k) {
-			return $f->getFileName();
-		}));
+		$headers = iterator_to_array(
+			new Nette\Iterators\Mapper(
+				new \CallbackFilterIterator(
+					new \DirectoryIterator(__DIR__ . '/../../www/images/header'),
+					fn($f, $_k) => $f->isFile() && \in_array($f->getExtension(), ['png', 'jpg', 'jpeg', 'gif'], true)
+				),
+				fn($f, $_k) => $f->getFileName()
+			)
+		);
 		shuffle($headers);
 
-		$template->headerStyle = count($headers) > 0 ? 'background-image: url(' . $template->basePath . '/images/header/' . $headers[0] . ');' : '';
+		$template->headerStyle = \count($headers) > 0 ? 'background-image: url(' . $template->basePath . '/images/header/' . $headers[0] . ');' : '';
 
 		$template->allowed = [$this, 'allowed'];
 	}
 
-	public function allowed($resource, $action) {
+	public function allowed($resource, $action): bool {
 		$user = $this->getUser()->isLoggedIn() ? $this->users->getById($this->getUser()->getIdentity()->id) : null;
-		return $this->getContext()->getService('authorizator')->isAllowed($user, $resource, $action);
+
+		return $this->authorizator->isAllowed($user, $resource, $action);
 	}
 
 	/**
-	* Chat control factory.
-	* @return App\Components\ChatControl
-	*/
-	protected function createComponentChat() {
-		$chat = new App\Components\ChatControl($this->chats, $this->users, $this->telegramNotifier);
+	 * Chat control factory.
+	 */
+	protected function createComponentChat(): \App\Components\ChatControl {
+		$chat = new App\Components\ChatControl(
+			$this->chats,
+			$this->users,
+			$this->telegramNotifier,
+			$this->helperLoader,
+			$this->request,
+			$this->chatFormatter,
+		);
+
 		return $chat;
 	}
 }

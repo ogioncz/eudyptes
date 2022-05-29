@@ -1,56 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers\Formatting\Parser;
 
-use League\CommonMark\Inline\Parser\AbstractInlineParser;
-use League\CommonMark\InlineParserContext;
 use League\CommonMark\Inline\Element\Image;
+use League\CommonMark\Inline\Parser\InlineParserInterface;
+use League\CommonMark\InlineParserContext;
 
-
-class EmoticonParser extends AbstractInlineParser {
-	/** @var array[] */
-	private $images;
-
+class EmoticonParser implements InlineParserInterface {
 	/** @var string[] */
-	private $emoticons;
+	private array $characters;
 
-	/** @var string[] */
-	private $characters;
+	private string $regex;
 
-	/** @var string */
-	private $regex;
+	public function __construct(
+		/** @param array[] $images */
+		private array $images,
+		/** @param string[] $emoticons */
+		private array $emoticons,
+	) {
+		$this->characters = array_unique(array_map(fn($emoticon) => mb_substr($emoticon, 0, 1), array_keys($emoticons)));
 
-	/**
-	 * Constructor
-	 *
-	 * @param array[] $images
-	 * @param string[] $emoticons
-	 */
-	public function __construct($images, $emoticons) {
-		$this->images = $images;
-		$this->emoticons = $emoticons;
-
-		$this->characters = array_unique(array_map(function($emoticon) {
-			return mb_substr($emoticon, 0, 1);
-		}, array_keys($emoticons)));
-
-		$this->regex = '(^(' . implode('|', array_map(function($emoticon) {
-			return preg_quote($emoticon);
-		}, array_keys($emoticons))) . '))';
+		$this->regex = '(^(' . implode('|', array_map(fn($emoticon) => preg_quote($emoticon), array_keys($emoticons))) . '))';
 	}
 
-	public function getCharacters() {
+	public function getCharacters(): array {
 		return $this->characters;
 	}
 
-	public function parse(InlineParserContext $inlineContext) {
+	public function parse(InlineParserContext $inlineContext): bool {
 		$cursor = $inlineContext->getCursor();
 
 		$previousState = $cursor->saveState();
 		$emoticon = $cursor->match($this->regex);
 
-		if (is_null($emoticon)) {
+		if ($emoticon === null) {
 			$cursor->restoreState($previousState);
+
 			return false;
 		}
 

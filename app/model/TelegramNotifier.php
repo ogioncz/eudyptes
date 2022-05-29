@@ -1,23 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
-use Nette;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 
 class TelegramNotifier {
-	use Nette\SmartObject;
+	private Telegram $telegram;
 
-	/** @var Telegram */
-	public $telegram;
-
-	/** @var int */
-	public $chatId;
-
-	public function __construct($apiKey, $chatId, $botName) {
+	public function __construct(string $apiKey, private int $chatId, string $botName) {
 		$this->telegram = new Telegram($apiKey, $botName);
-		$this->chatId = $chatId;
 	}
 
 	public function chatMessage($username, $message) {

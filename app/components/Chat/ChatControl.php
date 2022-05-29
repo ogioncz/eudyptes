@@ -1,37 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Components;
 
 use App;
-use App\Helpers\Formatting\ChatFormatter;
 use App\Model\Chat;
 use Nette;
-use Nette\Application\UI\Control;
 use Nette\Application\Responses\TextResponse;
-use Nextras\Forms\Rendering;
-
+use Nette\Application\UI\Control;
 
 class ChatControl extends Control {
-	/** @var App\Model\ChatRepository @inject */
-	public $chats;
-
-	/** @var App\Model\UserRepository @inject */
-	public $users;
-
-	/** @var App\Model\TelegramNotifier @inject */
-	public $telegramNotifier;
-
-	public function __construct(App\Model\ChatRepository $chats, App\Model\UserRepository $users, App\Model\TelegramNotifier $telegramNotifier) {
-		parent::__construct();
-		$this->chats = $chats;
-		$this->users = $users;
-		$this->telegramNotifier = $telegramNotifier;
+	public function __construct(
+		private App\Model\ChatRepository $chats,
+		private App\Model\UserRepository $users,
+		private App\Model\TelegramNotifier $telegramNotifier,
+		private App\Model\HelperLoader $helperLoader,
+		private Nette\Http\IRequest $request,
+		private App\Helpers\Formatting\ChatFormatter $chatFormatter,
+	) {
 	}
 
 
-	public function render() {
+	public function render(): void {
 		$template = $this->getTemplate();
-		$template->getLatte()->addFilter(null, [$this->getPresenter()->getContext()->getByType('App\Model\HelperLoader'), 'loader']);
+		$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
 		$template->setFile(__DIR__ . '/chat.latte');
 		$allChats = $this->chats->findAll()->orderBy(['timestamp' => 'ASC']);
 		$template->chats = $allChats->limitBy(51, max(0, $allChats->countStored() - 51));
@@ -40,7 +33,7 @@ class ChatControl extends Control {
 		$template->render();
 	}
 
-	protected function createComponentChatForm() {
+	protected function createComponentChatForm(): Nette\Application\UI\Form {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
 		$form->addTextArea('content', 'Zpráva:')->setRequired();
@@ -55,20 +48,20 @@ class ChatControl extends Control {
 		return $form;
 	}
 
-	public function handleRefresh($id) {
+	public function handleRefresh($id): void {
 		$presenter = $this->getPresenter();
 		if (!$presenter->isAjax()) {
 			$this->redirect('this');
 		} else {
 			$template = $this->getTemplate();
-			$template->getLatte()->addFilter(null, [$presenter->getContext()->getByType('App\Model\HelperLoader'), 'loader']);
+			$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
 			$template->setFile(__DIR__ . '/chat-messages.latte');
 			$template->chats = $this->chats->findBy(['id>=' => $id]);
 			$presenter->sendResponse(new TextResponse($template));
 		}
 	}
 
-	public function chatFormSucceeded(Nette\Application\UI\Form $form) {
+	public function chatFormSucceeded(Nette\Application\UI\Form $form): void {
 		$presenter = $this->getPresenter();
 		if (!$presenter->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $presenter->storeRequest()]);
@@ -78,16 +71,17 @@ class ChatControl extends Control {
 		}
 		$values = $form->getValues();
 
-		$formatter = $presenter->getContext()->getService('chatFormatter');
+		$formatter = $this->chatFormatter;
 
 		$chat = new Chat;
 		$chat->content = $formatter->format($values->content);
-		$chat->ip = $presenter->getContext()->getByType('Nette\Http\IRequest')->remoteAddress;
+		$chat->ip = $this->request->remoteAddress;
 		$chat->user = $this->users->getById($presenter->getUser()->getIdentity()->id);
 		$this->chats->persistAndFlush($chat);
 		try {
 			$this->telegramNotifier->chatMessage($presenter->getUser()->getIdentity()->username, trim(preg_replace('/\{#([0-9]+)\}/', '', $values->content)));
-		} catch (\Exception $e) {}
+		} catch (\Exception) {
+		}
 		if (!$presenter->isAjax()) {
 			$this->redirect('this');
 		} else {

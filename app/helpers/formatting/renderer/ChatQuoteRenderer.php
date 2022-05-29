@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers\Formatting\Renderer;
 
 use App\Helpers\Formatting\Element\ChatQuote;
@@ -10,35 +12,16 @@ use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\HtmlElement;
 
-
 class ChatQuoteRenderer implements BlockRendererInterface {
-	/** @var ChatRepository */
-	private $chats;
-
-	/** @var HelperLoader */
-	private $helperLoader;
-
-	/**
-	 * Constructor
-	 *
-	 * @param ChatRepository $chats
-	 * @param HelperLoader $helperLoader
-	 */
-	public function __construct(ChatRepository $chats, HelperLoader $helperLoader) {
-		$this->chats = $chats;
-		$this->helperLoader = $helperLoader;
+	public function __construct(private ChatRepository $chats, private HelperLoader $helperLoader) {
 	}
 
 	/**
 	 * @param ChatQuote $block
-	 * @param ElementRendererInterface $htmlRenderer
-	 * @param bool $inTightList
-	 *
-	 * @return HtmlElement|string
 	 */
-	public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false) {
+	public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, bool $inTightList = false): HtmlElement|string {
 		if (!($block instanceof ChatQuote)) {
-			throw new \InvalidArgumentException('Incompatible block type: ' . get_class($block));
+			throw new \InvalidArgumentException('Incompatible block type: ' . $block::class);
 		}
 
 		$original = $this->chats->getById($block->getId());

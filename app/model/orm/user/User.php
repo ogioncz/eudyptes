@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Model;
 
-use Nette;
 use DateTimeImmutable;
+use Nette;
 use Nextras\Orm\Entity\Entity;
-use Nextras\Orm\Relationships\OneHasMany;
 use Nextras\Orm\Relationships\ManyHasMany;
+use Nextras\Orm\Relationships\OneHasMany;
 
 /**
  * User
@@ -34,12 +36,12 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property ManyHasMany|Meeting[] $visitedMeetings {m:m Meeting::$visitors}
  * @property ManyHasMany|Stamp[] $ownedStamps {m:m Stamp::$owners , isMain=true}
  */
-class User extends Entity implements Nette\Security\IRole, Nette\Security\IResource {
-	public function getRoleId() {
+class User extends Entity implements Nette\Security\Role, Nette\Security\Resource {
+	public function getRoleId(): string {
 		return $this->role;
 	}
 
-	public function getResourceId() {
+	public function getResourceId(): string {
 		return 'user';
 	}
 }
