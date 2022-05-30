@@ -46,9 +46,6 @@ class ProfilePresenter extends BasePresenter {
 	#[Nette\DI\Attributes\Inject]
 	public Nette\Security\Passwords $passwords;
 
-	#[Nette\DI\Attributes\Inject]
-	public Nette\Http\IRequest $request;
-
 	public function renderList(): void {
 		$template = $this->getTemplate();
 		$template->profiles = $this->users->findAll()->orderBy('username');
@@ -61,10 +58,10 @@ class ProfilePresenter extends BasePresenter {
 		}
 		$template = $this->getTemplate();
 		if (file_exists($this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png')) {
-			$template->avatar = str_replace('♥basePath♥', $this->request->url->baseUrl, $this->context->parameters['avatarStoragePublic']) . '/' . $this->profile->id . 'm.png';
+			$template->avatar = str_replace('♥basePath♥', $this->getHttpRequest()->getUrl()->getBaseUrl(), $this->context->parameters['avatarStoragePublic']) . '/' . $this->profile->id . 'm.png';
 		}
 
-		$template->ipAddress = $this->request->remoteAddress;
+		$template->ipAddress = $this->getHttpRequest()->getRemoteAddress();
 		$template->profile = $this->profile;
 		$template->stamps = $this->stamps->findAll();
 	}
@@ -151,7 +148,7 @@ class ProfilePresenter extends BasePresenter {
 			$values->avatar->move($original);
 			try {
 				$resized = Image::fromFile($original)->resize(100, 100);
-				Image::fromBlank('100', '100', Image::rgb(0, 0, 0, 127))->place($resized, '50%', '50%')->save($medium);
+				Image::fromBlank(100, 100, Image::rgb(0, 0, 0, 127))->place($resized, '50%', '50%')->save($medium);
 			} catch (Exception $e) {
 				$form->addError('Chyba při zpracování avataru.');
 				Debugger::log($e);
@@ -271,7 +268,7 @@ class ProfilePresenter extends BasePresenter {
 			$t = Random::generate();
 			$token = new Token;
 			$token->token = $this->passwords->hash($t);
-			$token->ip = $this->request->remoteAddress;
+			$token->ip = $this->getHttpRequest()->getRemoteAddress();
 			$token->expiration = (new DateTimeImmutable())->add(\DateInterval::createFromDateString('2 day'));
 			$token->type = Token::PASSWORD;
 			$user->tokens->add($token);
@@ -285,7 +282,7 @@ class ProfilePresenter extends BasePresenter {
 			$mailTemplate->url = $this->link('//Profile:resetPassword', ['tid' => $token->id, 'token' => $t]);
 			$mailTemplate->username = $user->username;
 			$mail = new Message;
-			$mail->setFrom('admin@fan-club-penguin.cz')->addTo($user->email)->setHtmlBody($mailTemplate);
+			$mail->setFrom('admin@fan-club-penguin.cz')->addTo($user->email)->setHtmlBody((string) $mailTemplate);
 
 			$mailer = new SendmailMailer;
 			$mailer->send($mail);

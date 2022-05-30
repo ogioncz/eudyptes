@@ -196,7 +196,7 @@ class Formatter {
 			return $size;
 		};
 		$text = preg_replace_callback('/<gallery type="carousel">(.+?)<\/gallery>/s', function($match) use ($imageSize) {
-			$temp = sha1(random_int(0, mt_getrandmax()));
+			$temp = sha1((string) random_int(0, mt_getrandmax()));
 			$maxWidth = $maxHeight = 0;
 			$images = preg_replace_callback('/!\[(.*?)\]\(([^"]+?)(?: "([^"]+)")?\)/', function($match) use ($imageSize, &$maxWidth, &$maxHeight) {
 				$alt = $match[1];

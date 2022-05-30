@@ -75,11 +75,12 @@ class ChatControl extends Control {
 
 		$chat = new Chat;
 		$chat->content = $formatter->format($values->content);
-		$chat->ip = $this->request->remoteAddress;
-		$chat->user = $this->users->getById($presenter->getUser()->getIdentity()->id);
+		$chat->ip = $this->request->getRemoteAddress();
+		$chat->user = $this->users->getById($presenter->getUser()->getIdentity()->getId());
 		$this->chats->persistAndFlush($chat);
 		try {
-			$this->telegramNotifier->chatMessage($presenter->getUser()->getIdentity()->username, trim(preg_replace('/\{#([0-9]+)\}/', '', $values->content)));
+			$username = $presenter->getUser()->getIdentity()->getData()['username'] ?? throw new \Exception('Unexpected: missing username');
+			$this->telegramNotifier->chatMessage($username, trim(preg_replace('/\{#([0-9]+)\}/', '', $values->content)));
 		} catch (\Exception) {
 		}
 		if (!$presenter->isAjax()) {

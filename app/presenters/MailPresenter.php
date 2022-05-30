@@ -29,9 +29,6 @@ class MailPresenter extends BasePresenter {
 	#[Nette\DI\Attributes\Inject]
 	public App\Model\UserRepository $users;
 
-	#[Nette\DI\Attributes\Inject]
-	public Nette\Http\IRequest $request;
-
 	private int $itemsPerPage = 25;
 
 	public function renderList($sent = false): void {
@@ -43,7 +40,7 @@ class MailPresenter extends BasePresenter {
 		$template->sent = $sent;
 		$paginator = $this['paginator']->getPaginator();
 		$paginator->itemsPerPage = $this->itemsPerPage;
-		$mails = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->getUser()->getIdentity()->id]);
+		$mails = $this->mails->findBy([$sent ? 'sender' : 'recipient' => $this->getUser()->getIdentity()->getId()]);
 		$paginator->itemCount = $mails->countStored();
 		$template->mails = $mails->orderBy(['timestamp' => 'DESC'])->limitBy($paginator->itemsPerPage, $paginator->offset);
 	}
@@ -69,7 +66,7 @@ class MailPresenter extends BasePresenter {
 			$this->error('Toto není tvá zpráva', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 
-		if (!$mail->read && $mail->recipient->id === $this->getUser()->getIdentity()->id) {
+		if (!$mail->read && $mail->recipient->id === $this->getUser()->getIdentity()->getId()) {
 			$mail->read = true;
 			$this->mails->persistAndFlush($mail);
 		}
@@ -80,7 +77,8 @@ class MailPresenter extends BasePresenter {
 	protected function createComponentMailForm(): Nette\Application\UI\Form {
 		$form = new Nette\Application\UI\Form();
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$renderer = new Renderers\Bs3FormRenderer();
+		$form->setRenderer($renderer);
 
 		$subject = $form->addText('subject', 'Předmět:')->setRequired();
 		$subject->getControlPrototype()->autofocus = true;
@@ -97,7 +95,7 @@ class MailPresenter extends BasePresenter {
 
 		$submitButton = $form->addSubmit('send', 'Odeslat');
 		$submitButton->onClick[] = [$this, 'mailFormSucceeded'];
-		$form->getRenderer()->primaryButton = $submitButton;
+		$renderer->primaryButton = $submitButton;
 
 		return $form;
 	}
@@ -118,8 +116,8 @@ class MailPresenter extends BasePresenter {
 		$mail->subject = $values->subject;
 		$mail->markdown = $values->markdown;
 		$mail->content = $formatted['text'];
-		$mail->sender = $this->users->getById($this->getUser()->getIdentity()->id);
-		$mail->ip = $this->request->remoteAddress;
+		$mail->sender = $this->users->getById($this->getUser()->getIdentity()->getId());
+		$mail->ip = $this->getHttpRequest()->getRemoteAddress()();
 
 		if ($this->getAction() === 'reply') {
 			$original_id = $this->getParameter('id');
@@ -132,7 +130,7 @@ class MailPresenter extends BasePresenter {
 				$this->error('Zpráva s tímto id neexistuje.');
 			}
 
-			if ($original->recipient->id !== $this->getUser()->getIdentity()->id) {
+			if ($original->recipient->id !== $this->getUser()->getIdentity()->getId()) {
 				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 			}
 
@@ -198,7 +196,7 @@ class MailPresenter extends BasePresenter {
 		$message->setFrom($messageTemplate->sender . ' <neodpovidat@fan-club-penguin.cz>');
 		$message->setSubject('Nová zpráva ' . $mail->subject . ' (fan-club-penguin.cz)');
 		$message->addTo($mail->recipient->email);
-		$message->setBody($messageTemplate);
+		$message->setBody((string) $messageTemplate);
 
 		$mailer = new SendmailMailer();
 		$mailer->send($message);
@@ -239,7 +237,7 @@ class MailPresenter extends BasePresenter {
 			$this->error('Zpráva s tímto id neexistuje.');
 		}
 
-		if ($original->recipient->id !== $this->getUser()->getIdentity()->id) {
+		if ($original->recipient->id !== $this->getUser()->getIdentity()->getId()) {
 			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
 		}
 		$this->getTemplate()->original = $original;

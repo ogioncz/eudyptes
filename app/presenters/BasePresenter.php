@@ -31,9 +31,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	public App\Model\TelegramNotifier $telegramNotifier;
 
 	#[Nette\DI\Attributes\Inject]
-	public Nette\Http\IRequest $request;
-
-	#[Nette\DI\Attributes\Inject]
 	public App\Helpers\Formatting\ChatFormatter $chatFormatter;
 
 	public function __construct(private \App\Model\HelperLoader $helperLoader) {
@@ -50,7 +47,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 
 	protected function startup(): void {
 		if ($this->getUser()->isLoggedIn()) {
-			$user = $this->users->getById($this->getUser()->getIdentity()->id);
+			$user = $this->users->getById($this->getUser()->getIdentity()->getId());
 			$user->lastActivity = new DateTimeImmutable();
 			$this->users->persistAndFlush($user);
 		}
@@ -68,7 +65,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		parent::beforeRender();
 		$template = $this->getTemplate();
 		if ($this->getUser()->isLoggedIn()) {
-			$user = $this->users->getById($this->getUser()->getIdentity()->id);
+			$user = $this->users->getById($this->getUser()->getIdentity()->getId());
 			$template->unreadMails = $user->receivedMail->get()->findBy(['read' => false])->countStored();
 			$template->upcomingMeetings = $this->meetings->findUpcoming()->countStored();
 		}
@@ -113,7 +110,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	}
 
 	public function allowed($resource, $action): bool {
-		$user = $this->getUser()->isLoggedIn() ? $this->users->getById($this->getUser()->getIdentity()->id) : null;
+		$user = $this->getUser()->isLoggedIn() ? $this->users->getById($this->getUser()->getIdentity()->getId()) : null;
 
 		return $this->authorizator->isAllowed($user, $resource, $action);
 	}
@@ -127,7 +124,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 			$this->users,
 			$this->telegramNotifier,
 			$this->helperLoader,
-			$this->request,
+			$this->getHttpRequest(),
 			$this->chatFormatter,
 		);
 

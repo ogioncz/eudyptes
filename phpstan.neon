@@ -1,0 +1,15 @@
+includes:
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon
+	- vendor/nextras/orm-phpstan/extension.neon
+parameters:
+	level: max
+	paths:
+		- app
+		- tests
+		- www
+	# checkMissingIterableValueType: false
+	# treatPhpDocTypesAsCertain: false
+	# checkGenericClassInNonGenericObjectType: false
+	ignoreErrors:
+		# - '(Call to an undefined method App\\Components\\TeamForm::addDynamic\(\))'

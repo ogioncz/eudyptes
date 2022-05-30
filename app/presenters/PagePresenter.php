@@ -30,9 +30,6 @@ class PagePresenter extends BasePresenter {
 	public Nette\Http\Response $response;
 
 	#[Nette\DI\Attributes\Inject]
-	public Nette\Http\IRequest $request;
-
-	#[Nette\DI\Attributes\Inject]
 	public Nette\Caching\Storage $storage;
 
 	public function renderShow($slug): void {
@@ -127,7 +124,8 @@ class PagePresenter extends BasePresenter {
 	protected function createComponentPageForm(): Nette\Application\UI\Form {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$renderer = new Renderers\Bs3FormRenderer();
+		$form->setRenderer($renderer);
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$slug = $form->addText('slug', 'Adresa:')->setRequired()->setType('url');
 		if ($this->getAction() == 'edit') {
@@ -141,7 +139,7 @@ class PagePresenter extends BasePresenter {
 
 		$submitButton = $form->addSubmit('send', 'Odeslat a zveřejnit');
 		$submitButton->onClick[] = [$this, 'pageFormSucceeded'];
-		$form->getRenderer()->primaryButton = $submitButton;
+		$renderer->primaryButton = $submitButton;
 
 		return $form;
 	}
@@ -176,7 +174,7 @@ class PagePresenter extends BasePresenter {
 
 		if ($this->getAction() === 'create') {
 			$page->slug = $values->slug;
-			$page->user = $this->users->getById($this->getUser()->getIdentity()->id);
+			$page->user = $this->users->getById($this->getUser()->getIdentity()->getId());
 		}
 
 		try {
@@ -186,8 +184,8 @@ class PagePresenter extends BasePresenter {
 			$revision->markdown = $values->markdown;
 			$revision->page = $page;
 			$revision->content = $formatted['text'];
-			$revision->user = $this->users->getById($this->getUser()->getIdentity()->id);
-			$revision->ip = $this->request->remoteAddress;
+			$revision->user = $this->users->getById($this->getUser()->getIdentity()->getId());
+			$revision->ip = $this->getHttpRequest()->getRemoteAddress();
 			$page->revisions->add($revision);
 
 			$this->pages->persistAndFlush($page);

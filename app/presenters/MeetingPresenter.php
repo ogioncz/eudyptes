@@ -28,9 +28,6 @@ class MeetingPresenter extends BasePresenter {
 	public App\Model\UserRepository $users;
 
 	#[Nette\DI\Attributes\Inject]
-	public Nette\Http\IRequest $request;
-
-	#[Nette\DI\Attributes\Inject]
 	public App\Model\HelperLoader $helperLoader;
 
 	public function renderList(): void {
@@ -126,8 +123,8 @@ class MeetingPresenter extends BasePresenter {
 		$meeting->date = $values->date->setTime((int) $hour, (int) $minute);
 
 		if ($this->getAction() === 'create') {
-			$meeting->ip = $this->request->remoteAddress;
-			$meeting->user = $this->users->getById($this->getUser()->getIdentity()->id);
+			$meeting->ip = $this->getHttpRequest()->getRemoteAddress();
+			$meeting->user = $this->users->getById($this->getUser()->getIdentity()->getId());
 		}
 		$this->meetings->persistAndFlush($meeting);
 
@@ -163,7 +160,7 @@ class MeetingPresenter extends BasePresenter {
 		[$hour, $minute] = explode(':', $program[0]['time']);
 		$meeting->program = Json::encode($program);
 		$meeting->date = $values->date->setTime((int) $hour, (int) $minute);
-		$meeting->user = $this->users->getById($this->getUser()->getIdentity()->id);
+		$meeting->user = $this->users->getById($this->getUser()->getIdentity()->getId());
 
 		$this->getTemplate()->preview = $meeting;
 
@@ -186,9 +183,8 @@ class MeetingPresenter extends BasePresenter {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
-		/** @var Meeting $meeting */
 		$meeting = $this->meetings->getById($id);
-		if (!$meeting) {
+		if ($meeting === null) {
 			$this->error('Sraz nenalezen.');
 		}
 		if (!$this->allowed($meeting, 'edit')) {
@@ -249,7 +245,7 @@ class MeetingPresenter extends BasePresenter {
 	 */
 	protected function createComponentParticipator(): Multiplier {
 		return new Multiplier(function($meetingId) {
-			$userId = $this->getUser()->getIdentity()->id;
+			$userId = $this->getUser()->getIdentity()->getId();
 			$meeting = $this->meetings->getById($meetingId);
 			$youParticipate = array_reduce(iterator_to_array($meeting->visitors->get()), function($carry, $visitor) use ($userId) {
 				if ($visitor->id === $userId) {
@@ -269,7 +265,7 @@ class MeetingPresenter extends BasePresenter {
 		}
 
 		$meeting = $this->meetings->getById($values->id);
-		$userId = $this->getUser()->getIdentity()->id;
+		$userId = $this->getUser()->getIdentity()->getId();
 		$youParticipate = $values->action === 'unparticipate';
 		try {
 			if ($youParticipate) {

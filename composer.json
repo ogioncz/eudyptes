@@ -45,6 +45,9 @@
 		"mockery/mockery": "^1.5",
 		"nette/tester": "^2.4",
 		"nextras/migrations": "^3.0",
+		"nextras/orm-phpstan": "^1.0",
+		"phpstan/phpstan": "^1.7",
+		"phpstan/phpstan-nette": "^1.0",
 		"symfony/console": "^3.2"
 	},
 	"autoload": {

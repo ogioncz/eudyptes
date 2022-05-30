@@ -27,9 +27,6 @@ class PostPresenter extends BasePresenter {
 	public App\Model\UserRepository $users;
 
 	#[Nette\DI\Attributes\Inject]
-	public Nette\Http\IRequest $request;
-
-	#[Nette\DI\Attributes\Inject]
 	public Nette\Caching\Storage $storage;
 
 	public function renderShow($id): void {
@@ -66,7 +63,8 @@ class PostPresenter extends BasePresenter {
 	protected function createComponentPostForm() {
 		$form = new Nette\Application\UI\Form;
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$renderer = new Renderers\Bs3FormRenderer();
+		$form->setRenderer($renderer);
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 		$form->addCheckbox('published', 'Zveřejnit')->setDefaultValue(true);
@@ -77,7 +75,7 @@ class PostPresenter extends BasePresenter {
 
 		$submitButton = $form->addSubmit('save', 'Uložit');
 		$submitButton->onClick[] = [$this, 'postFormSucceeded'];
-		$form->getRenderer()->primaryButton = $submitButton;
+		$renderer->primaryButton = $submitButton;
 
 		return $form;
 	}
@@ -111,7 +109,7 @@ class PostPresenter extends BasePresenter {
 		}
 
 		if ($this->getAction() === 'create') {
-			$post->user = $this->users->getById($this->getUser()->getIdentity()->id);
+			$post->user = $this->users->getById($this->getUser()->getIdentity()->getId());
 		}
 
 		$this->posts->persistAndFlush($post);
@@ -121,8 +119,8 @@ class PostPresenter extends BasePresenter {
 		$revision->title = $values->title;
 		$revision->post = $post;
 		$revision->content = $formatted['text'];
-		$revision->user = $this->getUser()->getIdentity()->id;
-		$revision->ip = $this->request->remoteAddress;
+		$revision->user = $this->getUser()->getIdentity()->getId();
+		$revision->ip = $this->getHttpRequest()->getRemoteAddress();
 		$post->revisions->add($revision);
 
 		$cache = new Cache($this->storage, 'posts');

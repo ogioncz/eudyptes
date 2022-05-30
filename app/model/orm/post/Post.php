@@ -7,6 +7,7 @@ namespace App\Model;
 use DateTimeImmutable;
 use Nette;
 use Nextras\Orm\Entity\Entity;
+use Nextras\Orm\Relationships\OneHasMany;
 
 /**
  * Post
