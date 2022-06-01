@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Presenters;
 
 use Exception;
-use Nette;
+use Nette\Application\BadRequestException;
 use Tracy\Debugger;
 
 /**
@@ -13,7 +13,7 @@ use Tracy\Debugger;
  */
 class ErrorPresenter extends BasePresenter {
 	public function renderDefault(Exception $exception): void {
-		if ($exception instanceof Nette\Application\BadRequestException) {
+		if ($exception instanceof BadRequestException) {
 			$code = $exception->getCode();
 			// load template 403.latte or 404.latte or ... 4xx.latte
 			$this->setView(\in_array($code, [403, 404, 405, 410, 500], true) ? $code : '4xx');

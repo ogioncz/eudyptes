@@ -2,11 +2,14 @@
 
 declare(strict_types=1);
 
+use Nette\Bootstrap\Configurator;
+use Tester\Environment;
+
 require __DIR__ . '/../../vendor/autoload.php';
 
-Tester\Environment::setup();
+Environment::setup();
 
-$configurator = new \Nette\Bootstrap\Configurator();
+$configurator = new Configurator();
 $configurator->setDebugMode(false);
 $configurator->setTempDirectory(__DIR__ . '/../../temp');
 

@@ -15,8 +15,9 @@ declare(strict_types=1);
 namespace App\Components;
 
 use DateTimeImmutable;
+use Nextras\FormComponents\Controls\DateTimeControlPrototype;
 
-class TimePicker extends \Nextras\FormComponents\Controls\DateTimeControlPrototype {
+class TimePicker extends DateTimeControlPrototype {
 	/** @see http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#valid-time-string */
 	protected const W3C_TIME_FORMAT = 'H:i';
 

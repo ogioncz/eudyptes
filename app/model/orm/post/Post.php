@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use DateTimeImmutable;
-use Nette;
+use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
@@ -23,7 +23,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property-read PostRevision $lastRevision {virtual}
  * @property OneHasMany|PostRevision[] $revisions {1:m PostRevision::$post, orderBy=[timestamp, DESC]}
  */
-class Post extends Entity implements Nette\Security\Resource {
+class Post extends Entity implements Resource {
 	public function getterLastRevision(): PostRevision {
 		return $this->revisions->get()->orderBy(['timestamp' => 'DESC'])->fetch();
 	}

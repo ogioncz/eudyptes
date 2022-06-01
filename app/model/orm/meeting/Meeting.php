@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use DateTimeImmutable;
-use Nette;
+use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
 
@@ -23,7 +23,7 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property string $ip
  * @property ManyHasMany|User[] $visitors {m:m User::$visitedMeetings, isMain=true}
  */
-class Meeting extends Entity implements Nette\Security\Resource {
+class Meeting extends Entity implements Resource {
 	public function getResourceId(): string {
 		return 'meeting';
 	}

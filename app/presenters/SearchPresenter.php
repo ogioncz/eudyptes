@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use Nette;
+use Nette\DI\Attributes\Inject;
+use Nette\DI\Container;
 
 /**
  * SearchPresenter shows search results.
  */
 class SearchPresenter extends BasePresenter {
-	#[Nette\DI\Attributes\Inject]
-	public Nette\DI\Container $context;
+	#[Inject]
+	public Container $context;
 
 	private int $itemsPerPage = 15;
 

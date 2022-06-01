@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Helpers\Formatting\Parser;
 
-use Alb\OEmbed;
+use Alb\OEmbed\Simple as OEmbedSimple;
 use App\Helpers\Formatting\Element\OembedBlock;
 use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
 use League\CommonMark\Cursor;
 use League\CommonMark\Inline\Element\Link;
+use Tracy\Debugger;
 
 class OembedParser implements BlockParserInterface {
 	public function __construct(
-		private OEmbed\Simple $oembed,
+		private OEmbedSimple $oembed,
 		/** @param string[] */
 		private array $whitelistedDomains,
 	) {
@@ -42,7 +43,7 @@ class OembedParser implements BlockParserInterface {
 					return true;
 				}
 			} catch (\Exception $e) {
-				\Tracy\Debugger::log($e);
+				Debugger::log($e);
 			} // can’t serve, link is better than nothing so let’s leave it at that
 		}
 

@@ -4,20 +4,22 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use Nette;
-use Nextras\FormsRendering\Renderers;
+use Nette\Application\Attributes\Persistent;
+use Nette\Application\UI\Form;
+use Nette\Security\AuthenticationException;
+use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 
 /**
  * SignPresenter handles user sign-ins and sign-outs.
  */
 class SignPresenter extends BasePresenter {
-	#[Nette\Application\Attributes\Persistent]
+	#[Persistent]
 	public $backlink = '';
 
-	protected function createComponentSignInForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form();
+	protected function createComponentSignInForm(): Form {
+		$form = new Form();
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$form->setRenderer(new Bs3FormRenderer());
 		$form->addText('username', 'Uživatelské jméno:')->setRequired('Zadej prosím své uživatelské jméno.')->getControlPrototype()->autofocus = true;
 
 		$form->addPassword('password', 'Heslo:')->setRequired('Zadej prosím své heslo.');
@@ -31,7 +33,7 @@ class SignPresenter extends BasePresenter {
 		return $form;
 	}
 
-	public function signInFormSucceeded(Nette\Application\UI\Form $form): void {
+	public function signInFormSucceeded(Form $form): void {
 		$values = $form->getValues();
 
 		if ($values->remember) {
@@ -44,7 +46,7 @@ class SignPresenter extends BasePresenter {
 			$this->getUser()->login($values->username, $values->password);
 			$this->restoreRequest($this->backlink);
 			$this->redirect('Homepage:');
-		} catch (Nette\Security\AuthenticationException $e) {
+		} catch (AuthenticationException $e) {
 			$form->addError($e->getMessage());
 		}
 	}

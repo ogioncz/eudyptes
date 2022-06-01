@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Helpers\Formatting;
 
 use DateTimeImmutable;
-use Nette;
+use Nette\SmartObject;
 use Nette\Utils\Json;
 
 class CustomTags {
-	use Nette\SmartObject;
+	use SmartObject;
 
 	public static function item($text) {
 		$text = preg_replace_callback('/<(?P<prefix>cp-)(?P<type>(?:item|furniture|igloo|floor|location|puffleitem))(?P<attr>[^>]*)>(?P<id>\d+)<\/(?P=prefix)(?P=type)>/sU', function($match) {

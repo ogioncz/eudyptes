@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App;
-use Nette;
+use App\Model\PostRepository;
+use Nette\DI\Attributes\Inject;
 
 /**
  * HomepagePresenter handles the front page of the site.
  */
 class HomepagePresenter extends BasePresenter {
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\PostRepository $posts;
+	#[Inject]
+	public PostRepository $posts;
 
 	public function renderDefault(): void {
 		$paginator = $this['paginator']->getPaginator();

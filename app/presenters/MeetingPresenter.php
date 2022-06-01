@@ -4,31 +4,38 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App;
-use App\Helpers\Formatting;
+use App\Components\Participator;
+use App\Helpers\Formatting\Formatter;
+use App\Model\HelperLoader;
 use App\Model\Meeting;
-use Nette;
+use App\Model\MeetingRepository;
+use App\Model\UserRepository;
+use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;
+use Nette\DI\Attributes\Inject;
 use Nette\Forms\Container;
 use Nette\Forms\Controls\SubmitButton;
+use Nette\Http\IResponse;
 use Nette\Utils\Json;
-use Nextras\FormsRendering\Renderers;
+use Nextras\FormComponents\Controls\DateControl;
+use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
+use Tracy\Debugger;
 
 /**
  * MeetingPresenter handles user-organised meetings and events.
  */
 class MeetingPresenter extends BasePresenter {
-	#[Nette\DI\Attributes\Inject]
-	public Formatting\Formatter $formatter;
+	#[Inject]
+	public Formatter $formatter;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\MeetingRepository $meetings;
+	#[Inject]
+	public MeetingRepository $meetings;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\UserRepository $users;
+	#[Inject]
+	public UserRepository $users;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\HelperLoader $helperLoader;
+	#[Inject]
+	public HelperLoader $helperLoader;
 
 	public function renderList(): void {
 		if (!$this->getUser()->isLoggedIn()) {
@@ -41,10 +48,10 @@ class MeetingPresenter extends BasePresenter {
 		}
 	}
 
-	protected function createComponentMeetingForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form();
+	protected function createComponentMeetingForm(): Form {
+		$form = new Form();
 		$form->addProtection();
-		$renderer = new Renderers\Bs3FormRenderer();
+		$renderer = new Bs3FormRenderer();
 		$form->setRenderer($renderer);
 
 		$submit = $form->addSubmit('firstsend', 'Odeslat a zveřejnit');
@@ -52,7 +59,7 @@ class MeetingPresenter extends BasePresenter {
 		$submit->onClick[] = [$this, 'meetingFormSucceeded'];
 
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
-		$dateDateControl = $form['date'] = new \Nextras\FormComponents\Controls\DateControl('Datum:');
+		$dateDateControl = $form['date'] = new DateControl('Datum:');
 		$dateDateControl->setRequired();
 		$form->addText('server', 'Server:')->setRequired();
 
@@ -104,7 +111,7 @@ class MeetingPresenter extends BasePresenter {
 				$this->error('Sraz nenalezen.');
 			}
 			if (!$this->allowed($meeting, $this->getAction())) {
-				$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+				$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 			}
 		}
 
@@ -175,7 +182,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('meeting', $this->getAction())) {
-			$this->error('Pro založení srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro založení srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 	}
 
@@ -188,17 +195,17 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Sraz nenalezen.');
 		}
 		if (!$this->allowed($meeting, 'edit')) {
-			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 		$data = $meeting->toArray();
 		$data['times'] = Json::decode($meeting->program, Json::FORCE_ARRAY);
 		$this['meetingForm']->setDefaults($data);
 	}
 
-	protected function createComponentDeleteForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form();
+	protected function createComponentDeleteForm(): Form {
+		$form = new Form();
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$form->setRenderer(new Bs3FormRenderer());
 
 		$submit = $form->addSubmit('send', 'Ano, smazat');
 		$submit->getControlPrototype()->removeClass('btn-primary')->addClass('btn-danger');
@@ -216,7 +223,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Sraz nenalezen.');
 		}
 		if (!$this->allowed($meeting, $this->getAction())) {
-			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 
 		$this->meetings->removeAndFlush($meeting);
@@ -234,7 +241,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Sraz nenalezen.');
 		}
 		if (!$this->allowed('meeting', $this->getAction())) {
-			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 
 		$this->getTemplate()->meeting = $meeting;
@@ -255,11 +262,11 @@ class MeetingPresenter extends BasePresenter {
 				return $carry;
 			}, false);
 
-			return new App\Components\Participator($meeting, $youParticipate, [$this, 'participatorClicked'], $this->helperLoader);
+			return new Participator($meeting, $youParticipate, [$this, 'participatorClicked'], $this->helperLoader);
 		});
 	}
 
-	public function participatorClicked(Nette\Application\UI\Form $form, $values): void {
+	public function participatorClicked(Form $form, $values): void {
 		if (!$this->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
@@ -276,7 +283,7 @@ class MeetingPresenter extends BasePresenter {
 			$youParticipate = !$youParticipate;
 			$this->meetings->persistAndFlush($meeting);
 		} catch (\Exception $e) {
-			\Tracy\Debugger::log($e);
+			Debugger::log($e);
 		}
 
 		$form->getComponent('action')->value = $youParticipate ? 'unparticipate' : 'participate';

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use Nette;
+use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
 
@@ -19,7 +19,7 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property bool $obtainable
  * @property ManyHasMany|User[] $owners {m:m User::$ownedStamps}
  */
-class Stamp extends Entity implements Nette\Security\Resource {
+class Stamp extends Entity implements Resource {
 	public const DIFFICULTY_NOTHING = '0';
 	public const DIFFICULTY_EASY = '1';
 	public const DIFFICULTY_MODERATE = '2';

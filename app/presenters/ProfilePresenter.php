@@ -4,47 +4,53 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App;
+use App\Model\StampRepository;
 use App\Model\Token;
+use App\Model\TokenRepository;
+use App\Model\User;
+use App\Model\UserRepository;
 use DateTimeImmutable;
 use Exception;
-use Nette;
+use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
+use Nette\DI\Attributes\Inject;
+use Nette\DI\Container;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
+use Nette\Security\Passwords;
 use Nette\Utils\Image;
 use Nette\Utils\Random;
 use Nextras\Dbal\UniqueConstraintViolationException;
-use Nextras\FormsRendering\Renderers;
+use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 use Tracy\Debugger;
 
 /**
  * ProfilePresenter displays user profiles.
  */
 class ProfilePresenter extends BasePresenter {
-	#[Nette\DI\Attributes\Inject]
-	public Nette\DI\Container $context;
+	#[Inject]
+	public Container $context;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\UserRepository $users;
+	#[Inject]
+	public UserRepository $users;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\TokenRepository $tokens;
+	#[Inject]
+	public TokenRepository $tokens;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\StampRepository $stamps;
+	#[Inject]
+	public StampRepository $stamps;
 
-	#[Nette\Application\Attributes\Persistent]
+	#[Persistent]
 	public $token = null;
 
-	#[Nette\Application\Attributes\Persistent]
+	#[Persistent]
 	public $tid = null;
 
-	#[Nette\Application\Attributes\Persistent]
-	public ?App\Model\User $profile = null;
+	#[Persistent]
+	public ?User $profile = null;
 
-	#[Nette\DI\Attributes\Inject]
-	public Nette\Security\Passwords $passwords;
+	#[Inject]
+	public Passwords $passwords;
 
 	public function renderList(): void {
 		$template = $this->getTemplate();
@@ -85,7 +91,7 @@ class ProfilePresenter extends BasePresenter {
 	protected function createComponentProfileForm() {
 		$form = new Form();
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$form->setRenderer(new Bs3FormRenderer());
 		$username = $form->addText('username', 'Přezdívka:');
 
 		if (!$this->allowed($this->profile, 'rename')) {
@@ -175,7 +181,7 @@ class ProfilePresenter extends BasePresenter {
 	protected function createComponentSignUpForm() {
 		$form = new Form();
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$form->setRenderer(new Bs3FormRenderer());
 		$username = $form->addText('username', 'Přezdívka:');
 		$username->getControlPrototype()->autofocus = true;
 		$username->setRequired('Zadej prosím své uživatelské jméno.');
@@ -204,7 +210,7 @@ class ProfilePresenter extends BasePresenter {
 	public function signUpFormSucceeded(Form $form): void {
 		$values = $form->getValues();
 
-		$user = new App\Model\User();
+		$user = new User();
 		$user->username = $values->username;
 		$user->password = $this->passwords->hash($values->password);
 		$user->email = $values->email;
@@ -238,7 +244,7 @@ class ProfilePresenter extends BasePresenter {
 	protected function createComponentPasswordResetRequestForm() {
 		$form = new Form();
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$form->setRenderer(new Bs3FormRenderer());
 		$type = $form->addRadioList('type', null, ['username' => 'Přezdívka', 'email' => 'E-Mail'])->setDefaultValue('username');
 		$type->getSeparatorPrototype()->setName('');
 		$type->setRequired('Vyber si e-mail nebo přezdívku.');
@@ -304,7 +310,7 @@ class ProfilePresenter extends BasePresenter {
 	protected function createComponentPasswordResetForm() {
 		$form = new Form();
 		$form->addProtection();
-		$form->setRenderer(new Renderers\Bs3FormRenderer());
+		$form->setRenderer(new Bs3FormRenderer());
 
 		$token = $form->addHidden('token', $this->token);
 		$tid = $form->addHidden('tid', $this->tid);

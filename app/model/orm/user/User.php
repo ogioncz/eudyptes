@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Model;
 
 use DateTimeImmutable;
-use Nette;
+use Nette\Security\Resource;
+use Nette\Security\Role;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
@@ -36,7 +37,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property ManyHasMany|Meeting[] $visitedMeetings {m:m Meeting::$visitors}
  * @property ManyHasMany|Stamp[] $ownedStamps {m:m Stamp::$owners , isMain=true}
  */
-class User extends Entity implements Nette\Security\Role, Nette\Security\Resource {
+class User extends Entity implements Role, Resource {
 	public function getRoleId(): string {
 		return $this->role;
 	}

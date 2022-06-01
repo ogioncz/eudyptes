@@ -11,6 +11,7 @@ use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\HtmlElement;
+use Ogion\Utils\DarnDOMDocument;
 
 class ChatQuoteRenderer implements BlockRendererInterface {
 	public function __construct(private ChatRepository $chats, private HelperLoader $helperLoader) {
@@ -29,7 +30,7 @@ class ChatQuoteRenderer implements BlockRendererInterface {
 			return '';
 		}
 
-		$dom = new \Ogion\Utils\DarnDOMDocument();
+		$dom = new DarnDOMDocument();
 		$dom->loadHTML($original->content);
 		$xpath = new \DOMXPath($dom);
 		$nodes = $xpath->query('//blockquote');

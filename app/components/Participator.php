@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Components;
 
-use App;
-use Nette;
+use App\Model\HelperLoader;
+use App\Model\Meeting;
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
 use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 
 class Participator extends Control {
@@ -14,10 +15,10 @@ class Participator extends Control {
 	private $callback;
 
 	public function __construct(
-		private App\Model\Meeting $meeting,
+		private Meeting $meeting,
 		private bool $youParticipate,
 		callable $callback,
-		private \App\Model\HelperLoader $helperLoader,
+		private HelperLoader $helperLoader,
 	) {
 		$this->callback = $callback;
 	}
@@ -33,8 +34,8 @@ class Participator extends Control {
 		$template->render();
 	}
 
-	protected function createComponentParticipateForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form();
+	protected function createComponentParticipateForm(): Form {
+		$form = new Form();
 		$form->addProtection();
 		$form->getElementPrototype()->class('ajax');
 		$form->setRenderer(new Bs3FormRenderer());

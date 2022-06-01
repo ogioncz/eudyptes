@@ -4,36 +4,47 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App;
+use App\Components\ChatControl;
+use App\Helpers\Formatting\ChatFormatter;
+use App\Model\ChatRepository;
+use App\Model\HelperLoader;
+use App\Model\MeetingRepository;
+use App\Model\PageRepository;
+use App\Model\TelegramNotifier;
+use App\Model\UserRepository;
 use DateTimeImmutable;
-use Nette;
+use Nette\Application\UI\Presenter;
+use Nette\Application\UI\Template;
+use Nette\DI\Attributes\Inject;
+use Nette\Iterators\Mapper;
+use Nette\Security\Permission;
 
 /**
  * BasePresenter is the mother of all presenters.
  */
-abstract class BasePresenter extends Nette\Application\UI\Presenter {
-	#[Nette\DI\Attributes\Inject]
-	public Nette\Security\Permission $authorizator;
+abstract class BasePresenter extends Presenter {
+	#[Inject]
+	public Permission $authorizator;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\UserRepository $users;
+	#[Inject]
+	public UserRepository $users;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\MeetingRepository $meetings;
+	#[Inject]
+	public MeetingRepository $meetings;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\PageRepository $pages;
+	#[Inject]
+	public PageRepository $pages;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\ChatRepository $chats;
+	#[Inject]
+	public ChatRepository $chats;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\TelegramNotifier $telegramNotifier;
+	#[Inject]
+	public TelegramNotifier $telegramNotifier;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Helpers\Formatting\ChatFormatter $chatFormatter;
+	#[Inject]
+	public ChatFormatter $chatFormatter;
 
-	public function __construct(private \App\Model\HelperLoader $helperLoader) {
+	public function __construct(private HelperLoader $helperLoader) {
 		parent::__construct();
 	}
 
@@ -54,7 +65,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		parent::startup();
 	}
 
-	protected function createTemplate($class = null): Nette\Application\UI\Template {
+	protected function createTemplate($class = null): Template {
 		$template = parent::createTemplate($class);
 		$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
 
@@ -74,7 +85,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		$template->logo = file_get_contents(__DIR__ . '/../../www/images/bar.svg');
 
 		$template->customStyles = iterator_to_array(
-			new Nette\Iterators\Mapper(
+			new Mapper(
 				new \CallbackFilterIterator(
 					new \DirectoryIterator(__DIR__ . '/../../www/custom'),
 					fn($f, $_k) => $f->isFile() && $f->getExtension() == 'css'
@@ -84,7 +95,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		);
 
 		$template->customScripts = iterator_to_array(
-			new Nette\Iterators\Mapper(
+			new Mapper(
 				new \CallbackFilterIterator(
 					new \DirectoryIterator(__DIR__ . '/../../www/custom'),
 					fn($f, $_k) => $f->isFile() && $f->getExtension() == 'js'
@@ -94,7 +105,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 		);
 
 		$headers = iterator_to_array(
-			new Nette\Iterators\Mapper(
+			new Mapper(
 				new \CallbackFilterIterator(
 					new \DirectoryIterator(__DIR__ . '/../../www/images/header'),
 					fn($f, $_k) => $f->isFile() && \in_array($f->getExtension(), ['png', 'jpg', 'jpeg', 'gif'], true)
@@ -118,8 +129,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter {
 	/**
 	 * Chat control factory.
 	 */
-	protected function createComponentChat(): \App\Components\ChatControl {
-		$chat = new App\Components\ChatControl(
+	protected function createComponentChat(): ChatControl {
+		$chat = new ChatControl(
 			$this->chats,
 			$this->users,
 			$this->telegramNotifier,

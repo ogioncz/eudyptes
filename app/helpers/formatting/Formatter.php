@@ -4,17 +4,25 @@ declare(strict_types=1);
 
 namespace App\Helpers\Formatting;
 
-use Alb\OEmbed;
+use Alb\OEmbed\Simple as OEmbedSimple;
+use App\Helpers\Formatting\Element\OembedBlock;
+use App\Helpers\Formatting\Element\Spoiler;
+use App\Helpers\Formatting\Parser\EmoticonParser;
+use App\Helpers\Formatting\Parser\OembedParser;
+use App\Helpers\Formatting\Parser\SpoilerParser;
+use App\Helpers\Formatting\Renderer\OembedRenderer;
+use App\Helpers\Formatting\Renderer\SpoilerRenderer;
 use App\Model\PageRepository;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
-use Nette;
+use Nette\SmartObject;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
+use Tracy\Debugger;
 
 class Formatter {
-	use Nette\SmartObject;
+	use SmartObject;
 
 	public static $OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be', 'vimeo.com', 'soundcloud.com', 'twitter.com'];
 
@@ -132,14 +140,14 @@ class Formatter {
 	public function __construct(
 		private PageRepository $pages,
 		private \HTMLPurifier $purifier,
-		private OEmbed\Simple $oembed,
+		private OEmbedSimple $oembed,
 	) {
 		$environment = Environment::createCommonMarkEnvironment();
-		$environment->addInlineParser(new Parser\EmoticonParser(self::$images, self::$emoticons));
-		$environment->addBlockParser(new Parser\OembedParser($oembed, self::$OEMBED_WHITELIST));
-		$environment->addBlockParser(new Parser\SpoilerParser());
-		$environment->addBlockRenderer(\App\Helpers\Formatting\Element\OembedBlock::class, new Renderer\OembedRenderer());
-		$environment->addBlockRenderer(\App\Helpers\Formatting\Element\Spoiler::class, new Renderer\SpoilerRenderer());
+		$environment->addInlineParser(new EmoticonParser(self::$images, self::$emoticons));
+		$environment->addBlockParser(new OembedParser($oembed, self::$OEMBED_WHITELIST));
+		$environment->addBlockParser(new SpoilerParser());
+		$environment->addBlockRenderer(OembedBlock::class, new OembedRenderer());
+		$environment->addBlockRenderer(Spoiler::class, new SpoilerRenderer());
 		$this->parser = new DocParser($environment);
 		$this->htmlRenderer = new HtmlRenderer($environment);
 	}
@@ -176,7 +184,7 @@ class Formatter {
 							return $replacements[$match[0]] = '<figure class="rwd-media rwd-ratio-16-9">' . $request->getHtml() . '</figure>';
 						}
 					} catch (\Exception $e) {
-						\Tracy\Debugger::log($e);
+						Debugger::log($e);
 					} // can’t serve, link is better than nothing so let’s leave it at that
 				}
 

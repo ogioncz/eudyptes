@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App;
-use Nette;
+use Actinarium\Diff\Diff;
+use Actinarium\Diff\Renderer\Html\InlineRenderer;
+use Actinarium\Diff\Renderer\Html\SideBySideRenderer;
+use App\Model\RevisionRepository;
+use Nette\DI\Attributes\Inject;
 
 /**
  * RevisionPresenter displays and diffs revisions.
  */
 class RevisionPresenter extends BasePresenter {
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\RevisionRepository $revisions;
+	#[Inject]
+	public RevisionRepository $revisions;
 
 	public function renderShow($id): void {
 		$revision = $this->revisions->getById($id);
@@ -34,11 +37,11 @@ class RevisionPresenter extends BasePresenter {
 			$this->error('Revize nenalezena.');
 		}
 
-		$differ = new \Actinarium\Diff\Diff(explode("\n", $old->markdown), explode("\n", $new->markdown));
+		$differ = new Diff(explode("\n", $old->markdown), explode("\n", $new->markdown));
 		if ($type === 'inline') {
-			$renderer = new \Actinarium\Diff\Renderer\Html\InlineRenderer();
+			$renderer = new InlineRenderer();
 		} else {
-			$renderer = new \Actinarium\Diff\Renderer\Html\SideBySideRenderer();
+			$renderer = new SideBySideRenderer();
 		}
 
 		$diff = $differ->render($renderer);

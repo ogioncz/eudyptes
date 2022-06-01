@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use Nette;
+use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
@@ -22,7 +22,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property-read Revision $lastRevision {virtual}
  * @property OneHasMany|Revision[] $revisions {1:m Revision::$page, orderBy=[timestamp, DESC]}
  */
-class Page extends Entity implements Nette\Security\Resource {
+class Page extends Entity implements Resource {
 	public function getterLastRevision(): Revision {
 		return $this->revisions->get()->orderBy(['timestamp' => 'DESC'])->fetch();
 	}

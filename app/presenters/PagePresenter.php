@@ -4,40 +4,48 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App\Helpers\Formatting;
-use App\Model;
-use Nette;
+use App\Helpers\Formatting\Formatter;
+use App\Model\Page;
+use App\Model\PageRepository;
+use App\Model\Revision;
+use App\Model\UserRepository;
+use Nette\Application\UI\Form;
 use Nette\Caching\Cache;
+use Nette\Caching\Storage;
+use Nette\DI\Attributes\Inject;
 use Nette\Forms\Controls\SubmitButton;
+use Nette\Http\IResponse;
+use Nette\Http\Response;
 use Nette\Utils\Strings;
-use Nextras\FormsRendering\Renderers;
+use Nextras\Dbal\UniqueConstraintViolationException;
+use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 use Tracy\Debugger;
 
 /**
  * PagePresenter handles wiki articles.
  */
 class PagePresenter extends BasePresenter {
-	#[Nette\DI\Attributes\Inject]
-	public Formatting\Formatter $formatter;
+	#[Inject]
+	public Formatter $formatter;
 
-	#[Nette\DI\Attributes\Inject]
-	public Model\PageRepository $pages;
+	#[Inject]
+	public PageRepository $pages;
 
-	#[Nette\DI\Attributes\Inject]
-	public Model\UserRepository $users;
+	#[Inject]
+	public UserRepository $users;
 
-	#[Nette\DI\Attributes\Inject]
-	public Nette\Http\Response $response;
+	#[Inject]
+	public Response $response;
 
-	#[Nette\DI\Attributes\Inject]
-	public Nette\Caching\Storage $storage;
+	#[Inject]
+	public Storage $storage;
 
 	public function renderShow($slug): void {
 		$page = $this->pages->getBy(['slug' => $slug]);
 		if (!$page) {
 			if ($this->allowed('page', 'create')) {
 				$httpResponse = $this->response;
-				$httpResponse->setCode(Nette\Http\Response::S404_NOT_FOUND);
+				$httpResponse->setCode(Response::S404_NOT_FOUND);
 				$this->getTemplate()->slug = $slug;
 				$this->setView('@no-page');
 				$this->sendTemplate();
@@ -71,7 +79,7 @@ class PagePresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($page, 'purge')) {
-			$this->error('Nemáš právo vymazat cache!', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Nemáš právo vymazat cache!', IResponse::S403_FORBIDDEN);
 		}
 
 		$cache = new Cache($this->storage, 'pages');
@@ -121,10 +129,10 @@ class PagePresenter extends BasePresenter {
 		$this->getTemplate()->pages = $pagesJson;
 	}
 
-	protected function createComponentPageForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form();
+	protected function createComponentPageForm(): Form {
+		$form = new Form();
 		$form->addProtection();
-		$renderer = new Renderers\Bs3FormRenderer();
+		$renderer = new Bs3FormRenderer();
 		$form->setRenderer($renderer);
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$slug = $form->addText('slug', 'Adresa:')->setRequired()->setType('url');
@@ -152,7 +160,7 @@ class PagePresenter extends BasePresenter {
 		$values = $button->getForm()->getValues();
 
 		if ($this->getAction() === 'create') {
-			$page = new Model\Page();
+			$page = new Page();
 		} else {
 			$id = $this->getParameter('id');
 			$page = $this->pages->getById($id);
@@ -162,7 +170,7 @@ class PagePresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($this->getAction() === 'create' ? 'page' : $page, $this->getAction())) {
-			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 
 		$page->title = $values->title;
@@ -180,7 +188,7 @@ class PagePresenter extends BasePresenter {
 		try {
 			$this->pages->persistAndFlush($page);
 
-			$revision = new Model\Revision();
+			$revision = new Revision();
 			$revision->markdown = $values->markdown;
 			$revision->page = $page;
 			$revision->content = $formatted['text'];
@@ -195,7 +203,7 @@ class PagePresenter extends BasePresenter {
 
 			$this->flashMessage('Stránka byla odeslána.', 'success');
 			$this->redirect('show', $page->slug);
-		} catch (\Nextras\Dbal\UniqueConstraintViolationException $e) {
+		} catch (UniqueConstraintViolationException $e) {
 			$this->flashMessage('Stránka s tímto slugem již existuje.', 'danger');
 		}
 	}
@@ -226,7 +234,7 @@ class PagePresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('page', $this->getAction())) {
-			$this->error('Pro vytváření stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro vytváření stránek musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 
 		if (isset($slug)) {
@@ -243,7 +251,7 @@ class PagePresenter extends BasePresenter {
 			$this->error('Stránka nenalezena');
 		}
 		if (!$this->allowed($page, $this->getAction())) {
-			$this->error('Pro úpravu stránek musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro úpravu stránek musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 
 		$data = $page->toArray();

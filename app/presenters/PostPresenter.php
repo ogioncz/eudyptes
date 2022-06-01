@@ -4,30 +4,34 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App;
-use App\Helpers\Formatting;
+use App\Helpers\Formatting\Formatter;
 use App\Model\Post;
+use App\Model\PostRepository;
 use App\Model\PostRevision;
-use Nette;
+use App\Model\UserRepository;
+use Nette\Application\UI\Form;
 use Nette\Caching\Cache;
+use Nette\Caching\Storage;
+use Nette\DI\Attributes\Inject;
 use Nette\Forms\Controls\SubmitButton;
-use Nextras\FormsRendering\Renderers;
+use Nette\Http\IResponse;
+use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 
 /**
  * PostPresenter handles news posts.
  */
 class PostPresenter extends BasePresenter {
-	#[Nette\DI\Attributes\Inject]
-	public Formatting\Formatter $formatter;
+	#[Inject]
+	public Formatter $formatter;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\PostRepository $posts;
+	#[Inject]
+	public PostRepository $posts;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\UserRepository $users;
+	#[Inject]
+	public UserRepository $users;
 
-	#[Nette\DI\Attributes\Inject]
-	public Nette\Caching\Storage $storage;
+	#[Inject]
+	public Storage $storage;
 
 	public function renderShow($id): void {
 		$post = $this->posts->getById($id);
@@ -45,7 +49,7 @@ class PostPresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($post, 'purge')) {
-			$this->error('Nemáš právo vymazat cache!', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Nemáš právo vymazat cache!', IResponse::S403_FORBIDDEN);
 		}
 
 		$cache = new Cache($this->storage, 'posts');
@@ -61,9 +65,9 @@ class PostPresenter extends BasePresenter {
 	}
 
 	protected function createComponentPostForm() {
-		$form = new Nette\Application\UI\Form();
+		$form = new Form();
 		$form->addProtection();
-		$renderer = new Renderers\Bs3FormRenderer();
+		$renderer = new Bs3FormRenderer();
 		$form->setRenderer($renderer);
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
@@ -98,7 +102,7 @@ class PostPresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($this->getAction() === 'create' ? 'post' : $post, $this->getAction())) {
-			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 
 		$post->published = $values->published;
@@ -158,7 +162,7 @@ class PostPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('post', $this->getAction())) {
-			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 	}
 
@@ -167,7 +171,7 @@ class PostPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('post', $this->getAction())) {
-			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 		$post = $this->posts->getById($id);
 		if (!$post) {

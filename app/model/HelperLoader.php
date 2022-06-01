@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use Nette;
+use Latte\Runtime\Filters;
+use Nette\Application\Application;
+use Nette\SmartObject;
 use Nette\Utils\Html;
 
 class HelperLoader {
-	use Nette\SmartObject;
+	use SmartObject;
 
-	public function __construct(private Nette\Application\Application $app) {
+	public function __construct(private Application $app) {
 	}
 
 	public function loader(string $filter): ?callable {
@@ -37,7 +39,7 @@ class HelperLoader {
 
 	public function dateNA(\DateTimeImmutable $time = null, $format = null) {
 		if ($time) {
-			return \Latte\Runtime\Filters::date($time, $format);
+			return Filters::date($time, $format);
 		} else {
 			return 'N/A';
 		}

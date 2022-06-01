@@ -4,20 +4,26 @@ declare(strict_types=1);
 
 namespace App\Components;
 
-use App;
+use App\Helpers\Formatting\ChatFormatter;
 use App\Model\Chat;
-use Nette;
+use App\Model\ChatRepository;
+use App\Model\HelperLoader;
+use App\Model\TelegramNotifier;
+use App\Model\UserRepository;
 use Nette\Application\Responses\TextResponse;
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
+use Nette\Http\IRequest;
+use Nette\Http\IResponse;
 
 class ChatControl extends Control {
 	public function __construct(
-		private App\Model\ChatRepository $chats,
-		private App\Model\UserRepository $users,
-		private App\Model\TelegramNotifier $telegramNotifier,
-		private App\Model\HelperLoader $helperLoader,
-		private Nette\Http\IRequest $request,
-		private App\Helpers\Formatting\ChatFormatter $chatFormatter,
+		private ChatRepository $chats,
+		private UserRepository $users,
+		private TelegramNotifier $telegramNotifier,
+		private HelperLoader $helperLoader,
+		private IRequest $request,
+		private ChatFormatter $chatFormatter,
 	) {
 	}
 
@@ -32,8 +38,8 @@ class ChatControl extends Control {
 		$template->render();
 	}
 
-	protected function createComponentChatForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form();
+	protected function createComponentChatForm(): Form {
+		$form = new Form();
 		$form->addProtection();
 		$form->addTextArea('content', 'Zpráva:')->setRequired();
 
@@ -60,13 +66,13 @@ class ChatControl extends Control {
 		}
 	}
 
-	public function chatFormSucceeded(Nette\Application\UI\Form $form): void {
+	public function chatFormSucceeded(Form $form): void {
 		$presenter = $this->getPresenter();
 		if (!$presenter->getUser()->isLoggedIn()) {
 			$this->redirect('Sign:in', ['backlink' => $presenter->storeRequest()]);
 		}
 		if (!$presenter->getUser()->isAllowed('chat', 'send')) {
-			$presenter->error('Pro odesílání do chatu musíš mít oprávnění.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$presenter->error('Pro odesílání do chatu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
 		}
 		$values = $form->getValues();
 

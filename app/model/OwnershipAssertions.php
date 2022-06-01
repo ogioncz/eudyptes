@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use Nette;
 use Nette\Security\Permission;
 use Nette\Security\Resource;
 use Nette\Security\Role;
+use Nette\SmartObject;
 
 class OwnershipAssertions {
-	use Nette\SmartObject;
+	use SmartObject;
 
 	public static function ownsPage(Permission $acl): bool {
 		return $acl->getQueriedResource() instanceof Resource && $acl->getQueriedRole() instanceof Role && $acl->getQueriedRole()->id === $acl->getQueriedResource()->user->id;

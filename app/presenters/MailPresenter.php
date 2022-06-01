@@ -4,30 +4,34 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App;
-use App\Helpers\Formatting;
+use App\Helpers\Formatting\Formatter;
 use App\Model\Mail;
-use Nette;
+use App\Model\MailRepository;
+use App\Model\UserRepository;
+use Nette\Application\UI\Form;
+use Nette\DI\Attributes\Inject;
+use Nette\DI\Container;
 use Nette\Forms\Controls\SubmitButton;
+use Nette\Http\IResponse;
 use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
-use Nextras\FormsRendering\Renderers;
+use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 
 /**
  * MailPresenter handles messages sent between users.
  */
 class MailPresenter extends BasePresenter {
-	#[Nette\DI\Attributes\Inject]
-	public Nette\DI\Container $context;
+	#[Inject]
+	public Container $context;
 
-	#[Nette\DI\Attributes\Inject]
-	public Formatting\Formatter $formatter;
+	#[Inject]
+	public Formatter $formatter;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\MailRepository $mails;
+	#[Inject]
+	public MailRepository $mails;
 
-	#[Nette\DI\Attributes\Inject]
-	public App\Model\UserRepository $users;
+	#[Inject]
+	public UserRepository $users;
 
 	private int $itemsPerPage = 25;
 
@@ -63,7 +67,7 @@ class MailPresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($mail, 'show')) {
-			$this->error('Toto není tvá zpráva', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Toto není tvá zpráva', IResponse::S403_FORBIDDEN);
 		}
 
 		if (!$mail->read && $mail->recipient->id === $this->getUser()->getIdentity()->getId()) {
@@ -74,10 +78,10 @@ class MailPresenter extends BasePresenter {
 		$template->mail = $mail;
 	}
 
-	protected function createComponentMailForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form();
+	protected function createComponentMailForm(): Form {
+		$form = new Form();
 		$form->addProtection();
-		$renderer = new Renderers\Bs3FormRenderer();
+		$renderer = new Bs3FormRenderer();
 		$form->setRenderer($renderer);
 
 		$subject = $form->addText('subject', 'Předmět:')->setRequired();
@@ -131,7 +135,7 @@ class MailPresenter extends BasePresenter {
 			}
 
 			if ($original->recipient->id !== $this->getUser()->getIdentity()->getId()) {
-				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
+				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', IResponse::S403_FORBIDDEN);
 			}
 
 			$mail->recipient = $this->users->getById($original->sender);
@@ -238,7 +242,7 @@ class MailPresenter extends BasePresenter {
 		}
 
 		if ($original->recipient->id !== $this->getUser()->getIdentity()->getId()) {
-			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', Nette\Http\IResponse::S403_FORBIDDEN);
+			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', IResponse::S403_FORBIDDEN);
 		}
 		$this->getTemplate()->original = $original;
 	}

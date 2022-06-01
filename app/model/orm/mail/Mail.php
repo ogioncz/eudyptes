@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use DateTimeImmutable;
-use Nette;
+use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
@@ -25,7 +25,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property Mail $root {virtual}
  * @property OneHasMany|Mail[] $replies {1:m Mail::$reaction, orderBy=[timestamp, ASC]}
  */
-class Mail extends Entity implements Nette\Security\Resource {
+class Mail extends Entity implements Resource {
 	public function getResourceId(): string {
 		return 'mail';
 	}

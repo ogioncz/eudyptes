@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use Nette;
+use Nette\Application\Application;
 
 class TransformCustomSchemesUriFilter extends \HTMLPurifier_URIFilter {
 	/** * @var string */
 	public $name = 'TransformCustomSchemes';
 
-	public function __construct(protected Nette\Application\Application $app) {
+	public function __construct(protected Application $app) {
 	}
 
 	/**
