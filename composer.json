@@ -47,6 +47,7 @@
 		"nextras/orm-phpstan": "^1.0",
 		"phpstan/phpstan": "^1.7",
 		"phpstan/phpstan-nette": "^1.0",
+		"rector/rector": "^0.13.3",
 		"symfony/console": "^6.0"
 	},
 	"autoload": {
@@ -58,6 +59,7 @@
 	"scripts": {
 		"cs": "php-cs-fixer fix --verbose --dry-run --diff",
 		"fix": "php-cs-fixer fix --verbose --diff",
+		"rector": "vendor/bin/rector",
 		"test": "php vendor/bin/tester tests/unit"
 	}
 }
