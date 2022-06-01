@@ -37,7 +37,7 @@
 		"kdyby/forms-replicator": "^2.0",
 		"nextras/orm": "^4.0",
 		"actinarium/php-diff": "dev-master",
-		"longman/telegram-bot": "^0.35.0",
+		"longman/telegram-bot": "^0.77",
 		"league/commonmark": "^1.0.0"
 	},
 	"require-dev": {
@@ -47,7 +47,7 @@
 		"nextras/orm-phpstan": "^1.0",
 		"phpstan/phpstan": "^1.7",
 		"phpstan/phpstan-nette": "^1.0",
-		"symfony/console": "^3.2"
+		"symfony/console": "^6.0"
 	},
 	"autoload": {
 		"classmap": ["app", "vendor/others"]
