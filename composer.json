@@ -56,6 +56,8 @@
 		"sort-packages": true
 	},
 	"scripts": {
+		"cs": "php-cs-fixer fix --verbose --dry-run --diff",
+		"fix": "php-cs-fixer fix --verbose --diff",
 		"test": "php vendor/bin/tester tests/unit"
 	}
 }

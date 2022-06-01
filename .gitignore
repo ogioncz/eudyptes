@@ -12,3 +12,4 @@ assets/vendor
 node_modules
 www/css/screen.css
 www/javascript/
+.php-cs-fixer.cache

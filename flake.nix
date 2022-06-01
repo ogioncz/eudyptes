@@ -19,9 +19,10 @@
       in {
         devShells = {
           default = pkgs.mkShell {
-            nativeBuildInputs = [
-              pkgs.php
-              pkgs.php.packages.composer
+            nativeBuildInputs = with pkgs; [
+              php
+              php.packages.composer
+              php.packages.php-cs-fixer
             ];
           };
         };
