@@ -36,9 +36,9 @@ class RevisionPresenter extends BasePresenter {
 
 		$differ = new \Actinarium\Diff\Diff(explode("\n", $old->markdown), explode("\n", $new->markdown));
 		if ($type === 'inline') {
-			$renderer = new \Actinarium\Diff\Renderer\Html\InlineRenderer;
+			$renderer = new \Actinarium\Diff\Renderer\Html\InlineRenderer();
 		} else {
-			$renderer = new \Actinarium\Diff\Renderer\Html\SideBySideRenderer;
+			$renderer = new \Actinarium\Diff\Renderer\Html\SideBySideRenderer();
 		}
 
 		$diff = $differ->render($renderer);

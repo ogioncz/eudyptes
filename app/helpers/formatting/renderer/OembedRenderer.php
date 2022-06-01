@@ -21,7 +21,7 @@ class OembedRenderer implements BlockRendererInterface {
 		}
 
 		$attrs = [
-			'class' => "rwd-media rwd-ratio-16-9"
+			'class' => 'rwd-media rwd-ratio-16-9',
 		];
 
 		return new HtmlElement('figure', $attrs, $block->getResponse()->getHtml());

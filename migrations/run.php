@@ -17,10 +17,10 @@ $connection = $container->getByType(Connection::class);
 $dbal = new NextrasAdapter($connection);
 $driver = new MySqlDriver($dbal);
 
-if (PHP_SAPI === 'cli') {
-    $controller = new ConsoleController($driver);
+if (\PHP_SAPI === 'cli') {
+	$controller = new ConsoleController($driver);
 } else {
-    $controller = new HttpController($driver);
+	$controller = new HttpController($driver);
 }
 
 $baseDir = __DIR__;

@@ -7,7 +7,8 @@ namespace App\Model;
 use Nextras\Orm\Model\Model;
 
 /**
- * Model
+ * Model.
+ *
  * @property-read MeetingRepository $meetings
  * @property-read UserRepository $users
  * @property-read PostRepository $posts

@@ -33,12 +33,11 @@ class Participator extends Control {
 		$template->render();
 	}
 
-
 	protected function createComponentParticipateForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form;
+		$form = new Nette\Application\UI\Form();
 		$form->addProtection();
 		$form->getElementPrototype()->class('ajax');
-		$form->setRenderer(new Bs3FormRenderer);
+		$form->setRenderer(new Bs3FormRenderer());
 		$form->getElementPrototype()->removeClass('form-horizontal');
 		$form->getElementPrototype()->addClass('form-inline');
 		$form->addHidden('action', $this->youParticipate ? 'unparticipate' : 'participate');

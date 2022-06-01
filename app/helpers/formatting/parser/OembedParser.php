@@ -29,6 +29,7 @@ class OembedParser implements BlockParserInterface {
 
 		if ($url === null) {
 			$cursor->restoreState($previousState);
+
 			return false;
 		}
 
@@ -37,6 +38,7 @@ class OembedParser implements BlockParserInterface {
 				$response = $this->oembed->request($url);
 				if ($response) {
 					$context->addBlock(new OembedBlock($response));
+
 					return true;
 				}
 			} catch (\Exception $e) {
@@ -45,11 +47,13 @@ class OembedParser implements BlockParserInterface {
 		}
 
 		$cursor->restoreState($previousState);
+
 		return false;
 	}
 
 	private static function getDomain($url) {
 		preg_match(self::getUrlRegex(), $url, $match);
+
 		return $match[1];
 	}
 
@@ -58,6 +62,7 @@ class OembedParser implements BlockParserInterface {
 		$domainRegex = "[0-9$alphaRegex](?:[-0-9$alphaRegex]{0,61}[0-9$alphaRegex])?";
 		$topDomainRegex = "[$alphaRegex][-0-9$alphaRegex]{0,17}[$alphaRegex]";
 		$urlRegex = "(^https?://((?:$domainRegex\\.)*$topDomainRegex|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)i";
+
 		return $urlRegex;
 	}
 }

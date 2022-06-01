@@ -24,6 +24,7 @@ class SpoilerParser implements BlockParserInterface {
 			} else {
 				$context->addBlock(new Spoiler());
 			}
+
 			return true;
 		} else {
 			$cursor->restoreState($previousState);
@@ -34,6 +35,7 @@ class SpoilerParser implements BlockParserInterface {
 						$context->setContainer($container);
 						$container->finalize($context, $context->getLineNumber());
 						$context->getBlockCloser()->setLastMatchedContainer($container);
+
 						return true;
 					}
 				} while ($container = $container->parent());
@@ -41,6 +43,7 @@ class SpoilerParser implements BlockParserInterface {
 		}
 
 		$cursor->restoreState($previousState);
+
 		return false;
 	}
 }

@@ -22,15 +22,18 @@ class ChatQuoteParser implements BlockParserInterface {
 
 		if ($quoteBlock === null) {
 			$cursor->restoreState($previousState);
+
 			return false;
 		}
 
 		$context->getContainer()->appendChild(new ChatQuote(self::getQuotedId($quoteBlock)));
+
 		return true;
 	}
 
 	private static function getQuotedId($quote): int {
 		preg_match(self::$regex, $quote, $match);
+
 		return (int) $match[1];
 	}
 }

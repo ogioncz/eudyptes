@@ -83,7 +83,7 @@ class ProfilePresenter extends BasePresenter {
 	}
 
 	protected function createComponentProfileForm() {
-		$form = new Form;
+		$form = new Form();
 		$form->addProtection();
 		$form->setRenderer(new Renderers\Bs3FormRenderer());
 		$username = $form->addText('username', 'Přezdívka:');
@@ -116,6 +116,7 @@ class ProfilePresenter extends BasePresenter {
 		$form->addSubmit('send', 'Uložit změny');
 
 		$form->onSuccess[] = [$this, 'profileFormSucceeded'];
+
 		return $form;
 	}
 
@@ -172,7 +173,7 @@ class ProfilePresenter extends BasePresenter {
 	}
 
 	protected function createComponentSignUpForm() {
-		$form = new Form;
+		$form = new Form();
 		$form->addProtection();
 		$form->setRenderer(new Renderers\Bs3FormRenderer());
 		$username = $form->addText('username', 'Přezdívka:');
@@ -196,13 +197,14 @@ class ProfilePresenter extends BasePresenter {
 		$form->addSubmit('send', 'Zaregistrovat se');
 
 		$form->onSuccess[] = [$this, 'signUpFormSucceeded'];
+
 		return $form;
 	}
 
 	public function signUpFormSucceeded(Form $form): void {
 		$values = $form->getValues();
 
-		$user = new App\Model\User;
+		$user = new App\Model\User();
 		$user->username = $values->username;
 		$user->password = $this->passwords->hash($values->password);
 		$user->email = $values->email;
@@ -234,7 +236,7 @@ class ProfilePresenter extends BasePresenter {
 	}
 
 	protected function createComponentPasswordResetRequestForm() {
-		$form = new Form;
+		$form = new Form();
 		$form->addProtection();
 		$form->setRenderer(new Renderers\Bs3FormRenderer());
 		$type = $form->addRadioList('type', null, ['username' => 'Přezdívka', 'email' => 'E-Mail'])->setDefaultValue('username');
@@ -255,6 +257,7 @@ class ProfilePresenter extends BasePresenter {
 		$form->addSubmit('send', 'Obnovit heslo');
 
 		$form->onSuccess[] = [$this, 'passwordResetRequestFormSucceeded'];
+
 		return $form;
 	}
 
@@ -266,7 +269,7 @@ class ProfilePresenter extends BasePresenter {
 
 		if ($user) {
 			$t = Random::generate();
-			$token = new Token;
+			$token = new Token();
 			$token->token = $this->passwords->hash($t);
 			$token->ip = $this->getHttpRequest()->getRemoteAddress();
 			$token->expiration = (new DateTimeImmutable())->add(\DateInterval::createFromDateString('2 day'));
@@ -281,10 +284,10 @@ class ProfilePresenter extends BasePresenter {
 
 			$mailTemplate->url = $this->link('//Profile:resetPassword', ['tid' => $token->id, 'token' => $t]);
 			$mailTemplate->username = $user->username;
-			$mail = new Message;
+			$mail = new Message();
 			$mail->setFrom('admin@fan-club-penguin.cz')->addTo($user->email)->setHtmlBody((string) $mailTemplate);
 
-			$mailer = new SendmailMailer;
+			$mailer = new SendmailMailer();
 			$mailer->send($mail);
 
 			$this->flashMessage('Na tvůj e-mail jsme ti poslali odkaz ke změně hesla.', 'success');
@@ -299,7 +302,7 @@ class ProfilePresenter extends BasePresenter {
 	}
 
 	protected function createComponentPasswordResetForm() {
-		$form = new Form;
+		$form = new Form();
 		$form->addProtection();
 		$form->setRenderer(new Renderers\Bs3FormRenderer());
 
@@ -313,6 +316,7 @@ class ProfilePresenter extends BasePresenter {
 		$form->addSubmit('send', 'Změnit heslo');
 
 		$form->onSuccess[] = [$this, 'passwordResetFormSucceeded'];
+
 		return $form;
 	}
 

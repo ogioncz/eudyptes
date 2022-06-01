@@ -14,6 +14,7 @@ class TelegramNotifier {
 
 	public function chatMessage($username, $message) {
 		$data = ['chat_id' => $this->chatId, 'text' => "${username} píše na webu: „${message}“"];
+
 		return Request::sendMessage($data);
 	}
 }

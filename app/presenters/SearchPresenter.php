@@ -30,9 +30,9 @@ class SearchPresenter extends BasePresenter {
 
 			if ($response->matches == 0) {
 				$this->flashMessage('Nebyl nalezen žádný výsledek.', 'danger');
-			} else if ($response->matches == 1) {
+			} elseif ($response->matches == 1) {
 				$this->flashMessage('Byl nalezen jeden výsledek.', 'success');
-			} else if ($response->matches < 5) {
+			} elseif ($response->matches < 5) {
 				$this->flashMessage('Byly nalezeny ' . $response->matches . ' výsledky.', 'success');
 			} else {
 				$this->flashMessage('Bylo nalezeno ' . $response->matches . ' výsledků.', 'success');

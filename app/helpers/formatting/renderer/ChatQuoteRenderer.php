@@ -29,7 +29,7 @@ class ChatQuoteRenderer implements BlockRendererInterface {
 			return '';
 		}
 
-		$dom = new \Ogion\Utils\DarnDOMDocument;
+		$dom = new \Ogion\Utils\DarnDOMDocument();
 		$dom->loadHTML($original->content);
 		$xpath = new \DOMXPath($dom);
 		$nodes = $xpath->query('//blockquote');

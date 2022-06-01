@@ -26,6 +26,7 @@ class UrlParser implements InlineParserInterface {
 
 		if ($url === null) {
 			$cursor->restoreState($previousState);
+
 			return false;
 		}
 
@@ -40,6 +41,7 @@ class UrlParser implements InlineParserInterface {
 		$domainRegex = "[0-9$alphaRegex](?:[-0-9$alphaRegex]{0,61}[0-9$alphaRegex])?";
 		$topDomainRegex = "[$alphaRegex][-0-9$alphaRegex]{0,17}[$alphaRegex]";
 		$urlRegex = "(^https?://((?:$domainRegex\\.)*$topDomainRegex|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?\\b)i";
+
 		return $urlRegex;
 	}
 }

@@ -9,7 +9,8 @@ use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\Entity;
 
 /**
- * Revision
+ * Revision.
+ *
  * @property int $id {primary}
  * @property Page $page {m:1 Page::$revisions}
  * @property string $markdown
@@ -18,7 +19,6 @@ use Nextras\Orm\Entity\Entity;
  * @property DateTimeImmutable|null $timestamp {default now}
  * @property User $user {m:1 User::$createdRevisions}
  * @property string $ip
- *
  * @property-read Revision|null $previous {virtual}
  * @property-read Revision|null $next {virtual}
  */

@@ -46,7 +46,7 @@ class Formatter {
 		'coin' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/coin.svg', 'alt' => '(coin)', 'width' => 30, 'height' => 29],
 		'chocolate-ice-cream' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/chocolate-ice-cream.svg', 'alt' => '(icebrown)', 'width' => 30, 'height' => 29],
 		'operation-puffle-epf-logo' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/operation-puffle-epf-logo.svg', 'alt' => '(epf)', 'width' => 30, 'height' => 29],
-		'strawberry-ice-cream' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/strawberry-ice-cream.svg', 'alt' => '(icepink)', 'width' => 30, 'height' => 29]
+		'strawberry-ice-cream' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/strawberry-ice-cream.svg', 'alt' => '(icepink)', 'width' => 30, 'height' => 29],
 	];
 
 	public static $emoticons = [
@@ -122,7 +122,7 @@ class Formatter {
 		'(coin)' => 'coin',
 		'(icebrown)' => 'chocolate-ice-cream',
 		'(epf)' => 'operation-puffle-epf-logo',
-		'(icepink)' => 'strawberry-ice-cream'
+		'(icepink)' => 'strawberry-ice-cream',
 	];
 
 	private DocParser $parser;
@@ -179,8 +179,10 @@ class Formatter {
 						\Tracy\Debugger::log($e);
 					} // can’t serve, link is better than nothing so let’s leave it at that
 				}
+
 				return $match[0];
 			}
+
 			return $replacements[$match[0]];
 		}, $text);
 
@@ -189,10 +191,11 @@ class Formatter {
 
 	public function replaceGalleries($text) {
 		$imageSize = function($url, $thumbUrl) {
-			$size = @getImageSize($thumbUrl);
+			$size = @getimagesize($thumbUrl);
 			if (!$size) {
-				$size = @getImageSize($url);
+				$size = @getimagesize($url);
 			}
+
 			return $size;
 		};
 		$text = preg_replace_callback('/<gallery type="carousel">(.+?)<\/gallery>/s', function($match) use ($imageSize) {
@@ -207,20 +210,23 @@ class Formatter {
 				$code = '<div class="item' . ($maxHeight == 0 ? ' active' : '') . '"><a href="' . $url . '" data-lightbox="true"><img src="' . $thumbUrl . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '"></a>' . $caption . '</div>' . \PHP_EOL;
 				$maxWidth = max($maxWidth, $width);
 				$maxHeight = max($maxHeight, $height);
+
 				return $code;
 			}, $match[1]);
+
 			return <<<EOT
-<figure>
-<div id="carousel-{$temp}" class="carousel slide" style="width: {$maxWidth}px; height: {$maxHeight}px;" data-interval="false">
-<div class="carousel-inner">
-{$images}
-</div>
-<a href="#carousel-{$temp}" data-slide="prev" class="left carousel-control">‹</a>
-<a href="#carousel-{$temp}" data-slide="next" class="right carousel-control">›</a>
-</div>
-</figure>
-EOT;
+				<figure>
+				<div id="carousel-{$temp}" class="carousel slide" style="width: {$maxWidth}px; height: {$maxHeight}px;" data-interval="false">
+				<div class="carousel-inner">
+				{$images}
+				</div>
+				<a href="#carousel-{$temp}" data-slide="prev" class="left carousel-control">‹</a>
+				<a href="#carousel-{$temp}" data-slide="next" class="right carousel-control">›</a>
+				</div>
+				</figure>
+				EOT;
 		}, $text);
+
 		return $text;
 	}
 

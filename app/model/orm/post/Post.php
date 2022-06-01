@@ -10,7 +10,8 @@ use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
 /**
- * Post
+ * Post.
+ *
  * @property int $id {primary}
  * @property User $user {m:1 User::$createdPosts}
  * @property string $title {virtual}
@@ -19,7 +20,6 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property DateTimeImmutable $createdAt {default now}
  * @property bool $likeable {default false}
  * @property bool $published {default true}
- *
  * @property-read PostRevision $lastRevision {virtual}
  * @property OneHasMany|PostRevision[] $revisions {1:m PostRevision::$post, orderBy=[timestamp, DESC]}
  */

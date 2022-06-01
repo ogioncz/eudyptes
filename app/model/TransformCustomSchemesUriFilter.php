@@ -25,6 +25,7 @@ class TransformCustomSchemesUriFilter extends \HTMLPurifier_URIFilter {
 
 		$uri->scheme = ucfirst($uri->scheme);
 		$uri = new \HTMLPurifier_URI(null, null, null, null, $this->app->getPresenter()->link($uri->scheme . ':show', $uri->path), $uri->query, $uri->fragment);
+
 		return true;
 	}
 }

@@ -61,7 +61,7 @@ class PostPresenter extends BasePresenter {
 	}
 
 	protected function createComponentPostForm() {
-		$form = new Nette\Application\UI\Form;
+		$form = new Nette\Application\UI\Form();
 		$form->addProtection();
 		$renderer = new Renderers\Bs3FormRenderer();
 		$form->setRenderer($renderer);
@@ -88,7 +88,7 @@ class PostPresenter extends BasePresenter {
 		$values = $button->getForm()->getValues();
 
 		if ($this->getAction() === 'create') {
-			$post = new Post;
+			$post = new Post();
 		} else {
 			$id = $this->getParameter('id');
 			$post = $this->posts->getById($id);
@@ -104,7 +104,7 @@ class PostPresenter extends BasePresenter {
 		$post->published = $values->published;
 
 		$formatted = $this->formatter->format($values->markdown);
-		if (count($formatted['errors'])) {
+		if (\count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
@@ -114,7 +114,7 @@ class PostPresenter extends BasePresenter {
 
 		$this->posts->persistAndFlush($post);
 
-		$revision = new PostRevision;
+		$revision = new PostRevision();
 		$revision->markdown = $values->markdown;
 		$revision->title = $values->title;
 		$revision->post = $post;
@@ -141,7 +141,7 @@ class PostPresenter extends BasePresenter {
 
 		$formatted = $this->formatter->format($values['markdown']);
 
-		if (count($formatted['errors'])) {
+		if (\count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 

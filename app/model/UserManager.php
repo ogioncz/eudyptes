@@ -30,9 +30,9 @@ class UserManager implements Nette\Security\IAuthenticator {
 
 		if (!$user) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi neexistující uživatelské jméno.', self::IDENTITY_NOT_FOUND);
-		} else if (!$this->passwords->verify($password, $user->password)) {
+		} elseif (!$this->passwords->verify($password, $user->password)) {
 			throw new Nette\Security\AuthenticationException('Zadal jsi nesprávné heslo.', self::INVALID_CREDENTIAL);
-		} else if ($this->passwords->needsRehash($user->password)) {
+		} elseif ($this->passwords->needsRehash($user->password)) {
 			$user->password = $this->passwords->hash($password);
 			$this->users->persistAndFlush($user);
 		}

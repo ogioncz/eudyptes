@@ -56,7 +56,7 @@ class PagePresenter extends BasePresenter {
 		$this->getTemplate()->content = $cache->load($page->slug, function() use ($page) {
 			$formatted = $this->formatter->format($page->markdown);
 
-			if (count($formatted['errors'])) {
+			if (\count($formatted['errors'])) {
 				Debugger::log($this->formatter->formatErrors($formatted['errors']));
 			}
 
@@ -122,7 +122,7 @@ class PagePresenter extends BasePresenter {
 	}
 
 	protected function createComponentPageForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form;
+		$form = new Nette\Application\UI\Form();
 		$form->addProtection();
 		$renderer = new Renderers\Bs3FormRenderer();
 		$form->setRenderer($renderer);
@@ -152,7 +152,7 @@ class PagePresenter extends BasePresenter {
 		$values = $button->getForm()->getValues();
 
 		if ($this->getAction() === 'create') {
-			$page = new Model\Page;
+			$page = new Model\Page();
 		} else {
 			$id = $this->getParameter('id');
 			$page = $this->pages->getById($id);
@@ -168,7 +168,7 @@ class PagePresenter extends BasePresenter {
 		$page->title = $values->title;
 		$formatted = $this->formatter->format($values['markdown']);
 
-		if (count($formatted['errors'])) {
+		if (\count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 
@@ -180,7 +180,7 @@ class PagePresenter extends BasePresenter {
 		try {
 			$this->pages->persistAndFlush($page);
 
-			$revision = new Model\Revision;
+			$revision = new Model\Revision();
 			$revision->markdown = $values->markdown;
 			$revision->page = $page;
 			$revision->content = $formatted['text'];
@@ -209,7 +209,7 @@ class PagePresenter extends BasePresenter {
 
 		$formatted = $this->formatter->format($values['markdown']);
 
-		if (count($formatted['errors'])) {
+		if (\count($formatted['errors'])) {
 			$this->flashMessage($this->formatter->formatErrors($formatted['errors']), 'warning');
 		}
 

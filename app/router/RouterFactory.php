@@ -28,6 +28,7 @@ class RouterFactory {
 		$router->addRoute('mail/<id \d+>', 'Mail:show', Route::ONE_WAY);
 		$router->addRoute('page/show/<slug .*>', ['presenter' => 'Page', 'action' => 'show']);
 		$router->addRoute('<presenter>/<action>[/<id>]', 'Homepage:default');
+
 		return $router;
 	}
 }

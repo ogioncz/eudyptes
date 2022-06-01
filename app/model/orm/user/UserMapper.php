@@ -10,6 +10,7 @@ class UserMapper extends BaseMapper {
 	protected function createConventions(): IConventions {
 		$conventions = parent::createConventions();
 		$conventions->addMapping('notifyByMail', 'mailnotify');
+
 		return $conventions;
 	}
 }

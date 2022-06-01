@@ -11,7 +11,8 @@ use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
 
 /**
- * User
+ * User.
+ *
  * @property int $id {primary}
  * @property string $username
  * @property string $password
@@ -23,7 +24,6 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property DateTimeImmutable|null $registered {default now}
  * @property DateTimeImmutable $lastActivity {default now}
  * @property string|null $profile
- *
  * @property OneHasMany|Token[] $tokens {1:m Token::$user}
  * @property OneHasMany|Post[] $createdPosts {1:m Post::$user, orderBy=[createdAt, DESC]}
  * @property OneHasMany|Page[] $createdPages {1:m Page::$user, orderBy=[title, DESC]}

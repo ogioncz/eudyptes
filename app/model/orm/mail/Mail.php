@@ -10,7 +10,8 @@ use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
 /**
- * Mail
+ * Mail.
+ *
  * @property int $id {primary}
  * @property User|null $sender {m:1 User::$sentMail}
  * @property User|null $recipient {m:1 User::$receivedMail}
@@ -21,7 +22,6 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property DateTimeImmutable $timestamp {default now}
  * @property string $ip
  * @property bool $read {default false}
- *
  * @property Mail $root {virtual}
  * @property OneHasMany|Mail[] $replies {1:m Mail::$reaction, orderBy=[timestamp, ASC]}
  */
@@ -35,6 +35,7 @@ class Mail extends Entity implements Nette\Security\Resource {
 		while ($mail->reaction) {
 			$mail = $mail->reaction;
 		}
+
 		return $mail;
 	}
 }

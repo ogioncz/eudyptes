@@ -8,7 +8,8 @@ use DateTimeImmutable;
 use Nextras\Orm\Entity\Entity;
 
 /**
- * Token
+ * Token.
+ *
  * @property int $id {primary}
  * @property User $user {m:1 User::$tokens}
  * @property string $token

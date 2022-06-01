@@ -10,7 +10,8 @@ use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
 
 /**
- * Meeting
+ * Meeting.
+ *
  * @property int $id {primary}
  * @property User $user {m:1 User::$createdMeetings}
  * @property string $title
@@ -20,7 +21,6 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property string $markdown
  * @property string $description
  * @property string $ip
- *
  * @property ManyHasMany|User[] $visitors {m:m User::$visitedMeetings, isMain=true}
  */
 class Meeting extends Entity implements Nette\Security\Resource {

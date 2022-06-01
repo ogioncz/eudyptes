@@ -21,7 +21,6 @@ class ChatControl extends Control {
 	) {
 	}
 
-
 	public function render(): void {
 		$template = $this->getTemplate();
 		$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
@@ -34,7 +33,7 @@ class ChatControl extends Control {
 	}
 
 	protected function createComponentChatForm(): Nette\Application\UI\Form {
-		$form = new Nette\Application\UI\Form;
+		$form = new Nette\Application\UI\Form();
 		$form->addProtection();
 		$form->addTextArea('content', 'Zpráva:')->setRequired();
 
@@ -73,7 +72,7 @@ class ChatControl extends Control {
 
 		$formatter = $this->chatFormatter;
 
-		$chat = new Chat;
+		$chat = new Chat();
 		$chat->content = $formatter->format($values->content);
 		$chat->ip = $this->request->getRemoteAddress();
 		$chat->user = $this->users->getById($presenter->getUser()->getIdentity()->getId());

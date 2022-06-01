@@ -8,7 +8,8 @@ use DateTimeImmutable;
 use Nextras\Orm\Entity\Entity;
 
 /**
- * Chat
+ * Chat.
+ *
  * @property int $id {primary}
  * @property User $user {m:1 User::$createdChats}
  * @property string $content

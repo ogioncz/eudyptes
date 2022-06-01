@@ -9,7 +9,8 @@ use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\Entity;
 
 /**
- * PostRevision
+ * PostRevision.
+ *
  * @property int $id {primary}
  * @property Post $post {m:1 Post::$revisions}
  * @property string $title
@@ -18,7 +19,6 @@ use Nextras\Orm\Entity\Entity;
  * @property DateTimeImmutable|null $timestamp {default now}
  * @property User $user {m:1 User::$createdPostRevisions}
  * @property string $ip
- *
  * @property-read Revision|null $previous {virtual}
  * @property-read Revision|null $next {virtual}
  */

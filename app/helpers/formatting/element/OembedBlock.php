@@ -16,22 +16,21 @@ class OembedBlock extends AbstractBlock {
 	}
 
 	/**
-	 * Returns the response of the OEmbed provider
+	 * Returns the response of the OEmbed provider.
 	 */
 	public function getResponse(): Response {
 		return $this->response;
 	}
 
 	/**
-	 * Returns true if this block can contain the given block as a child node
-	 *
+	 * Returns true if this block can contain the given block as a child node.
 	 */
 	public function canContain(AbstractBlock $block): bool {
 		return false;
 	}
 
 	/**
-	 * Whether this is a code block
+	 * Whether this is a code block.
 	 */
 	public function isCode(): bool {
 		return false;

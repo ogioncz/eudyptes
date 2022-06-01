@@ -7,7 +7,7 @@ use Nextras\FormComponents\Controls\DateControl;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$configurator = new Nette\Bootstrap\Configurator;
+$configurator = new Nette\Bootstrap\Configurator();
 
 // $configurator->setDebugMode(TRUE);  // debug mode MUST NOT be enabled on production server
 $configurator->enableDebugger(__DIR__ . '/../log');

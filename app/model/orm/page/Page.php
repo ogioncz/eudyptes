@@ -9,7 +9,8 @@ use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
 
 /**
- * Page
+ * Page.
+ *
  * @property int $id {primary}
  * @property User $user {m:1 User::$createdPages}
  * @property string $slug
@@ -18,7 +19,6 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property-read string $redirect {virtual}
  * @property string|null $icon
  * @property bool $menu {default false}
- *
  * @property-read Revision $lastRevision {virtual}
  * @property OneHasMany|Revision[] $revisions {1:m Revision::$page, orderBy=[timestamp, DESC]}
  */
