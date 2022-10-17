@@ -17,6 +17,14 @@
 	],
 	"require": {
 		"php": ">= 8.0",
+		"actinarium/php-diff": "dev-master",
+		"alb/oembed": "dev-master",
+		"ezyang/htmlpurifier": "dev-master",
+		"flaptor/indextank-php": "dev-master",
+		"kdyby/forms-replicator": "^2.0",
+		"latte/latte": "^2.9",
+		"league/commonmark": "^1.0.0",
+		"longman/telegram-bot": "^0.79.0",
 		"nette/application": "^3.0",
 		"nette/bootstrap": "^3.0",
 		"nette/caching": "^3.0",
@@ -29,16 +37,8 @@
 		"nette/utils": "^3.0",
 		"nextras/form-components": "^1.0",
 		"nextras/forms-rendering": "^1.0",
-		"latte/latte": "^2.9",
-		"tracy/tracy": "^2.9",
-		"flaptor/indextank-php": "dev-master",
-		"ezyang/htmlpurifier": "dev-master",
-		"alb/oembed": "dev-master",
-		"kdyby/forms-replicator": "^2.0",
 		"nextras/orm": "^4.0",
-		"actinarium/php-diff": "dev-master",
-		"longman/telegram-bot": "^0.77",
-		"league/commonmark": "^1.0.0"
+		"tracy/tracy": "^2.9"
 	},
 	"require-dev": {
 		"mockery/mockery": "^1.5",
@@ -47,7 +47,7 @@
 		"nextras/orm-phpstan": "^1.0",
 		"phpstan/phpstan": "^1.7",
 		"phpstan/phpstan-nette": "^1.0",
-		"rector/rector": "^0.13.3",
+		"rector/rector": "^0.14.6",
 		"symfony/console": "^6.0"
 	},
 	"autoload": {
