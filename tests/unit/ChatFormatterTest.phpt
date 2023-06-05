@@ -15,18 +15,18 @@ class ChatFormatterTest extends Tester\TestCase {
 	private $formatter;
 
 	function setUp() {
-		$adam = Mockery::mock('App\Model\User');
-		$eve = Mockery::mock('App\Model\User');
-		$chat1 = Mockery::mock('App\Model\Chat');
+		$adam = Mockery::mock(App\Model\User::class);
+		$eve = Mockery::mock(App\Model\User::class);
+		$chat1 = Mockery::mock(App\Model\Chat::class);
 		$chat1->shouldReceive('getValue')->with('content')->andReturn('<p>Ping</p>');
 		$chat1->shouldReceive('getValue')->with('user')->andReturn($adam);
-		$chat2 = Mockery::mock('App\Model\Chat');
+		$chat2 = Mockery::mock(App\Model\Chat::class);
 		$chat2->shouldReceive('getValue')->with('content')->andReturn("<blockquote><strong><a href=\"adam\">Adam</a></strong>\n<p>Ping</p></blockquote>\n<p>Pong</p>");
 		$chat2->shouldReceive('getValue')->with('user')->andReturn($eve);
-		$chats = Mockery::mock('App\Model\ChatRepository');
+		$chats = Mockery::mock(App\Model\ChatRepository::class);
 		$chats->shouldReceive('getById')->with(1)->andReturn($chat1);
 		$chats->shouldReceive('getById')->with(2)->andReturn($chat2);
-		$helperLoader = Mockery::mock('App\Model\HelperLoader');
+		$helperLoader = Mockery::mock(App\Model\HelperLoader::class);
 		$helperLoader->shouldReceive('userLink')->with($adam, true)->andReturn(Html::fromHtml('<a href="adam">Adam</a>'));
 		$helperLoader->shouldReceive('userLink')->with($eve, true)->andReturn(Html::fromHtml('<a href="adam">Eve</a>'));
 		$this->formatter = new ChatFormatter($chats, $helperLoader);

@@ -2,7 +2,12 @@
 
 namespace Test;
 
+use Alb;
 use App\Helpers\Formatting\Formatter;
+use App\Model\PageRepository;
+use HTMLPurifier;
+use HTMLPurifier_Context;
+use HTMLPurifier_ErrorCollector;
 use Mockery;
 use Tester;
 use Tester\Assert;
@@ -13,19 +18,19 @@ class FormatterTest extends Tester\TestCase {
 	private $formatter;
 
 	function setUp() {
-		$oembedResponse = Mockery::mock('Alb\OEmbed\Response');
+		$oembedResponse = Mockery::mock(Alb\OEmbed\Response::class);
 		$oembedResponse->shouldReceive('getHtml')->andReturn('<video src="nggyu.webm"></video>');
-		$errorCollector = Mockery::mock('HTMLPurifier_ErrorCollector');
+		$errorCollector = Mockery::mock(HTMLPurifier_ErrorCollector::class);
 		$errorCollector->shouldReceive('getRaw')->andReturn([]);
-		$purifierContext = Mockery::mock('HTMLPurifier_Context');
+		$purifierContext = Mockery::mock(HTMLPurifier_Context::class);
 		$purifierContext->shouldReceive('get')->with('ErrorCollector')->andReturn($errorCollector);
-		$pages = Mockery::mock('App\Model\PageRepository');
-		$purifier = Mockery::mock('HTMLPurifier');
+		$pages = Mockery::mock(PageRepository::class);
+		$purifier = Mockery::mock(HTMLPurifier::class);
 		$purifier->context = $purifierContext;
 		$purifier->shouldReceive('purify')->withAnyArgs()->andReturnUsing(function($text) {
 			return $text;
 		});
-		$oembed = Mockery::mock('Alb\OEmbed\Simple');
+		$oembed = Mockery::mock(Alb\OEmbed\Simple::class);
 		$oembed->shouldReceive('request')->with('https://youtu.be/dQw4w9WgXcQ')->andReturn($oembedResponse);
 		$this->formatter = new Formatter($pages, $purifier, $oembed);
 	}
