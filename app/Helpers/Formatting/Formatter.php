@@ -13,6 +13,7 @@ use App\Helpers\Formatting\Parser\SpoilerParser;
 use App\Helpers\Formatting\Renderer\OembedRenderer;
 use App\Helpers\Formatting\Renderer\SpoilerRenderer;
 use App\Model\Orm\Page\PageRepository;
+use HTMLPurifier_ErrorCollector as ErrorCollector;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
@@ -152,6 +153,17 @@ class Formatter {
 		$this->htmlRenderer = new HtmlRenderer($environment);
 	}
 
+	/**
+	 * @return array{
+	 * 	text: string,
+	 * 	errors: array<array{
+	 * 		0: int,
+	 * 		1: int,
+	 * 		2: string,
+	 * 		3: array<mixed>,
+	 * 	}>,
+	 * }
+	 */
 	public function format($markdown): array {
 		$markdown = $this->replaceGalleries($markdown);
 
