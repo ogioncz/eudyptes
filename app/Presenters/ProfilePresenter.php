@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App\Model\StampRepository;
-use App\Model\Token;
-use App\Model\TokenRepository;
-use App\Model\User;
-use App\Model\UserRepository;
+use App\Model\Orm\Stamp\StampRepository;
+use App\Model\Orm\Token\Token;
+use App\Model\Orm\Token\TokenRepository;
+use App\Model\Orm\User\User;
+use App\Model\Orm\User\UserRepository;
 use DateTimeImmutable;
 use Exception;
 use Nette\Application\Attributes\Persistent;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Components;
 
 use App\Model\HelperLoader;
-use App\Model\Meeting;
+use App\Model\Orm\Meeting\Meeting;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
 use Nextras\FormsRendering\Renderers\Bs3FormRenderer;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App\Components\ChatControl;
+use App\Components\Chat\ChatControl;
 use App\Helpers\Formatting\ChatFormatter;
-use App\Model\ChatRepository;
 use App\Model\HelperLoader;
-use App\Model\MeetingRepository;
-use App\Model\PageRepository;
+use App\Model\Orm\Chat\ChatRepository;
+use App\Model\Orm\Meeting\MeetingRepository;
+use App\Model\Orm\Page\PageRepository;
+use App\Model\Orm\User\UserRepository;
 use App\Model\TelegramNotifier;
-use App\Model\UserRepository;
 use DateTimeImmutable;
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Template;

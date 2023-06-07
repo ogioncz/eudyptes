@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Presenters;
 
 use App\Helpers\Formatting\Formatter;
-use App\Model\Page;
-use App\Model\PageRepository;
-use App\Model\Revision;
-use App\Model\UserRepository;
+use App\Model\Orm\Page\Page;
+use App\Model\Orm\Page\PageRepository;
+use App\Model\Orm\Revision\Revision;
+use App\Model\Orm\User\UserRepository;
 use Nette\Application\UI\Form;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;

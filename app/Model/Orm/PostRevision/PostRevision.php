@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\PostRevision;
 
+use App\Model\Orm\Post\Post;
+use App\Model\Orm\Revision\Revision;
+use App\Model\Orm\User\User;
 use DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\Entity;

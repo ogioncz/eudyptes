@@ -31,18 +31,18 @@ extensions:
 	dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
 
 orm:
-	model: App\Model\Orm
+	model: App\Model\Orm\Orm
 
 services:
 	- App\Model\UserManager
-	- App\RouterFactory
+	- App\Router\RouterFactory
 	- App\Model\PurifierFactory
 	- App\Model\HelperLoader
 	- App\Model\TelegramNotifier(%telegram.apiKey%, %telegram.chatId%, %telegram.botName%)
 	oembed: Alb\OEmbed\Simple
 	formatter: App\Helpers\Formatting\Formatter
 	chatFormatter: App\Helpers\Formatting\ChatFormatter
-	router: @App\RouterFactory::createRouter
+	router: @App\Router\RouterFactory::createRouter
 	purifier: @App\Model\PurifierFactory::createPurifier(@Nette\Application\Application, '%tempDir%/cache')
 	authorizator:
 		class: Nette\Security\Permission

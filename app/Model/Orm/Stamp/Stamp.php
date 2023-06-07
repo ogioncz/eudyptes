@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\Stamp;
 
+use App\Model\Orm\User\User;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;

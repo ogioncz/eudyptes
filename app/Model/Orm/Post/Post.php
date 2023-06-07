@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\Post;
 
+use App\Model\Orm\PostRevision\PostRevision;
+use App\Model\Orm\User\User;
 use DateTimeImmutable;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;

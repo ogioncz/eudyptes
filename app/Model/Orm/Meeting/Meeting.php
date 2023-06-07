@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\Meeting;
 
+use App\Model\Orm\User\User;
 use DateTimeImmutable;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;

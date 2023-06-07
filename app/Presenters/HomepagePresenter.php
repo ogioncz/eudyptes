@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
-use App\Model\PostRepository;
+use App\Model\Orm\Post\PostRepository;
 use Nette\DI\Attributes\Inject;
 
 /**

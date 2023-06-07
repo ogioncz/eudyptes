@@ -12,7 +12,7 @@ use App\Helpers\Formatting\Parser\OembedParser;
 use App\Helpers\Formatting\Parser\SpoilerParser;
 use App\Helpers\Formatting\Renderer\OembedRenderer;
 use App\Helpers\Formatting\Renderer\SpoilerRenderer;
-use App\Model\PageRepository;
+use App\Model\Orm\Page\PageRepository;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Helpers\Formatting\Renderer;
 
 use App\Helpers\Formatting\Element\ChatQuote;
-use App\Model\ChatRepository;
 use App\Model\HelperLoader;
+use App\Model\Orm\Chat\ChatRepository;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;

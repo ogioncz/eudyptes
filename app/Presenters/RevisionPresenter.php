@@ -7,7 +7,7 @@ namespace App\Presenters;
 use Actinarium\Diff\Diff;
 use Actinarium\Diff\Renderer\Html\InlineRenderer;
 use Actinarium\Diff\Renderer\Html\SideBySideRenderer;
-use App\Model\RevisionRepository;
+use App\Model\Orm\Revision\RevisionRepository;
 use Nette\DI\Attributes\Inject;
 
 /**

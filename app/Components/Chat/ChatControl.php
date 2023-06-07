@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Components;
+namespace App\Components\Chat;
 
 use App\Helpers\Formatting\ChatFormatter;
-use App\Model\Chat;
-use App\Model\ChatRepository;
 use App\Model\HelperLoader;
+use App\Model\Orm\Chat\Chat;
+use App\Model\Orm\Chat\ChatRepository;
+use App\Model\Orm\User\UserRepository;
 use App\Model\TelegramNotifier;
-use App\Model\UserRepository;
 use Nette\Application\Responses\TextResponse;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;

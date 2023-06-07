@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\Mail;
 
 use Nextras\Orm\Repository\Repository;
 

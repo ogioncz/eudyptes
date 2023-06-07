@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use App\Model\Orm\User\User;
 use Latte\Runtime\Filters;
 use Nette\Application\Application;
 use Nette\SmartObject;

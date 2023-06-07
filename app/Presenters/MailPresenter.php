@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Presenters;
 
 use App\Helpers\Formatting\Formatter;
-use App\Model\Mail;
-use App\Model\MailRepository;
-use App\Model\UserRepository;
+use App\Model\Orm\Mail\Mail;
+use App\Model\Orm\Mail\MailRepository;
+use App\Model\Orm\User\UserRepository;
 use Nette\Application\UI\Form;
 use Nette\DI\Attributes\Inject;
 use Nette\DI\Container;

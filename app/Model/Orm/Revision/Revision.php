@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\Revision;
 
+use App\Model\Orm\Page\Page;
+use App\Model\Orm\User\User;
 use DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Entity\Entity;

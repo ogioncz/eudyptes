@@ -2,8 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\User;
 
+use App\Model\Orm\Chat\Chat;
+use App\Model\Orm\Mail\Mail;
+use App\Model\Orm\Meeting\Meeting;
+use App\Model\Orm\Page\Page;
+use App\Model\Orm\Post\Post;
+use App\Model\Orm\PostRevision\PostRevision;
+use App\Model\Orm\Revision\Revision;
+use App\Model\Orm\Stamp\Stamp;
+use App\Model\Orm\Token\Token;
 use DateTimeImmutable;
 use Nette\Security\Resource;
 use Nette\Security\Role;

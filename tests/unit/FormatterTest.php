@@ -6,7 +6,7 @@ namespace Test;
 
 use Alb;
 use App\Helpers\Formatting\Formatter;
-use App\Model\PageRepository;
+use App\Model\Orm\Page\PageRepository;
 use HTMLPurifier;
 use HTMLPurifier_Context;
 use HTMLPurifier_ErrorCollector;

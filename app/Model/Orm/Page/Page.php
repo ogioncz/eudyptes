@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\Page;
 
+use App\Model\Orm\Revision\Revision;
+use App\Model\Orm\User\User;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;

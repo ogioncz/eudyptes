@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Model\Orm\Meeting;
 
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Repository\Repository;

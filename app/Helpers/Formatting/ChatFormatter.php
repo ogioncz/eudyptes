@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Helpers\Formatting;
 
 use App\Helpers\Formatting\Extension\CommonMarkChatExtension;
-use App\Model\ChatRepository;
 use App\Model\HelperLoader;
+use App\Model\Orm\Chat\ChatRepository;
 use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment;
 
