@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Test;
 
 use Alb;
@@ -17,7 +19,7 @@ $container = require __DIR__ . '/bootstrap.php';
 class FormatterTest extends Tester\TestCase {
 	private $formatter;
 
-	function setUp() {
+	protected function setUp(): void {
 		$oembedResponse = Mockery::mock(Alb\OEmbed\Response::class);
 		$oembedResponse->shouldReceive('getHtml')->andReturn('<video src="nggyu.webm"></video>');
 		$errorCollector = Mockery::mock(HTMLPurifier_ErrorCollector::class);
@@ -27,15 +29,13 @@ class FormatterTest extends Tester\TestCase {
 		$pages = Mockery::mock(PageRepository::class);
 		$purifier = Mockery::mock(HTMLPurifier::class);
 		$purifier->context = $purifierContext;
-		$purifier->shouldReceive('purify')->withAnyArgs()->andReturnUsing(function($text) {
-			return $text;
-		});
+		$purifier->shouldReceive('purify')->withAnyArgs()->andReturnUsing(fn($text) => $text);
 		$oembed = Mockery::mock(Alb\OEmbed\Simple::class);
 		$oembed->shouldReceive('request')->with('https://youtu.be/dQw4w9WgXcQ')->andReturn($oembedResponse);
 		$this->formatter = new Formatter($pages, $purifier, $oembed);
 	}
 
-	function testPlain() {
+	public function testPlain(): void {
 		$markdown = 'Hello';
 		$html = "<p>Hello</p>\n";
 
@@ -44,7 +44,7 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testSpoiler() {
+	public function testSpoiler(): void {
 		$markdown = "¡¡¡\nHello\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n";
 
@@ -53,7 +53,7 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testSpoilerSummary() {
+	public function testSpoilerSummary(): void {
 		$markdown = "¡¡¡ Click to open\nHello\n!!!";
 		$html = "<details><summary>Click to open</summary>\n<p>Hello</p></details>\n";
 
@@ -62,7 +62,7 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testSpoilerNested() {
+	public function testSpoilerNested(): void {
 		$markdown = "¡¡¡\n¡¡¡\n¡¡¡\nHello\n!!!\n!!!\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details></details></details>\n";
 
@@ -71,7 +71,7 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testSpoilerNestedInText() {
+	public function testSpoilerNestedInText(): void {
 		$markdown = "¡¡¡\n1\n¡¡¡\n2\n¡¡¡\nHello\n!!!\n3\n!!!\n4\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>1</p>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>2</p>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n<p>3</p></details>\n<p>4</p></details>\n";
 
@@ -80,7 +80,7 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testMultipleSpoilers() {
+	public function testMultipleSpoilers(): void {
 		$markdown = "¡¡¡\nHello\n!!!\n¡¡¡\nBye\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Bye</p></details>\n";
 
@@ -89,7 +89,7 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testEmoji() {
+	public function testEmoji(): void {
 		$markdown = ':-)';
 		$html = "<p><img src=\"https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg\" alt=\"\" width=\"30\" height=\"29\" /></p>\n";
 
@@ -98,8 +98,8 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testOembed() {
-		$markdown = "https://youtu.be/dQw4w9WgXcQ";
+	public function testOembed(): void {
+		$markdown = 'https://youtu.be/dQw4w9WgXcQ';
 		$html = "<figure class=\"rwd-media rwd-ratio-16-9\"><video src=\"nggyu.webm\"></video></figure>\n";
 
 		$formatted = $this->formatter->format($markdown);
@@ -107,7 +107,7 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testOembedInText() {
+	public function testOembedInText(): void {
 		$markdown = "Hello\nhttps://youtu.be/dQw4w9WgXcQ\nGood-by";
 		$html = "<p>Hello</p>\n<figure class=\"rwd-media rwd-ratio-16-9\"><video src=\"nggyu.webm\"></video></figure>\n<p>Good-by</p>\n";
 
@@ -116,8 +116,8 @@ class FormatterTest extends Tester\TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
-	function testYoutubeUrlInParagraph() {
-		$markdown = "You must see https://youtu.be/dQw4w9WgXcQ";
+	public function testYoutubeUrlInParagraph(): void {
+		$markdown = 'You must see https://youtu.be/dQw4w9WgXcQ';
 		$html = "<p>You must see https://youtu.be/dQw4w9WgXcQ</p>\n";
 
 		$formatted = $this->formatter->format($markdown);

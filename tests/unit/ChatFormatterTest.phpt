@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Test;
 
 use App;
@@ -14,7 +16,7 @@ $container = require __DIR__ . '/bootstrap.php';
 class ChatFormatterTest extends Tester\TestCase {
 	private $formatter;
 
-	function setUp() {
+	protected function setUp(): void {
 		$adam = Mockery::mock(App\Model\User::class);
 		$eve = Mockery::mock(App\Model\User::class);
 		$chat1 = Mockery::mock(App\Model\Chat::class);
@@ -32,62 +34,62 @@ class ChatFormatterTest extends Tester\TestCase {
 		$this->formatter = new ChatFormatter($chats, $helperLoader);
 	}
 
-	function testPlain() {
+	public function testPlain(): void {
 		$markdown = 'Hello';
 		$html = "<p>Hello</p>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testEmoji() {
+	public function testEmoji(): void {
 		$markdown = 'Hello :-)';
 		$html = "<p>Hello <img src=\"https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg\" alt=\"\" width=\"30\" height=\"29\" /></p>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testMultiline() {
+	public function testMultiline(): void {
 		$markdown = "Hello\n\nWorld";
 		$html = "<p>Hello</p>\n<p>World</p>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testUrl() {
-		$markdown = "http://www.example.com";
+	public function testUrl(): void {
+		$markdown = 'http://www.example.com';
 		$html = "<p><a href=\"http://www.example.com\">http://www.example.com</a></p>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testUrlText() {
-		$markdown = "Go to http://www.example.com for example";
+	public function testUrlText(): void {
+		$markdown = 'Go to http://www.example.com for example';
 		$html = "<p>Go to <a href=\"http://www.example.com\">http://www.example.com</a> for example</p>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testStrongDisabled() {
-		$markdown = "**important**";
+	public function testStrongDisabled(): void {
+		$markdown = '**important**';
 		$html = "<p>**important**</p>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testHtmlEscaped() {
-		$markdown = "<strong>important</strong>";
+	public function testHtmlEscaped(): void {
+		$markdown = '<strong>important</strong>';
 		$html = "<p>&lt;strong&gt;important&lt;/strong&gt;</p>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testQuote() {
-		$markdown = "{#1}";
+	public function testQuote(): void {
+		$markdown = '{#1}';
 		$html = "<blockquote><strong><a href=\"adam\">Adam</a></strong>\n<p>Ping</p></blockquote>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testQuoteText() {
+	public function testQuoteText(): void {
 		$markdown = "{#1}\nHello";
 		$html = "<blockquote><strong><a href=\"adam\">Adam</a></strong>\n<p>Ping</p></blockquote>\n<p>Hello</p>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}
 
-	function testQuoteQuoted() {
-		$markdown = "{#2}";
+	public function testQuoteQuoted(): void {
+		$markdown = '{#2}';
 		$html = "<blockquote><strong><a href=\"adam\">Eve</a></strong>\n<p>Pong</p></blockquote>\n";
 		Assert::equal($html, $this->formatter->format($markdown));
 	}

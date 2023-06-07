@@ -60,37 +60,37 @@ class HelperLoader {
 		$tags = []; // not yet closed tags
 		for ($i = 0; $i < $textLength && $length < $limit; ++$i) {
 			switch ($text[$i]) {
-			case '<':
-				// load tag
-				$start = $i + 1;
-				while ($i < $textLength && $text[$i] !== '>' && !ctype_space($text[$i])) {
-					++$i;
-				}
-				$tag = strtolower(substr($text, $start, $i - $start));
-				// skip potential attributes
-				$in_quote = '';
-				while ($i < $textLength && ($in_quote || $text[$i] !== '>')) {
-					if (($text[$i] === '"' || $text[$i] === "'") && !$in_quote) {
-						$in_quote = $text[$i];
-					} elseif ($in_quote === $text[$i]) {
-						$in_quote = '';
+				case '<':
+					// load tag
+					$start = $i + 1;
+					while ($i < $textLength && $text[$i] !== '>' && !ctype_space($text[$i])) {
+						++$i;
 					}
-					++$i;
-				}
-				if ($text[$start] === '/') { // closing tag
-					$tags = \array_slice($tags, array_search(substr($tag, 1), $tags, true) + 1);
-				} elseif ($text[$i - 1] != '/' && !\in_array($tag, $empty_tags, true)) { // opening tag
-					array_unshift($tags, $tag);
-				}
-				break;
-			case '&':
-				$length++;
-				while ($i < $textLength && $text[$i] != ';') {
-					++$i;
-				}
-				break;
-			default:
-				$length++;
+					$tag = strtolower(substr($text, $start, $i - $start));
+					// skip potential attributes
+					$in_quote = '';
+					while ($i < $textLength && ($in_quote || $text[$i] !== '>')) {
+						if (($text[$i] === '"' || $text[$i] === "'") && !$in_quote) {
+							$in_quote = $text[$i];
+						} elseif ($in_quote === $text[$i]) {
+							$in_quote = '';
+						}
+						++$i;
+					}
+					if ($text[$start] === '/') { // closing tag
+						$tags = \array_slice($tags, array_search(substr($tag, 1), $tags, true) + 1);
+					} elseif ($text[$i - 1] != '/' && !\in_array($tag, $empty_tags, true)) { // opening tag
+						array_unshift($tags, $tag);
+					}
+					break;
+				case '&':
+					$length++;
+					while ($i < $textLength && $text[$i] != ';') {
+						++$i;
+					}
+					break;
+				default:
+					$length++;
 			}
 		}
 		$text = substr($text, 0, $i);
