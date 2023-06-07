@@ -51,7 +51,10 @@
 		"symfony/console": "^6.0"
 	},
 	"autoload": {
-		"classmap": ["app", "vendor/others"]
+		"classmap": ["vendor/others"],
+		"psr-4": {
+			"App\\": "app/"
+		}
 	},
 	"config": {
 		"sort-packages": true
