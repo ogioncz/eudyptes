@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Test;
 
+use Tester\TestCase;
 use App\Helpers\Formatting\ChatFormatter;
 use App\Model\HelperLoader;
 use App\Model\Orm\Chat\Chat;
@@ -16,7 +17,7 @@ use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
 
-class ChatFormatterTest extends Tester\TestCase {
+class ChatFormatterTest extends TestCase {
 	private $formatter;
 
 	protected function setUp(): void {

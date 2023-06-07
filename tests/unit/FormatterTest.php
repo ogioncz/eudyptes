@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Alb;
+use Tester\TestCase;
+use Alb\OEmbed\Response as OEmbedResponse;
+use Alb\OEmbed\Simple as OEmbed;
 use App\Helpers\Formatting\Formatter;
 use App\Model\Orm\Page\PageRepository;
 use HTMLPurifier;
@@ -16,11 +18,11 @@ use Tester\Assert;
 
 $container = require __DIR__ . '/bootstrap.php';
 
-class FormatterTest extends Tester\TestCase {
+class FormatterTest extends TestCase {
 	private $formatter;
 
 	protected function setUp(): void {
-		$oembedResponse = Mockery::mock(Alb\OEmbed\Response::class);
+		$oembedResponse = Mockery::mock(OEmbedResponse::class);
 		$oembedResponse->shouldReceive('getHtml')->andReturn('<video src="nggyu.webm"></video>');
 		$errorCollector = Mockery::mock(HTMLPurifier_ErrorCollector::class);
 		$errorCollector->shouldReceive('getRaw')->andReturn([]);
@@ -30,7 +32,7 @@ class FormatterTest extends Tester\TestCase {
 		$purifier = Mockery::mock(HTMLPurifier::class);
 		$purifier->context = $purifierContext;
 		$purifier->shouldReceive('purify')->withAnyArgs()->andReturnUsing(fn($text) => $text);
-		$oembed = Mockery::mock(Alb\OEmbed\Simple::class);
+		$oembed = Mockery::mock(OEmbed::class);
 		$oembed->shouldReceive('request')->with('https://youtu.be/dQw4w9WgXcQ')->andReturn($oembedResponse);
 		$this->formatter = new Formatter($pages, $purifier, $oembed);
 	}
