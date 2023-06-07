@@ -22,6 +22,5 @@ $container = $configurator->createContainer();
 
 Container::extensionMethod('addDatePicker', fn(Container $container, $name, $label = null) => $container[$name] = new DateControl($label));
 Container::extensionMethod('addTimePicker', fn(Container $container, $name, $label = null) => $container[$name] = new TimePicker($label));
-Kdyby\Replicator\Container::register();
 
 return $container;

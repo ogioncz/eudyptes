@@ -27,6 +27,7 @@ forms:
 		Nette\Forms\Controls\CsrfProtection::PROTECTION: 'Pro větší bezpečnost prosím odešli tento formulář znovu.'
 
 extensions:
+	- Contributte\FormMultiplier\DI\MultiplierExtension
 	orm: Nextras\Orm\Bridges\NetteDI\OrmExtension
 	dbal: Nextras\Dbal\Bridges\NetteDI\DbalExtension
 

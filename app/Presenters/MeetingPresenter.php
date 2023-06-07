@@ -63,19 +63,13 @@ class MeetingPresenter extends BasePresenter {
 		$dateDateControl->setRequired();
 		$form->addText('server', 'Server:')->setRequired();
 
-		$form->addDynamic('times', function(Container $time): void {
+		$times = $form->addMultiplier('times', function(Container $time): void {
 			$time->addTimePicker('time', 'čas')->setRequired();
 			$time->addText('event', 'činnost')->setRequired();
-
-			$time->addSubmit('remove', 'Odebrat')->setValidationScope([])->onClick[] = function(SubmitButton $button): void {
-				$replicator = $button->getParent()->getParent();
-				$replicator->remove($button->getParent(), true);
-			};
-		}, 1, true);
-
-		$form->addSubmit('add', 'Přidat')->setValidationScope([])->onClick[] = function(SubmitButton $button): void {
-			$button->getParent()['times']->createOne();
-		};
+		});
+		$times->setMinCopies(1);
+		$times->addCreateButton('Přidat')->setValidationScope([]);
+		$times->addRemoveButton('Odebrat');
 
 		$form->addTextArea('markdown', 'Popis:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
