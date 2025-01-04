@@ -16,7 +16,7 @@
 		}
 	],
 	"require": {
-		"php": ">= 8.0",
+		"php": ">= 8.3",
 		"actinarium/php-diff": "dev-master",
 		"alb/oembed": "dev-master",
 		"contributte/forms-multiplier": "^3.3",

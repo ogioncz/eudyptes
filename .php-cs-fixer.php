@@ -10,8 +10,8 @@ $finder = PhpCsFixer\Finder::create()
 $rules = [
 	'@Symfony' => true,
 	'@Symfony:risky' => true,
-	'@PHP80Migration' => true,
-	'@PHP80Migration:risky' => true,
+	'@PHP83Migration' => true,
+	'@PHP82Migration:risky' => true,
 
 	// overwrite some Symfony rules
 	'braces_position' => [
