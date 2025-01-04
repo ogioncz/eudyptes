@@ -74,11 +74,11 @@ class PostPresenter extends BasePresenter {
 		$form->addCheckbox('published', 'Zveřejnit')->setDefaultValue(true);
 
 		$previewButton = $form->addSubmit('preview', 'Náhled');
-		$previewButton->onClick[] = [$this, 'postFormPreview'];
+		$previewButton->onClick[] = $this->postFormPreview(...);
 		$previewButton->getControlPrototype()->addClass('ajax');
 
 		$submitButton = $form->addSubmit('save', 'Uložit');
-		$submitButton->onClick[] = [$this, 'postFormSucceeded'];
+		$submitButton->onClick[] = $this->postFormSucceeded(...);
 		$renderer->primaryButton = $submitButton;
 
 		return $form;

@@ -7,8 +7,10 @@ namespace App\Model\Orm\User;
 use DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Repository\Repository;
+use Override;
 
 class UserRepository extends Repository {
+	#[Override]
 	public static function getEntityClassNames(): array {
 		return [User::class];
 	}

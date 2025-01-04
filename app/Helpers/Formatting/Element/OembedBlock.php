@@ -7,11 +7,12 @@ namespace App\Helpers\Formatting\Element;
 use Alb\OEmbed\Response;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Cursor;
+use Override;
 
 class OembedBlock extends AbstractBlock {
 	public function __construct(
 		/** @param Response of the OEmbed provider */
-		private Response $response,
+		private readonly Response $response,
 	) {
 	}
 
@@ -25,6 +26,7 @@ class OembedBlock extends AbstractBlock {
 	/**
 	 * Returns true if this block can contain the given block as a child node.
 	 */
+	#[Override]
 	public function canContain(AbstractBlock $block): bool {
 		return false;
 	}
@@ -32,10 +34,12 @@ class OembedBlock extends AbstractBlock {
 	/**
 	 * Whether this is a code block.
 	 */
+	#[Override]
 	public function isCode(): bool {
 		return false;
 	}
 
+	#[Override]
 	public function matchesNextLine(Cursor $cursor): bool {
 		return false;
 	}

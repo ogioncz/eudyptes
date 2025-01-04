@@ -123,7 +123,7 @@ class ProfilePresenter extends BasePresenter {
 
 		$form->addSubmit('send', 'Uložit změny');
 
-		$form->onSuccess[] = [$this, 'profileFormSucceeded'];
+		$form->onSuccess[] = $this->profileFormSucceeded(...);
 
 		return $form;
 	}
@@ -172,11 +172,11 @@ class ProfilePresenter extends BasePresenter {
 			$this->users->persistAndFlush($user);
 			$this->flashMessage('Profil byl úspěšně upraven.', 'success');
 			$this->redirect('show', $user->id);
-		} catch (UniqueConstraintViolationException $e) {
+		} catch (UniqueConstraintViolationException) {
 			$form->addError($this->allowed($user, 'rename') ? 'Tento e-mail nebo přezdívka jsou již obsazeny.' : 'Tento e-mail je již obsazen.');
 		} catch (PDOException $e) {
 			$file = Debugger::log($e);
-			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename($file));
+			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename((string) $file));
 		}
 	}
 
@@ -204,7 +204,7 @@ class ProfilePresenter extends BasePresenter {
 
 		$form->addSubmit('send', 'Zaregistrovat se');
 
-		$form->onSuccess[] = [$this, 'signUpFormSucceeded'];
+		$form->onSuccess[] = $this->signUpFormSucceeded(...);
 
 		return $form;
 	}
@@ -221,11 +221,11 @@ class ProfilePresenter extends BasePresenter {
 			$this->users->persistAndFlush($user);
 			$this->flashMessage('Registrace proběhla úspěšně.', 'success');
 			$this->redirect('Homepage:');
-		} catch (UniqueConstraintViolationException $e) {
+		} catch (UniqueConstraintViolationException) {
 			$form->addError('Toto uživatelské jméno nebo e-mail je již obsazeno.');
 		} catch (PDOException $e) {
 			$file = Debugger::log($e);
-			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename($file));
+			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename((string) $file));
 		}
 	}
 
@@ -264,7 +264,7 @@ class ProfilePresenter extends BasePresenter {
 
 		$form->addSubmit('send', 'Obnovit heslo');
 
-		$form->onSuccess[] = [$this, 'passwordResetRequestFormSucceeded'];
+		$form->onSuccess[] = $this->passwordResetRequestFormSucceeded(...);
 
 		return $form;
 	}
@@ -323,7 +323,7 @@ class ProfilePresenter extends BasePresenter {
 
 		$form->addSubmit('send', 'Změnit heslo');
 
-		$form->onSuccess[] = [$this, 'passwordResetFormSucceeded'];
+		$form->onSuccess[] = $this->passwordResetFormSucceeded(...);
 
 		return $form;
 	}

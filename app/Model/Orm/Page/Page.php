@@ -9,6 +9,7 @@ use App\Model\Orm\User\User;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
+use Override;
 
 /**
  * Page.
@@ -37,6 +38,7 @@ class Page extends Entity implements Resource {
 		return $this->lastRevision ? $this->lastRevision->redirect : null;
 	}
 
+	#[Override]
 	public function getResourceId(): string {
 		return 'page';
 	}

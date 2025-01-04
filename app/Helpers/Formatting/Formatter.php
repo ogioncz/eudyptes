@@ -205,7 +205,7 @@ class Formatter {
 			}
 
 			return $replacements[$match[0]];
-		}, $text);
+		}, (string) $text);
 
 		return $text;
 	}
@@ -246,13 +246,13 @@ class Formatter {
 				</div>
 				</figure>
 				EOT;
-		}, $text);
+		}, (string) $text);
 
 		return $text;
 	}
 
 	public function replaceProps($text) {
-		$text = preg_replace('/<prop>vystavba<\/prop>/i', '<figure><img src="http://cdn.fan-club-penguin.cz/img/vystavba.gif"></figure>', $text);
+		$text = preg_replace('/<prop>vystavba<\/prop>/i', '<figure><img src="http://cdn.fan-club-penguin.cz/img/vystavba.gif"></figure>', (string) $text);
 		$text = preg_replace('/<prop>fieldop<\/prop>/i', '<figure><img alt="Field-op" src="http://upload.fan-club-penguin.cz/files/system/phone-red-pulsing-big.gif"></figure>', $text);
 		$text = preg_replace('/<prop>message<\/prop>/i', '<figure><img alt="Zpráva" src="http://upload.fan-club-penguin.cz/files/system/phone-blue-pulsing-big.gif"></figure>', $text);
 		$text = preg_replace('/<prop>message2013<\/prop>/i', '<figure><img alt="Zpráva" src="http://upload.fan-club-penguin.cz/files/system/phone-2013.png" width="146" height="200"></figure>', $text);
@@ -283,7 +283,7 @@ class Formatter {
 			$redlink = $this->pages->findBy(['slug' => $link])->countStored() === 0;
 
 			return '<a href="page:' . $link . '"' . ($redlink ? ' class="redlink"' : '') . '>' . $label . '</a>';
-		}, $text);
+		}, (string) $text);
 
 		return $text;
 	}

@@ -12,6 +12,7 @@ use HTMLPurifier;
 use HTMLPurifier_Context;
 use HTMLPurifier_ErrorCollector;
 use Mockery;
+use Override;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -20,6 +21,7 @@ $container = require __DIR__ . '/bootstrap.php';
 class FormatterTest extends TestCase {
 	private $formatter;
 
+	#[Override]
 	protected function setUp(): void {
 		$oembedResponse = Mockery::mock(OEmbedResponse::class);
 		$oembedResponse->shouldReceive('getHtml')->andReturn('<video src="nggyu.webm"></video>');

@@ -94,11 +94,11 @@ class MailPresenter extends BasePresenter {
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$previewButton = $form->addSubmit('preview', 'Náhled');
-		$previewButton->onClick[] = [$this, 'mailFormPreview'];
+		$previewButton->onClick[] = $this->mailFormPreview(...);
 		$previewButton->getControlPrototype()->addClass('ajax');
 
 		$submitButton = $form->addSubmit('send', 'Odeslat');
-		$submitButton->onClick[] = [$this, 'mailFormSucceeded'];
+		$submitButton->onClick[] = $this->mailFormSucceeded(...);
 		$renderer->primaryButton = $submitButton;
 
 		return $form;

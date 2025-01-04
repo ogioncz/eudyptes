@@ -19,6 +19,7 @@ use Nette\Security\Role;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
 use Nextras\Orm\Relationships\OneHasMany;
+use Override;
 
 /**
  * User.
@@ -47,10 +48,12 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property ManyHasMany|Stamp[] $ownedStamps {m:m Stamp::$owners , isMain=true}
  */
 class User extends Entity implements Role, Resource {
+	#[Override]
 	public function getRoleId(): string {
 		return $this->role;
 	}
 
+	#[Override]
 	public function getResourceId(): string {
 		return 'user';
 	}

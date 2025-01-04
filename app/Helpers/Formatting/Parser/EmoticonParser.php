@@ -7,12 +7,13 @@ namespace App\Helpers\Formatting\Parser;
 use League\CommonMark\Inline\Element\Image;
 use League\CommonMark\Inline\Parser\InlineParserInterface;
 use League\CommonMark\InlineParserContext;
+use Override;
 
 class EmoticonParser implements InlineParserInterface {
 	/** @var string[] */
-	private array $characters;
+	private readonly array $characters;
 
-	private string $regex;
+	private readonly string $regex;
 
 	public function __construct(
 		/** @param array[] $images */
@@ -25,10 +26,12 @@ class EmoticonParser implements InlineParserInterface {
 		$this->regex = '(^(' . implode('|', array_map(fn($emoticon) => preg_quote($emoticon), array_keys($emoticons))) . '))';
 	}
 
+	#[Override]
 	public function getCharacters(): array {
 		return $this->characters;
 	}
 
+	#[Override]
 	public function parse(InlineParserContext $inlineContext): bool {
 		$cursor = $inlineContext->getCursor();
 

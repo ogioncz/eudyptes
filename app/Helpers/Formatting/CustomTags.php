@@ -39,16 +39,16 @@ class CustomTags {
 			$match['attr']->class = isset($match['attr']->class) ? $match['attr']->class . ' cpitem' : 'cpitem';
 			$match['attr'] = Json::encode($match['attr']);
 			$match['attr'] = preg_replace('/"([^"]+)":("[^"]+"),?/', '\1=\2 ', $match['attr']);
-			$match['attr'] = trim($match['attr'], '{} ');
+			$match['attr'] = trim((string) $match['attr'], '{} ');
 
 			return '<img src="http://mediacache.fan-club-penguin.cz/game/items/images/' . $match['type'] . '/icon/' . $match['size'] . '/' . $match['id'] . '.png" alt="" width="' . $match['size'] . '" height="' . $match['size'] . '" ' . $match['attr'] . '>';
-		}, $text);
+		}, (string) $text);
 
 		return $text;
 	}
 
 	public static function coins($text) {
-		$text = preg_replace('/<cp-coins>(\d+)<\/cp-coins>/sU', '<span class="cpcoins cpitem"><span>\1<span class="sr-only"> mincí</span></span></span>', $text);
+		$text = preg_replace('/<cp-coins>(\d+)<\/cp-coins>/sU', '<span class="cpcoins cpitem"><span>\1<span class="sr-only"> mincí</span></span></span>', (string) $text);
 
 		return $text;
 	}
@@ -59,12 +59,12 @@ class CustomTags {
 			$registration = new DateTimeImmutable($match[1]);
 
 			return $today->diff($registration)->format('%a');
-		}, $text);
+		}, (string) $text);
 
 		return $text;
 	}
 
 	public static function music($text) {
-		return preg_replace('/<cp-music>(\d+)<\/cp-music>/sU', '<audio src="http://upload.fan-club-penguin.cz/hudba/$1.mp3" loop="loop" autoplay="autoplay" type="audio/mp3"></audio>', $text);
+		return preg_replace('/<cp-music>(\d+)<\/cp-music>/sU', '<audio src="http://upload.fan-club-penguin.cz/hudba/$1.mp3" loop="loop" autoplay="autoplay" type="audio/mp3"></audio>', (string) $text);
 	}
 }

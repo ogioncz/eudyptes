@@ -8,7 +8,7 @@ use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 
 class TelegramNotifier {
-	public function __construct(string $apiKey, private int $chatId, string $botName) {
+	public function __construct(string $apiKey, private readonly int $chatId, string $botName) {
 		new Telegram($apiKey, $botName);
 	}
 

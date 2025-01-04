@@ -11,16 +11,18 @@ use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
 use League\CommonMark\Cursor;
 use League\CommonMark\Inline\Element\Link;
+use Override;
 use Tracy\Debugger;
 
 class OembedParser implements BlockParserInterface {
 	public function __construct(
-		private OEmbedSimple $oembed,
+		private readonly OEmbedSimple $oembed,
 		/** @param string[] */
-		private array $whitelistedDomains,
+		private readonly array $whitelistedDomains,
 	) {
 	}
 
+	#[Override]
 	public function parse(ContextInterface $context, Cursor $cursor): bool {
 		if ($cursor->isIndented()) {
 			return false;
@@ -54,7 +56,7 @@ class OembedParser implements BlockParserInterface {
 	}
 
 	private static function getDomain($url) {
-		preg_match(self::getUrlRegex(), $url, $match);
+		preg_match(self::getUrlRegex(), (string) $url, $match);
 
 		return $match[1];
 	}

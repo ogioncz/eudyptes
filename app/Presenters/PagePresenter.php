@@ -142,11 +142,11 @@ class PagePresenter extends BasePresenter {
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$previewButton = $form->addSubmit('preview', 'Náhled');
-		$previewButton->onClick[] = [$this, 'pageFormPreview'];
+		$previewButton->onClick[] = $this->pageFormPreview(...);
 		$previewButton->getControlPrototype()->addClass('ajax');
 
 		$submitButton = $form->addSubmit('send', 'Odeslat a zveřejnit');
-		$submitButton->onClick[] = [$this, 'pageFormSucceeded'];
+		$submitButton->onClick[] = $this->pageFormSucceeded(...);
 		$renderer->primaryButton = $submitButton;
 
 		return $form;
@@ -203,7 +203,7 @@ class PagePresenter extends BasePresenter {
 
 			$this->flashMessage('Stránka byla odeslána.', 'success');
 			$this->redirect('show', $page->slug);
-		} catch (UniqueConstraintViolationException $e) {
+		} catch (UniqueConstraintViolationException) {
 			$this->flashMessage('Stránka s tímto slugem již existuje.', 'danger');
 		}
 	}

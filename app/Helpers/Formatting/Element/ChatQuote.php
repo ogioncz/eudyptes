@@ -6,11 +6,12 @@ namespace App\Helpers\Formatting\Element;
 
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Cursor;
+use Override;
 
 class ChatQuote extends AbstractBlock {
 	public function __construct(
 		/** @param ID of the quoted chat message */
-		private int $id,
+		private readonly int $id,
 	) {
 	}
 
@@ -24,6 +25,7 @@ class ChatQuote extends AbstractBlock {
 	/**
 	 * Returns true if this block can contain the given block as a child node.
 	 */
+	#[Override]
 	public function canContain(AbstractBlock $block): bool {
 		return false;
 	}
@@ -31,10 +33,12 @@ class ChatQuote extends AbstractBlock {
 	/**
 	 * Whether this is a code block.
 	 */
+	#[Override]
 	public function isCode(): bool {
 		return false;
 	}
 
+	#[Override]
 	public function matchesNextLine(Cursor $cursor): bool {
 		return false;
 	}

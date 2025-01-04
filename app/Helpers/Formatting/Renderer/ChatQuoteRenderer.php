@@ -14,14 +14,16 @@ use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\HtmlElement;
 use Ogion\Utils\DarnDOMDocument;
+use Override;
 
 class ChatQuoteRenderer implements BlockRendererInterface {
-	public function __construct(private ChatRepository $chats, private HelperLoader $helperLoader) {
+	public function __construct(private readonly ChatRepository $chats, private readonly HelperLoader $helperLoader) {
 	}
 
 	/**
 	 * @param ChatQuote $block
 	 */
+	#[Override]
 	public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, bool $inTightList = false): HtmlElement|string {
 		if (!($block instanceof ChatQuote)) {
 			throw new InvalidArgumentException('Incompatible block type: ' . $block::class);

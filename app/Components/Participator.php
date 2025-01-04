@@ -15,10 +15,10 @@ class Participator extends Control {
 	private $callback;
 
 	public function __construct(
-		private Meeting $meeting,
-		private bool $youParticipate,
+		private readonly Meeting $meeting,
+		private readonly bool $youParticipate,
 		callable $callback,
-		private HelperLoader $helperLoader,
+		private readonly HelperLoader $helperLoader,
 	) {
 		$this->callback = $callback;
 	}
@@ -26,7 +26,7 @@ class Participator extends Control {
 	public function render(): void {
 		$template = $this->getTemplate();
 
-		$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
+		$template->getLatte()->addFilterLoader($this->helperLoader->loader(...));
 		$template->setFile(__DIR__ . '/participator.latte');
 
 		$template->participants = $this->meeting->visitors;

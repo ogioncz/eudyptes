@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
+use Override;
 
 /**
  * Post.
@@ -42,6 +43,7 @@ class Post extends Entity implements Resource {
 		return $this->lastRevision ? $this->lastRevision->content : null;
 	}
 
+	#[Override]
 	public function getResourceId(): string {
 		return 'post';
 	}

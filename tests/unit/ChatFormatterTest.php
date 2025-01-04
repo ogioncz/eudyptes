@@ -11,6 +11,7 @@ use App\Model\Orm\Chat\ChatRepository;
 use App\Model\Orm\User\User;
 use Mockery;
 use Nette\Utils\Html;
+use Override;
 use Tester\Assert;
 use Tester\TestCase;
 
@@ -19,6 +20,7 @@ $container = require __DIR__ . '/bootstrap.php';
 class ChatFormatterTest extends TestCase {
 	private $formatter;
 
+	#[Override]
 	protected function setUp(): void {
 		$adam = Mockery::mock(User::class);
 		$eve = Mockery::mock(User::class);

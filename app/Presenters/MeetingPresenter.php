@@ -57,7 +57,7 @@ class MeetingPresenter extends BasePresenter {
 
 		$submit = $form->addSubmit('firstsend', 'Odeslat a zveřejnit');
 		$submit->getControlPrototype()->addClass('hidden');
-		$submit->onClick[] = [$this, 'meetingFormSucceeded'];
+		$submit->onClick[] = $this->meetingFormSucceeded(...);
 
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
 		$dateDateControl = $form['date'] = new DateControl('Datum:');
@@ -75,11 +75,11 @@ class MeetingPresenter extends BasePresenter {
 		$form->addTextArea('markdown', 'Popis:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
 
 		$previewButton = $form->addSubmit('preview', 'Náhled');
-		$previewButton->onClick[] = [$this, 'meetingFormPreview'];
+		$previewButton->onClick[] = $this->meetingFormPreview(...);
 		$previewButton->getControlPrototype()->addClass('ajax');
 
 		$submit = $form->addSubmit('send', 'Odeslat a zveřejnit');
-		$submit->onClick[] = [$this, 'meetingFormSucceeded'];
+		$submit->onClick[] = $this->meetingFormSucceeded(...);
 		$renderer->primaryButton = $submit;
 
 		return $form;
@@ -120,7 +120,7 @@ class MeetingPresenter extends BasePresenter {
 			$program[] = ['time' => $time['time']->format('H:i'), 'event' => $time['event']];
 		}
 
-		[$hour, $minute] = explode(':', $program[0]['time']);
+		[$hour, $minute] = explode(':', (string) $program[0]['time']);
 		$meeting->program = Json::encode($program);
 		$meeting->date = $values->date->setTime((int) $hour, (int) $minute);
 
@@ -159,7 +159,7 @@ class MeetingPresenter extends BasePresenter {
 			$program[] = ['time' => $time['time']->format('H:i'), 'event' => $time['event']];
 		}
 
-		[$hour, $minute] = explode(':', $program[0]['time']);
+		[$hour, $minute] = explode(':', (string) $program[0]['time']);
 		$meeting->program = Json::encode($program);
 		$meeting->date = $values->date->setTime((int) $hour, (int) $minute);
 		$meeting->user = $this->users->getById($this->getUser()->getIdentity()->getId());
@@ -204,7 +204,7 @@ class MeetingPresenter extends BasePresenter {
 
 		$submit = $form->addSubmit('send', 'Ano, smazat');
 		$submit->getControlPrototype()->removeClass('btn-primary')->addClass('btn-danger');
-		$form->onSuccess[] = [$this, 'deleteFormSucceeded'];
+		$form->onSuccess[] = $this->deleteFormSucceeded(...);
 
 		return $form;
 	}
@@ -257,7 +257,7 @@ class MeetingPresenter extends BasePresenter {
 				return $carry;
 			}, false);
 
-			return new Participator($meeting, $youParticipate, [$this, 'participatorClicked'], $this->helperLoader);
+			return new Participator($meeting, $youParticipate, $this->participatorClicked(...), $this->helperLoader);
 		});
 	}
 

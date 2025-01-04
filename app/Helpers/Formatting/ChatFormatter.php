@@ -11,7 +11,7 @@ use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment;
 
 class ChatFormatter {
-	private CommonMarkConverter $converter;
+	private readonly CommonMarkConverter $converter;
 
 	public function __construct(ChatRepository $chats, HelperLoader $helperLoader) {
 		$environment = new Environment();

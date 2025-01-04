@@ -21,14 +21,16 @@ use League\CommonMark\Inline\Element\Image;
 use League\CommonMark\Inline\Element\Link;
 use League\CommonMark\Inline\Element\Text;
 use League\CommonMark\Inline\Renderer as InlineRenderer;
+use Override;
 
 class CommonMarkChatExtension implements ExtensionInterface {
 	public function __construct(
-		private ChatRepository $chats,
-		private HelperLoader $helperLoader,
+		private readonly ChatRepository $chats,
+		private readonly HelperLoader $helperLoader,
 	) {
 	}
 
+	#[Override]
 	public function register(ConfigurableEnvironmentInterface $environment): void {
 		$environment->addBlockParser(new ChatQuoteParser(), 100);
 

@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\OneHasMany;
+use Override;
 
 /**
  * Mail.
@@ -27,6 +28,7 @@ use Nextras\Orm\Relationships\OneHasMany;
  * @property OneHasMany|Mail[] $replies {1:m Mail::$reaction, orderBy=[timestamp, ASC]}
  */
 class Mail extends Entity implements Resource {
+	#[Override]
 	public function getResourceId(): string {
 		return 'mail';
 	}

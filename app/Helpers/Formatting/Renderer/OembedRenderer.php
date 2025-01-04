@@ -10,12 +10,14 @@ use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
 use League\CommonMark\HtmlElement;
+use Override;
 
 class OembedRenderer implements BlockRendererInterface {
 	/**
 	 * @param OembedBlock $block
 	 * @param bool $inTightList
 	 */
+	#[Override]
 	public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false): HtmlElement {
 		if (!($block instanceof OembedBlock)) {
 			throw new InvalidArgumentException('Incompatible block type: ' . $block::class);

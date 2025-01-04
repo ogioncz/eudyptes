@@ -7,8 +7,10 @@ namespace App\Model\Orm\Meeting;
 use DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Repository\Repository;
+use Override;
 
 class MeetingRepository extends Repository {
+	#[Override]
 	public static function getEntityClassNames(): array {
 		return [Meeting::class];
 	}

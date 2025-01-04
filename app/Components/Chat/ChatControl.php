@@ -19,18 +19,18 @@ use Nette\Http\IResponse;
 
 class ChatControl extends Control {
 	public function __construct(
-		private ChatRepository $chats,
-		private UserRepository $users,
-		private TelegramNotifier $telegramNotifier,
-		private HelperLoader $helperLoader,
-		private IRequest $request,
-		private ChatFormatter $chatFormatter,
+		private readonly ChatRepository $chats,
+		private readonly UserRepository $users,
+		private readonly TelegramNotifier $telegramNotifier,
+		private readonly HelperLoader $helperLoader,
+		private readonly IRequest $request,
+		private readonly ChatFormatter $chatFormatter,
 	) {
 	}
 
 	public function render(): void {
 		$template = $this->getTemplate();
-		$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
+		$template->getLatte()->addFilterLoader($this->helperLoader->loader(...));
 		$template->setFile(__DIR__ . '/chat.latte');
 		$allChats = $this->chats->findAll()->orderBy(['timestamp' => 'ASC']);
 		$template->chats = $allChats->limitBy(51, max(0, $allChats->countStored() - 51));
@@ -49,7 +49,7 @@ class ChatControl extends Control {
 		$submit->addClass('chat-submit');
 		$submit->create('span class="glyphicon glyphicon-send"');
 		$submit->title = 'Odeslat';
-		$form->onSuccess[] = [$this, 'chatFormSucceeded'];
+		$form->onSuccess[] = $this->chatFormSucceeded(...);
 
 		return $form;
 	}
@@ -60,7 +60,7 @@ class ChatControl extends Control {
 			$this->redirect('this');
 		} else {
 			$template = $this->getTemplate();
-			$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
+			$template->getLatte()->addFilterLoader($this->helperLoader->loader(...));
 			$template->setFile(__DIR__ . '/chat-messages.latte');
 			$template->chats = $this->chats->findBy(['id>=' => $id]);
 			$presenter->sendResponse(new TextResponse($template));

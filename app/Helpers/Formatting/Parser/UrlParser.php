@@ -7,12 +7,15 @@ namespace App\Helpers\Formatting\Parser;
 use League\CommonMark\Inline\Element\Link;
 use League\CommonMark\Inline\Parser\InlineParserInterface;
 use League\CommonMark\InlineParserContext;
+use Override;
 
 class UrlParser implements InlineParserInterface {
+	#[Override]
 	public function getCharacters(): array {
 		return ['h'];
 	}
 
+	#[Override]
 	public function parse(InlineParserContext $inlineContext): bool {
 		$cursor = $inlineContext->getCursor();
 

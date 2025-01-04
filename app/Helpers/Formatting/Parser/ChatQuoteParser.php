@@ -8,10 +8,12 @@ use App\Helpers\Formatting\Element\ChatQuote;
 use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
 use League\CommonMark\Cursor;
+use Override;
 
 class ChatQuoteParser implements BlockParserInterface {
 	private static string $regex = '(^\{#([0-9]+)\}$)';
 
+	#[Override]
 	public function parse(ContextInterface $context, Cursor $cursor): bool {
 		if ($cursor->isIndented()) {
 			return false;
@@ -32,7 +34,7 @@ class ChatQuoteParser implements BlockParserInterface {
 	}
 
 	private static function getQuotedId($quote): int {
-		preg_match(self::$regex, $quote, $match);
+		preg_match(self::$regex, (string) $quote, $match);
 
 		return (int) $match[1];
 	}

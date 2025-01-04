@@ -7,8 +7,10 @@ namespace App\Model\Orm;
 use Nextras\Orm\Mapper\Dbal\Conventions\Conventions;
 use Nextras\Orm\Mapper\Dbal\Conventions\IConventions;
 use Nextras\Orm\Mapper\Mapper;
+use Override;
 
 class BaseMapper extends Mapper {
+	#[Override]
 	protected function createConventions(): IConventions {
 		$conventions = parent::createConventions();
 		\assert($conventions instanceof Conventions); // property is not available on interface

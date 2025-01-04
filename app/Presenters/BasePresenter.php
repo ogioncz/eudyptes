@@ -20,6 +20,7 @@ use Nette\Application\UI\Template;
 use Nette\DI\Attributes\Inject;
 use Nette\Iterators\Mapper;
 use Nette\Security\Permission;
+use Override;
 use VisualPaginator;
 
 /**
@@ -47,7 +48,7 @@ abstract class BasePresenter extends Presenter {
 	#[Inject]
 	public ChatFormatter $chatFormatter;
 
-	public function __construct(private HelperLoader $helperLoader) {
+	public function __construct(private readonly HelperLoader $helperLoader) {
 		parent::__construct();
 	}
 
@@ -59,6 +60,7 @@ abstract class BasePresenter extends Presenter {
 		return $vp;
 	}
 
+	#[Override]
 	protected function startup(): void {
 		if ($this->getUser()->isLoggedIn()) {
 			$user = $this->users->getById($this->getUser()->getIdentity()->getId());
@@ -68,13 +70,15 @@ abstract class BasePresenter extends Presenter {
 		parent::startup();
 	}
 
+	#[Override]
 	protected function createTemplate($class = null): Template {
 		$template = parent::createTemplate($class);
-		$template->getLatte()->addFilterLoader([$this->helperLoader, 'loader']);
+		$template->getLatte()->addFilterLoader($this->helperLoader->loader(...));
 
 		return $template;
 	}
 
+	#[Override]
 	public function beforeRender(): void {
 		parent::beforeRender();
 		$template = $this->getTemplate();
@@ -120,7 +124,7 @@ abstract class BasePresenter extends Presenter {
 
 		$template->headerStyle = \count($headers) > 0 ? 'background-image: url(' . $template->basePath . '/images/header/' . $headers[0] . ');' : '';
 
-		$template->allowed = [$this, 'allowed'];
+		$template->allowed = $this->allowed(...);
 	}
 
 	public function allowed($resource, $action): bool {

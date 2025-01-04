@@ -6,8 +6,10 @@ namespace App\Model\Orm\User;
 
 use App\Model\Orm\BaseMapper;
 use Nextras\Orm\Mapper\Dbal\Conventions\IConventions;
+use Override;
 
 class UserMapper extends BaseMapper {
+	#[Override]
 	protected function createConventions(): IConventions {
 		$conventions = parent::createConventions();
 		$conventions->addMapping('notifyByMail', 'mailnotify');

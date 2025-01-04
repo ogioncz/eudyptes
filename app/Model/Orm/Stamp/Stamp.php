@@ -8,6 +8,7 @@ use App\Model\Orm\User\User;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
+use Override;
 
 /**
  * Stamp.
@@ -28,6 +29,7 @@ class Stamp extends Entity implements Resource {
 	public const DIFFICULTY_HARD = '4';
 	public const DIFFICULTY_CRAZY = '5';
 
+	#[Override]
 	public function getResourceId(): string {
 		return 'stamp';
 	}

@@ -8,8 +8,10 @@ use App\Helpers\Formatting\Element\Spoiler;
 use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
 use League\CommonMark\Cursor;
+use Override;
 
 class SpoilerParser implements BlockParserInterface {
+	#[Override]
 	public function parse(ContextInterface $context, Cursor $cursor): bool {
 		if ($cursor->isIndented()) {
 			return false;

@@ -9,6 +9,7 @@ use HTMLPurifier_Context;
 use HTMLPurifier_URI;
 use HTMLPurifier_URIFilter;
 use Nette\Application\Application;
+use Override;
 
 class TransformCustomSchemesUriFilter extends HTMLPurifier_URIFilter {
 	/** * @var string */
@@ -22,6 +23,7 @@ class TransformCustomSchemesUriFilter extends HTMLPurifier_URIFilter {
 	 * @param HTMLPurifier_Config $config
 	 * @param HTMLPurifier_Context $context
 	 */
+	#[Override]
 	public function filter(&$uri, $config, $context): bool {
 		if ($uri->scheme !== 'post' && $uri->scheme !== 'page') {
 			return true;

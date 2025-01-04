@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Nette\Security\Resource;
 use Nextras\Orm\Entity\Entity;
 use Nextras\Orm\Relationships\ManyHasMany;
+use Override;
 
 /**
  * Meeting.
@@ -25,6 +26,7 @@ use Nextras\Orm\Relationships\ManyHasMany;
  * @property ManyHasMany|User[] $visitors {m:m User::$visitedMeetings, isMain=true}
  */
 class Meeting extends Entity implements Resource {
+	#[Override]
 	public function getResourceId(): string {
 		return 'meeting';
 	}
