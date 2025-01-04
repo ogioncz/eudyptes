@@ -22,7 +22,6 @@
             nativeBuildInputs = with pkgs; [
               php
               php.packages.composer
-              php.packages.php-cs-fixer
             ];
           };
         };
