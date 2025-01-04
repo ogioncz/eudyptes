@@ -26,6 +26,9 @@ jobs:
       - name: Run Nette code-checker
         run: code-checker --short-arrays -d app
 
+      - name: Run PHP-CS-Fixer
+        run: composer run-script cs
+
       - name: Run tests
         run: |
           mv app/config/config.local.neon.default app/config/config.local.neon
