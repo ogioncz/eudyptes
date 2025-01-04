@@ -22,6 +22,7 @@
             nativeBuildInputs = with pkgs; [
               php
               php.packages.composer
+              phpactor
             ];
           };
         };
