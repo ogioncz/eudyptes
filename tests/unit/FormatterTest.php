@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Tester\TestCase;
 use Alb\OEmbed\Response as OEmbedResponse;
 use Alb\OEmbed\Simple as OEmbed;
 use App\Helpers\Formatting\Formatter;
@@ -13,8 +12,8 @@ use HTMLPurifier;
 use HTMLPurifier_Context;
 use HTMLPurifier_ErrorCollector;
 use Mockery;
-use Tester;
 use Tester\Assert;
+use Tester\TestCase;
 
 $container = require __DIR__ . '/bootstrap.php';
 

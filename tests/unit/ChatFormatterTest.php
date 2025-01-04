@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Tester\TestCase;
 use App\Helpers\Formatting\ChatFormatter;
 use App\Model\HelperLoader;
 use App\Model\Orm\Chat\Chat;
@@ -12,8 +11,8 @@ use App\Model\Orm\Chat\ChatRepository;
 use App\Model\Orm\User\User;
 use Mockery;
 use Nette\Utils\Html;
-use Tester;
 use Tester\Assert;
+use Tester\TestCase;
 
 $container = require __DIR__ . '/bootstrap.php';
 

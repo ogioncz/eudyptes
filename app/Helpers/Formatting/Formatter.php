@@ -13,7 +13,6 @@ use App\Helpers\Formatting\Parser\SpoilerParser;
 use App\Helpers\Formatting\Renderer\OembedRenderer;
 use App\Helpers\Formatting\Renderer\SpoilerRenderer;
 use App\Model\Orm\Page\PageRepository;
-use HTMLPurifier_ErrorCollector as ErrorCollector;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
@@ -154,6 +153,8 @@ class Formatter {
 	}
 
 	/**
+	 * @param mixed $markdown
+	 *
 	 * @return array{
 	 *   text: string,
 	 *   errors: array<array{
