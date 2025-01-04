@@ -24,7 +24,7 @@
 		"flaptor/indextank-php": "dev-master",
 		"latte/latte": "^2.9",
 		"league/commonmark": "^1.0.0",
-		"longman/telegram-bot": "^0.79.0",
+		"longman/telegram-bot": "^0.83.1",
 		"nette/application": "^3.0",
 		"nette/bootstrap": "^3.0",
 		"nette/caching": "^3.0",
