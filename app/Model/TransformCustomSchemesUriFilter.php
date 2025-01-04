@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use HTMLPurifier_Config;
+use HTMLPurifier_Context;
+use HTMLPurifier_URI;
+use HTMLPurifier_URIFilter;
 use Nette\Application\Application;
 
-class TransformCustomSchemesUriFilter extends \HTMLPurifier_URIFilter {
+class TransformCustomSchemesUriFilter extends HTMLPurifier_URIFilter {
 	/** * @var string */
 	public $name = 'TransformCustomSchemes';
 
@@ -14,9 +18,9 @@ class TransformCustomSchemesUriFilter extends \HTMLPurifier_URIFilter {
 	}
 
 	/**
-	 * @param \HTMLPurifier_URI $uri
-	 * @param \HTMLPurifier_Config $config
-	 * @param \HTMLPurifier_Context $context
+	 * @param HTMLPurifier_URI $uri
+	 * @param HTMLPurifier_Config $config
+	 * @param HTMLPurifier_Context $context
 	 */
 	public function filter(&$uri, $config, $context): bool {
 		if ($uri->scheme !== 'post' && $uri->scheme !== 'page') {
@@ -24,7 +28,7 @@ class TransformCustomSchemesUriFilter extends \HTMLPurifier_URIFilter {
 		}
 
 		$uri->scheme = ucfirst($uri->scheme);
-		$uri = new \HTMLPurifier_URI(null, null, null, null, $this->app->getPresenter()->link($uri->scheme . ':show', $uri->path), $uri->query, $uri->fragment);
+		$uri = new HTMLPurifier_URI(null, null, null, null, $this->app->getPresenter()->link($uri->scheme . ':show', $uri->path), $uri->query, $uri->fragment);
 
 		return true;
 	}

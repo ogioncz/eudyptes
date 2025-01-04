@@ -14,13 +14,20 @@ $rules = [
 	'@PHP80Migration:risky' => true,
 
 	// overwrite some Symfony rules
-	'braces' => ['position_after_functions_and_oop_constructs' => 'same'],
-	'function_declaration' => ['closure_function_spacing' => 'none'],
+	'braces_position' => [
+		'functions_opening_brace' => 'same_line',
+		'classes_opening_brace' => 'same_line',
+	],
+	'function_declaration' => [
+		'closure_function_spacing' => 'none',
+		'closure_fn_spacing' => 'none',
+	],
 	'concat_space' => ['spacing' => 'one'],
 	'phpdoc_align' => false,
 	'yoda_style' => false,
 	'non_printable_character' => false,
 	'phpdoc_no_alias_tag' => false,
+	'global_namespace_import' => true,
 
 	// additional rules
 	'array_syntax' => ['syntax' => 'short'],

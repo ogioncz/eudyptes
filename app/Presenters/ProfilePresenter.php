@@ -9,6 +9,7 @@ use App\Model\Orm\Token\Token;
 use App\Model\Orm\Token\TokenRepository;
 use App\Model\Orm\User\User;
 use App\Model\Orm\User\UserRepository;
+use DateInterval;
 use DateTimeImmutable;
 use Exception;
 use Nette\Application\Attributes\Persistent;
@@ -22,6 +23,7 @@ use Nette\Utils\Image;
 use Nette\Utils\Random;
 use Nextras\Dbal\UniqueConstraintViolationException;
 use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
+use PDOException;
 use Tracy\Debugger;
 
 /**
@@ -41,10 +43,10 @@ class ProfilePresenter extends BasePresenter {
 	public StampRepository $stamps;
 
 	#[Persistent]
-	public $token = null;
+	public $token;
 
 	#[Persistent]
-	public $tid = null;
+	public $tid;
 
 	#[Persistent]
 	public ?User $profile = null;
@@ -172,7 +174,7 @@ class ProfilePresenter extends BasePresenter {
 			$this->redirect('show', $user->id);
 		} catch (UniqueConstraintViolationException $e) {
 			$form->addError($this->allowed($user, 'rename') ? 'Tento e-mail nebo přezdívka jsou již obsazeny.' : 'Tento e-mail je již obsazen.');
-		} catch (\PDOException $e) {
+		} catch (PDOException $e) {
 			$file = Debugger::log($e);
 			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename($file));
 		}
@@ -221,7 +223,7 @@ class ProfilePresenter extends BasePresenter {
 			$this->redirect('Homepage:');
 		} catch (UniqueConstraintViolationException $e) {
 			$form->addError('Toto uživatelské jméno nebo e-mail je již obsazeno.');
-		} catch (\PDOException $e) {
+		} catch (PDOException $e) {
 			$file = Debugger::log($e);
 			$form->addError('Nastala neznámá chyba. Informace o chybě byly uloženy do souboru ' . basename($file));
 		}
@@ -278,7 +280,7 @@ class ProfilePresenter extends BasePresenter {
 			$token = new Token();
 			$token->token = $this->passwords->hash($t);
 			$token->ip = $this->getHttpRequest()->getRemoteAddress();
-			$token->expiration = (new DateTimeImmutable())->add(\DateInterval::createFromDateString('2 day'));
+			$token->expiration = (new DateTimeImmutable())->add(DateInterval::createFromDateString('2 day'));
 			$token->type = Token::PASSWORD;
 			$user->tokens->add($token);
 			$this->users->persistAndFlush($user);

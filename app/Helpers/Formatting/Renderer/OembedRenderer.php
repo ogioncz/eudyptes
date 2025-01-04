@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Helpers\Formatting\Renderer;
 
 use App\Helpers\Formatting\Element\OembedBlock;
+use InvalidArgumentException;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
@@ -17,7 +18,7 @@ class OembedRenderer implements BlockRendererInterface {
 	 */
 	public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, $inTightList = false): HtmlElement {
 		if (!($block instanceof OembedBlock)) {
-			throw new \InvalidArgumentException('Incompatible block type: ' . $block::class);
+			throw new InvalidArgumentException('Incompatible block type: ' . $block::class);
 		}
 
 		$attrs = [

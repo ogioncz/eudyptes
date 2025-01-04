@@ -7,6 +7,8 @@ namespace App\Helpers\Formatting\Renderer;
 use App\Helpers\Formatting\Element\ChatQuote;
 use App\Model\HelperLoader;
 use App\Model\Orm\Chat\ChatRepository;
+use DOMXPath;
+use InvalidArgumentException;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Renderer\BlockRendererInterface;
 use League\CommonMark\ElementRendererInterface;
@@ -22,7 +24,7 @@ class ChatQuoteRenderer implements BlockRendererInterface {
 	 */
 	public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, bool $inTightList = false): HtmlElement|string {
 		if (!($block instanceof ChatQuote)) {
-			throw new \InvalidArgumentException('Incompatible block type: ' . $block::class);
+			throw new InvalidArgumentException('Incompatible block type: ' . $block::class);
 		}
 
 		$original = $this->chats->getById($block->getId());
@@ -32,7 +34,7 @@ class ChatQuoteRenderer implements BlockRendererInterface {
 
 		$dom = new DarnDOMDocument();
 		$dom->loadHTML($original->content);
-		$xpath = new \DOMXPath($dom);
+		$xpath = new DOMXPath($dom);
 		$nodes = $xpath->query('//blockquote');
 		foreach ($nodes as $node) {
 			$node->parentNode->removeChild($node);

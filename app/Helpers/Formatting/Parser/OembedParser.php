@@ -6,6 +6,7 @@ namespace App\Helpers\Formatting\Parser;
 
 use Alb\OEmbed\Simple as OEmbedSimple;
 use App\Helpers\Formatting\Element\OembedBlock;
+use Exception;
 use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
 use League\CommonMark\Cursor;
@@ -42,7 +43,7 @@ class OembedParser implements BlockParserInterface {
 
 					return true;
 				}
-			} catch (\Exception $e) {
+			} catch (Exception $e) {
 				Debugger::log($e);
 			} // can’t serve, link is better than nothing so let’s leave it at that
 		}

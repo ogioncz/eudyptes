@@ -12,12 +12,15 @@ use App\Model\Orm\Meeting\MeetingRepository;
 use App\Model\Orm\Page\PageRepository;
 use App\Model\Orm\User\UserRepository;
 use App\Model\TelegramNotifier;
+use CallbackFilterIterator;
 use DateTimeImmutable;
+use DirectoryIterator;
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Template;
 use Nette\DI\Attributes\Inject;
 use Nette\Iterators\Mapper;
 use Nette\Security\Permission;
+use VisualPaginator;
 
 /**
  * BasePresenter is the mother of all presenters.
@@ -48,8 +51,8 @@ abstract class BasePresenter extends Presenter {
 		parent::__construct();
 	}
 
-	protected function createComponentPaginator($name): \VisualPaginator {
-		$vp = new \VisualPaginator();
+	protected function createComponentPaginator($name): VisualPaginator {
+		$vp = new VisualPaginator();
 		$vp->getPaginator()->setItemsPerPage(10);
 		$this->addComponent($vp, $name);
 
@@ -86,8 +89,8 @@ abstract class BasePresenter extends Presenter {
 
 		$template->customStyles = iterator_to_array(
 			new Mapper(
-				new \CallbackFilterIterator(
-					new \DirectoryIterator(__DIR__ . '/../../www/custom'),
+				new CallbackFilterIterator(
+					new DirectoryIterator(__DIR__ . '/../../www/custom'),
 					fn($f, $_k) => $f->isFile() && $f->getExtension() == 'css'
 				),
 				fn($f, $_k) => $template->basePath . '/custom/' . $f->getFileName()
@@ -96,8 +99,8 @@ abstract class BasePresenter extends Presenter {
 
 		$template->customScripts = iterator_to_array(
 			new Mapper(
-				new \CallbackFilterIterator(
-					new \DirectoryIterator(__DIR__ . '/../../www/custom'),
+				new CallbackFilterIterator(
+					new DirectoryIterator(__DIR__ . '/../../www/custom'),
 					fn($f, $_k) => $f->isFile() && $f->getExtension() == 'js'
 				),
 				fn($f, $_k) => $template->basePath . '/custom/' . $f->getFileName()
@@ -106,8 +109,8 @@ abstract class BasePresenter extends Presenter {
 
 		$headers = iterator_to_array(
 			new Mapper(
-				new \CallbackFilterIterator(
-					new \DirectoryIterator(__DIR__ . '/../../www/images/header'),
+				new CallbackFilterIterator(
+					new DirectoryIterator(__DIR__ . '/../../www/images/header'),
 					fn($f, $_k) => $f->isFile() && \in_array($f->getExtension(), ['png', 'jpg', 'jpeg', 'gif'], true)
 				),
 				fn($f, $_k) => $f->getFileName()

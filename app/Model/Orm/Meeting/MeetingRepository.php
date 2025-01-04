@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Orm\Meeting;
 
+use DateTimeImmutable;
 use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Repository\Repository;
 
@@ -13,6 +14,6 @@ class MeetingRepository extends Repository {
 	}
 
 	public function findUpcoming(): ICollection {
-		return $this->findAll()->findBy(['date>=' => new \DateTimeImmutable('today')])->orderBy(['date' => ICollection::ASC]);
+		return $this->findAll()->findBy(['date>=' => new DateTimeImmutable('today')])->orderBy(['date' => ICollection::ASC]);
 	}
 }

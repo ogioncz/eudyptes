@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
+use Indextank_Api;
 use Nette\DI\Attributes\Inject;
 use Nette\DI\Container;
 
@@ -22,7 +23,7 @@ class SearchPresenter extends BasePresenter {
 			$page = $paginator->page;
 			$paginator->itemsPerPage = $this->itemsPerPage;
 
-			$client = new \Indextank_Api($this->context->parameters['indextank']);
+			$client = new Indextank_Api($this->context->parameters['indextank']);
 			$index = $client->get_index('web');
 
 			$fetch_fields = 'title,timestamp';

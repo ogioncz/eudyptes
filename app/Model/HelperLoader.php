@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Model;
 
 use App\Model\Orm\User\User;
+use DateTimeImmutable;
 use Latte\Runtime\Filters;
 use Nette\Application\Application;
 use Nette\SmartObject;
@@ -28,17 +29,17 @@ class HelperLoader {
 		return Html::el('a', $user->username)->href($this->app->getPresenter()->link('Profile:show', $user->id))->class('role-' . $user->role . ($visual ? ' role-visual' : ''));
 	}
 
-	public function relDate(\DateTimeImmutable $date): string {
-		if ($date == (new \DateTimeImmutable('today'))) {
+	public function relDate(DateTimeImmutable $date): string {
+		if ($date == (new DateTimeImmutable('today'))) {
 			return '(dnes)';
-		} elseif ($date == (new \DateTimeImmutable('tomorrow'))) {
+		} elseif ($date == (new DateTimeImmutable('tomorrow'))) {
 			return '(zítra)';
 		}
 
 		return '';
 	}
 
-	public function dateNA(\DateTimeImmutable $time = null, $format = null) {
+	public function dateNA(?DateTimeImmutable $time = null, $format = null) {
 		if ($time) {
 			return Filters::date($time, $format);
 		} else {

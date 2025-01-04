@@ -10,6 +10,7 @@ use App\Model\Orm\Chat\Chat;
 use App\Model\Orm\Chat\ChatRepository;
 use App\Model\Orm\User\UserRepository;
 use App\Model\TelegramNotifier;
+use Exception;
 use Nette\Application\Responses\TextResponse;
 use Nette\Application\UI\Control;
 use Nette\Application\UI\Form;
@@ -84,9 +85,9 @@ class ChatControl extends Control {
 		$chat->user = $this->users->getById($presenter->getUser()->getIdentity()->getId());
 		$this->chats->persistAndFlush($chat);
 		try {
-			$username = $presenter->getUser()->getIdentity()->getData()['username'] ?? throw new \Exception('Unexpected: missing username');
+			$username = $presenter->getUser()->getIdentity()->getData()['username'] ?? throw new Exception('Unexpected: missing username');
 			$this->telegramNotifier->chatMessage($username, trim(preg_replace('/\{#([0-9]+)\}/', '', $values->content)));
-		} catch (\Exception) {
+		} catch (Exception) {
 		}
 		if (!$presenter->isAjax()) {
 			$this->redirect('this');

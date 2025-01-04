@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace App\Components;
 
+use Closure;
 use DateTimeImmutable;
 use Nextras\FormComponents\Controls\DateTimeControlPrototype;
 
@@ -27,7 +28,7 @@ class TimePicker extends DateTimeControlPrototype {
 	/** @var string */
 	protected $htmlType = 'time';
 
-	protected function getDefaultParser(): \Closure {
+	protected function getDefaultParser(): Closure {
 		return function($value) {
 			if (!preg_match('#^(?P<HH>0?[0-9]|1[0-9]|2[0-3]):(?P<mm>[0-5][0-9])$#', $value, $matches)) {
 				return null;

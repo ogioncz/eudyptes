@@ -13,7 +13,7 @@ class UserRepository extends Repository {
 		return [User::class];
 	}
 
-	public function findActive(DateTimeImmutable $time = null): ICollection {
+	public function findActive(?DateTimeImmutable $time = null): ICollection {
 		if (!$time) {
 			$time = new DateTimeImmutable('-5 min');
 		}
