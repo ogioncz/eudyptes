@@ -52,7 +52,7 @@ abstract class BasePresenter extends Presenter {
 		parent::__construct();
 	}
 
-	protected function createComponentPaginator($name): VisualPaginator {
+	protected function createComponentPaginator(?string $name): VisualPaginator {
 		$vp = new VisualPaginator();
 		$vp->getPaginator()->setItemsPerPage(10);
 		$this->addComponent($vp, $name);
@@ -95,9 +95,9 @@ abstract class BasePresenter extends Presenter {
 			new Mapper(
 				new CallbackFilterIterator(
 					new DirectoryIterator(__DIR__ . '/../../www/custom'),
-					fn($f, $_k) => $f->isFile() && $f->getExtension() == 'css'
+					fn($f, $_k): bool => $f->isFile() && $f->getExtension() == 'css'
 				),
-				fn($f, $_k) => $template->basePath . '/custom/' . $f->getFileName()
+				fn($f, $_k): string => $template->basePath . '/custom/' . $f->getFileName()
 			)
 		);
 
@@ -105,9 +105,9 @@ abstract class BasePresenter extends Presenter {
 			new Mapper(
 				new CallbackFilterIterator(
 					new DirectoryIterator(__DIR__ . '/../../www/custom'),
-					fn($f, $_k) => $f->isFile() && $f->getExtension() == 'js'
+					fn($f, $_k): bool => $f->isFile() && $f->getExtension() == 'js'
 				),
-				fn($f, $_k) => $template->basePath . '/custom/' . $f->getFileName()
+				fn($f, $_k): string => $template->basePath . '/custom/' . $f->getFileName()
 			)
 		);
 
@@ -115,7 +115,7 @@ abstract class BasePresenter extends Presenter {
 			new Mapper(
 				new CallbackFilterIterator(
 					new DirectoryIterator(__DIR__ . '/../../www/images/header'),
-					fn($f, $_k) => $f->isFile() && \in_array($f->getExtension(), ['png', 'jpg', 'jpeg', 'gif'], true)
+					fn($f, $_k): bool => $f->isFile() && \in_array($f->getExtension(), ['png', 'jpg', 'jpeg', 'gif'], true)
 				),
 				fn($f, $_k) => $f->getFileName()
 			)

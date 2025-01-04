@@ -11,8 +11,8 @@ use Nette\Utils\Json;
 class CustomTags {
 	use SmartObject;
 
-	public static function item($text) {
-		$text = preg_replace_callback('/<(?P<prefix>cp-)(?P<type>(?:item|furniture|igloo|floor|location|puffleitem))(?P<attr>[^>]*)>(?P<id>\d+)<\/(?P=prefix)(?P=type)>/sU', function($match) {
+	public static function item($text): array|string|null {
+		$text = preg_replace_callback('/<(?P<prefix>cp-)(?P<type>(?:item|furniture|igloo|floor|location|puffleitem))(?P<attr>[^>]*)>(?P<id>\d+)<\/(?P=prefix)(?P=type)>/sU', function(array $match): string {
 			if ($match['type'] === 'item') {
 				$match['type'] = 'paper';
 			} elseif ($match['type'] === 'furniture') {
@@ -26,7 +26,7 @@ class CustomTags {
 			} elseif ($match['type'] === 'location') {
 				$match['type'] = 'igloos/locations';
 			}
-			$match['attr'] = Json::decode('{' . preg_replace('/([\w-]+)=("[^"]+")/', '"\1": \2, ', $match['attr']) . '"data-final": "true"}');
+			$match['attr'] = Json::decode('{' . preg_replace('/([\w-]+)=("[^"]+")/', '"\1": \2, ', (string) $match['attr']) . '"data-final": "true"}');
 
 			if (isset($match['attr']->size)) {
 				$match['size'] = (int) $match['attr']->size;
@@ -47,14 +47,14 @@ class CustomTags {
 		return $text;
 	}
 
-	public static function coins($text) {
+	public static function coins($text): string|array|null {
 		$text = preg_replace('/<cp-coins>(\d+)<\/cp-coins>/sU', '<span class="cpcoins cpitem"><span>\1<span class="sr-only"> mincí</span></span></span>', (string) $text);
 
 		return $text;
 	}
 
-	public static function age($text) {
-		$text = preg_replace_callback('/<cp-age>(\d{4}-\d{2}-\d{2})<\/cp-age>/sU', function($match) {
+	public static function age($text): array|string|null {
+		$text = preg_replace_callback('/<cp-age>(\d{4}-\d{2}-\d{2})<\/cp-age>/sU', function($match): string {
 			$today = new DateTimeImmutable();
 			$registration = new DateTimeImmutable($match[1]);
 
@@ -64,7 +64,7 @@ class CustomTags {
 		return $text;
 	}
 
-	public static function music($text) {
+	public static function music($text): ?string {
 		return preg_replace('/<cp-music>(\d+)<\/cp-music>/sU', '<audio src="http://upload.fan-club-penguin.cz/hudba/$1.mp3" loop="loop" autoplay="autoplay" type="audio/mp3"></audio>', (string) $text);
 	}
 }

@@ -31,7 +31,7 @@ class TimePicker extends DateTimeControlPrototype {
 
 	#[Override]
 	protected function getDefaultParser(): Closure {
-		return function($value) {
+		return function($value): ?DateTimeImmutable {
 			if (!preg_match('#^(?P<HH>0?[0-9]|1[0-9]|2[0-3]):(?P<mm>[0-5][0-9])$#', $value, $matches)) {
 				return null;
 			}

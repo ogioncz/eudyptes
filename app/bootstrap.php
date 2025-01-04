@@ -20,7 +20,7 @@ $configurator->addConfig(__DIR__ . '/config/config.local.neon');
 
 $container = $configurator->createContainer();
 
-Container::extensionMethod('addDatePicker', fn(Container $container, $name, $label = null) => $container[$name] = new DateControl($label));
-Container::extensionMethod('addTimePicker', fn(Container $container, $name, $label = null) => $container[$name] = new TimePicker($label));
+Container::extensionMethod('addDatePicker', fn(Container $container, $name, $label = null): DateControl => $container[$name] = new DateControl($label));
+Container::extensionMethod('addTimePicker', fn(Container $container, $name, $label = null): TimePicker => $container[$name] = new TimePicker($label));
 
 return $container;

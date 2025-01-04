@@ -11,4 +11,6 @@ return RectorConfig::configure()
 		__DIR__ . '/www',
 	])
 	->withPhpSets()
-	->withTypeCoverageLevel(0);
+	->withPreparedSets(
+		typeDeclarations: true,
+	);

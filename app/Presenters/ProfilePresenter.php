@@ -90,7 +90,7 @@ class ProfilePresenter extends BasePresenter {
 		$this['profileForm']->setDefaults($data);
 	}
 
-	protected function createComponentProfileForm() {
+	protected function createComponentProfileForm(): Form {
 		$form = new Form();
 		$form->addProtection();
 		$form->setRenderer(new Bs3FormRenderer());
@@ -180,7 +180,7 @@ class ProfilePresenter extends BasePresenter {
 		}
 	}
 
-	protected function createComponentSignUpForm() {
+	protected function createComponentSignUpForm(): Form {
 		$form = new Form();
 		$form->addProtection();
 		$form->setRenderer(new Bs3FormRenderer());
@@ -243,7 +243,7 @@ class ProfilePresenter extends BasePresenter {
 		}
 	}
 
-	protected function createComponentPasswordResetRequestForm() {
+	protected function createComponentPasswordResetRequestForm(): Form {
 		$form = new Form();
 		$form->addProtection();
 		$form->setRenderer(new Bs3FormRenderer());
@@ -309,7 +309,7 @@ class ProfilePresenter extends BasePresenter {
 		}
 	}
 
-	protected function createComponentPasswordResetForm() {
+	protected function createComponentPasswordResetForm(): Form {
 		$form = new Form();
 		$form->addProtection();
 		$form->setRenderer(new Bs3FormRenderer());

@@ -64,7 +64,7 @@ class PostPresenter extends BasePresenter {
 		$this->getTemplate()->posts = $posts;
 	}
 
-	protected function createComponentPostForm() {
+	protected function createComponentPostForm(): Form {
 		$form = new Form();
 		$form->addProtection();
 		$renderer = new Bs3FormRenderer();

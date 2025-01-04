@@ -18,7 +18,7 @@ use Tester\TestCase;
 $container = require __DIR__ . '/bootstrap.php';
 
 class ChatFormatterTest extends TestCase {
-	private $formatter;
+	private ?ChatFormatter $formatter = null;
 
 	#[Override]
 	protected function setUp(): void {

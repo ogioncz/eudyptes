@@ -19,7 +19,7 @@ use Tester\TestCase;
 $container = require __DIR__ . '/bootstrap.php';
 
 class FormatterTest extends TestCase {
-	private $formatter;
+	private ?Formatter $formatter = null;
 
 	#[Override]
 	protected function setUp(): void {

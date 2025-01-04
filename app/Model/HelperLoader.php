@@ -39,7 +39,7 @@ class HelperLoader {
 		return '';
 	}
 
-	public function dateNA(?DateTimeImmutable $time = null, $format = null) {
+	public function dateNA(?DateTimeImmutable $time = null, ?string $format = null): ?string {
 		if ($time) {
 			return Filters::date($time, $format);
 		} else {

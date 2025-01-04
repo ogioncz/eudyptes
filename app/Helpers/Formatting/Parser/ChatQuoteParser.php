@@ -33,7 +33,7 @@ class ChatQuoteParser implements BlockParserInterface {
 		return true;
 	}
 
-	private static function getQuotedId($quote): int {
+	private static function getQuotedId(string $quote): int {
 		preg_match(self::$regex, (string) $quote, $match);
 
 		return (int) $match[1];

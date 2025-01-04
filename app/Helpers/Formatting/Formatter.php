@@ -183,12 +183,12 @@ class Formatter {
 		return ['text' => $text, 'errors' => $this->purifier->context->get('ErrorCollector')->getRaw()];
 	}
 
-	public function replaceOembed($text) {
+	public function replaceOembed($text): array|string|null {
 		$replacements = [];
 		$alpha = "a-z\x80-\xFF";
 		$domain = "[0-9$alpha](?:[-0-9$alpha]{0,61}[0-9$alpha])?";
 		$topDomain = "[$alpha][-0-9$alpha]{0,17}[$alpha]";
-		$text = preg_replace_callback("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", function($match) use (&$replacements) {
+		$text = preg_replace_callback("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", function($match) use (&$replacements): string {
 			if (!isset($replacements[$match[0]])) {
 				if (\in_array($match[1], self::$OEMBED_WHITELIST, true)) {
 					try {
@@ -210,8 +210,8 @@ class Formatter {
 		return $text;
 	}
 
-	public function replaceGalleries($text) {
-		$imageSize = function($url, $thumbUrl) {
+	public function replaceGalleries($text): array|string|null {
+		$imageSize = function($url, $thumbUrl): array|false {
 			$size = @getimagesize($thumbUrl);
 			if (!$size) {
 				$size = @getimagesize($url);
@@ -219,10 +219,10 @@ class Formatter {
 
 			return $size;
 		};
-		$text = preg_replace_callback('/<gallery type="carousel">(.+?)<\/gallery>/s', function($match) use ($imageSize) {
+		$text = preg_replace_callback('/<gallery type="carousel">(.+?)<\/gallery>/s', function($match) use ($imageSize): string {
 			$temp = sha1((string) random_int(0, mt_getrandmax()));
 			$maxWidth = $maxHeight = 0;
-			$images = preg_replace_callback('/!\[(.*?)\]\(([^"]+?)(?: "([^"]+)")?\)/', function($match) use ($imageSize, &$maxWidth, &$maxHeight) {
+			$images = preg_replace_callback('/!\[(.*?)\]\(([^"]+?)(?: "([^"]+)")?\)/', function($match) use ($imageSize, &$maxWidth, &$maxHeight): string {
 				$alt = $match[1];
 				$caption = !empty($match[3]) ? '<div class="carousel-caption"><p>' . $match[3] . '</p></div>' : '';
 				$url = $match[2];
@@ -233,7 +233,7 @@ class Formatter {
 				$maxHeight = max($maxHeight, $height);
 
 				return $code;
-			}, $match[1]);
+			}, (string) $match[1]);
 
 			return <<<EOT
 				<figure>
@@ -251,7 +251,7 @@ class Formatter {
 		return $text;
 	}
 
-	public function replaceProps($text) {
+	public function replaceProps($text): string|array|null {
 		$text = preg_replace('/<prop>vystavba<\/prop>/i', '<figure><img src="http://cdn.fan-club-penguin.cz/img/vystavba.gif"></figure>', (string) $text);
 		$text = preg_replace('/<prop>fieldop<\/prop>/i', '<figure><img alt="Field-op" src="http://upload.fan-club-penguin.cz/files/system/phone-red-pulsing-big.gif"></figure>', (string) $text);
 		$text = preg_replace('/<prop>message<\/prop>/i', '<figure><img alt="Zpráva" src="http://upload.fan-club-penguin.cz/files/system/phone-blue-pulsing-big.gif"></figure>', (string) $text);
@@ -271,8 +271,8 @@ class Formatter {
 		return $text;
 	}
 
-	public function replaceWikiLinks($text) {
-		$text = preg_replace_callback('~\[\[([^\]|\n]+)(?:\|([^\]|\n]+))?\]\]~u', function($matches) {
+	public function replaceWikiLinks($text): array|string|null {
+		$text = preg_replace_callback('~\[\[([^\]|\n]+)(?:\|([^\]|\n]+))?\]\]~u', function($matches): string {
 			$link = $label = $matches[1];
 			if (\count($matches) === 3) {
 				$label = $matches[2];

@@ -22,7 +22,7 @@ class ChatFormatter {
 		$this->converter = new CommonMarkConverter($config, $environment);
 	}
 
-	public function format($markdown): string {
+	public function format(string $markdown): string {
 		return $this->converter->convertToHtml($markdown);
 	}
 }

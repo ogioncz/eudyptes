@@ -246,7 +246,7 @@ class MeetingPresenter extends BasePresenter {
 	 * Participator control factory.
 	 */
 	protected function createComponentParticipator(): Multiplier {
-		return new Multiplier(function($meetingId) {
+		return new Multiplier(function($meetingId): Participator {
 			$userId = $this->getUser()->getIdentity()->getId();
 			$meeting = $this->meetings->getById($meetingId);
 			$youParticipate = array_reduce(iterator_to_array($meeting->visitors->toCollection()), function($carry, $visitor) use ($userId) {

@@ -21,9 +21,9 @@ class EmoticonParser implements InlineParserInterface {
 		/** @param string[] $emoticons */
 		private array $emoticons,
 	) {
-		$this->characters = array_unique(array_map(fn($emoticon) => mb_substr($emoticon, 0, 1), array_keys($emoticons)));
+		$this->characters = array_unique(array_map(fn($emoticon): string => mb_substr((string) $emoticon, 0, 1), array_keys($emoticons)));
 
-		$this->regex = '(^(' . implode('|', array_map(fn($emoticon) => preg_quote($emoticon), array_keys($emoticons))) . '))';
+		$this->regex = '(^(' . implode('|', array_map(fn($emoticon): string => preg_quote((string) $emoticon), array_keys($emoticons))) . '))';
 	}
 
 	#[Override]

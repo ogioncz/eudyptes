@@ -55,7 +55,7 @@ class OembedParser implements BlockParserInterface {
 		return false;
 	}
 
-	private static function getDomain($url) {
+	private static function getDomain(string $url): string {
 		preg_match(self::getUrlRegex(), (string) $url, $match);
 
 		return $match[1];
