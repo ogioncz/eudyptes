@@ -7,6 +7,9 @@ namespace App\Model\Orm\PostRevision;
 use App\Model\Orm\BaseMapper;
 use Override;
 
+/**
+ * @extends BaseMapper<PostRevision>
+ */
 class PostRevisionMapper extends BaseMapper {
 	#[Override]
 	public function getTableName(): string {

@@ -23,11 +23,11 @@ use Override;
  * @property string|null $icon
  * @property bool $menu {default false}
  * @property-read Revision $lastRevision {virtual}
- * @property OneHasMany|Revision[] $revisions {1:m Revision::$page, orderBy=[timestamp, DESC]}
+ * @property OneHasMany<Revision> $revisions {1:m Revision::$page, orderBy=[timestamp, DESC]}
  */
 class Page extends Entity implements Resource {
 	public function getterLastRevision(): Revision {
-		return $this->revisions->get()->orderBy(['timestamp' => 'DESC'])->fetch();
+		return $this->revisions->toCollection()->orderBy(['timestamp' => 'DESC'])->fetch();
 	}
 
 	public function getterMarkdown(): string {

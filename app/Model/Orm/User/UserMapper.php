@@ -8,6 +8,9 @@ use App\Model\Orm\BaseMapper;
 use Nextras\Orm\Mapper\Dbal\Conventions\IConventions;
 use Override;
 
+/**
+ * @extends BaseMapper<User>
+ */
 class UserMapper extends BaseMapper {
 	#[Override]
 	protected function createConventions(): IConventions {

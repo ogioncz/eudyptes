@@ -265,6 +265,6 @@ class PagePresenter extends BasePresenter {
 			$this->error('Stránka nenalezena.');
 		}
 		$this->getTemplate()->page = $page;
-		$this->getTemplate()->revisions = $page->revisions->get()->orderBy(['timestamp' => 'DESC']);
+		$this->getTemplate()->revisions = $page->revisions->toCollection()->orderBy(['timestamp' => 'DESC']);
 	}
 }

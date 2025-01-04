@@ -43,7 +43,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (isset($this->params['do']) && $this->params['do'] === 'participator-participation') {
-			$this->getTemplate()->meetings = $this->meetings->findById($this['participator']->params['meetingId']);
+			$this->getTemplate()->meetings = $this->meetings->findByIds([$this['participator']->params['meetingId']]);
 		} else {
 			$this->getTemplate()->meetings = $this->meetings->findUpcoming();
 		}
@@ -249,7 +249,7 @@ class MeetingPresenter extends BasePresenter {
 		return new Multiplier(function($meetingId) {
 			$userId = $this->getUser()->getIdentity()->getId();
 			$meeting = $this->meetings->getById($meetingId);
-			$youParticipate = array_reduce(iterator_to_array($meeting->visitors->get()), function($carry, $visitor) use ($userId) {
+			$youParticipate = array_reduce(iterator_to_array($meeting->visitors->toCollection()), function($carry, $visitor) use ($userId) {
 				if ($visitor->id === $userId) {
 					return true;
 				}

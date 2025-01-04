@@ -6,5 +6,8 @@ namespace App\Model\Orm\Mail;
 
 use App\Model\Orm\BaseMapper;
 
+/**
+ * @extends BaseMapper<Mail>
+ */
 class MailMapper extends BaseMapper {
 }

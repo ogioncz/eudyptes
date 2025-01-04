@@ -25,7 +25,7 @@ use Override;
  * @property string $ip
  * @property bool $read {default false}
  * @property Mail $root {virtual}
- * @property OneHasMany|Mail[] $replies {1:m Mail::$reaction, orderBy=[timestamp, ASC]}
+ * @property OneHasMany<Mail> $replies {1:m Mail::$reaction, orderBy=[timestamp, ASC]}
  */
 class Mail extends Entity implements Resource {
 	#[Override]

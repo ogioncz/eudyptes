@@ -84,7 +84,7 @@ abstract class BasePresenter extends Presenter {
 		$template = $this->getTemplate();
 		if ($this->getUser()->isLoggedIn()) {
 			$user = $this->users->getById($this->getUser()->getIdentity()->getId());
-			$template->unreadMails = $user->receivedMail->get()->findBy(['read' => false])->countStored();
+			$template->unreadMails = $user->receivedMail->toCollection()->findBy(['read' => false])->countStored();
 			$template->upcomingMeetings = $this->meetings->findUpcoming()->countStored();
 		}
 

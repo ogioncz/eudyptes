@@ -19,7 +19,7 @@ use Override;
  * @property string $difficulty {enum self::DIFFICULTY_*}
  * @property string $icon
  * @property bool $obtainable
- * @property ManyHasMany|User[] $owners {m:m User::$ownedStamps}
+ * @property ManyHasMany<User> $owners {m:m User::$ownedStamps}
  */
 class Stamp extends Entity implements Resource {
 	public const DIFFICULTY_NOTHING = '0';

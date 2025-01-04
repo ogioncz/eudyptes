@@ -23,7 +23,7 @@ use Override;
  * @property string $markdown
  * @property string $description
  * @property string $ip
- * @property ManyHasMany|User[] $visitors {m:m User::$visitedMeetings, isMain=true}
+ * @property ManyHasMany<User> $visitors {m:m User::$visitedMeetings, isMain=true}
  */
 class Meeting extends Entity implements Resource {
 	#[Override]

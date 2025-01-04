@@ -6,5 +6,8 @@ namespace App\Model\Orm\Chat;
 
 use App\Model\Orm\BaseMapper;
 
+/**
+ * @extends BaseMapper<Chat>
+ */
 class ChatMapper extends BaseMapper {
 }

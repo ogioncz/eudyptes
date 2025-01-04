@@ -9,6 +9,9 @@ use Nextras\Orm\Collection\ICollection;
 use Nextras\Orm\Repository\Repository;
 use Override;
 
+/**
+ * @extends Repository<User>
+ */
 class UserRepository extends Repository {
 	#[Override]
 	public static function getEntityClassNames(): array {

@@ -24,11 +24,11 @@ use Override;
  * @property bool $likeable {default false}
  * @property bool $published {default true}
  * @property-read PostRevision $lastRevision {virtual}
- * @property OneHasMany|PostRevision[] $revisions {1:m PostRevision::$post, orderBy=[timestamp, DESC]}
+ * @property OneHasMany<PostRevision> $revisions {1:m PostRevision::$post, orderBy=[timestamp, DESC]}
  */
 class Post extends Entity implements Resource {
 	public function getterLastRevision(): PostRevision {
-		return $this->revisions->get()->orderBy(['timestamp' => 'DESC'])->fetch();
+		return $this->revisions->toCollection()->orderBy(['timestamp' => 'DESC'])->fetch();
 	}
 
 	public function getterTitle(): string {

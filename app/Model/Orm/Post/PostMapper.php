@@ -6,5 +6,8 @@ namespace App\Model\Orm\Post;
 
 use App\Model\Orm\BaseMapper;
 
+/**
+ * @extends BaseMapper<Post>
+ */
 class PostMapper extends BaseMapper {
 }

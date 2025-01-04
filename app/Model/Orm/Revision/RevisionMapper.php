@@ -7,6 +7,9 @@ namespace App\Model\Orm\Revision;
 use App\Model\Orm\BaseMapper;
 use Override;
 
+/**
+ * @extends BaseMapper<Revision>
+ */
 class RevisionMapper extends BaseMapper {
 	#[Override]
 	public function getTableName(): string {
