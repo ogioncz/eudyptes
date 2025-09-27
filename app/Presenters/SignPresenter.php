@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Presenters;
 
+use App\FormData\SignInFormData;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Security\AuthenticationException;
@@ -14,7 +15,7 @@ use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
  */
 class SignPresenter extends BasePresenter {
 	#[Persistent]
-	public $backlink = '';
+	public string $backlink = '';
 
 	protected function createComponentSignInForm(): Form {
 		$form = new Form();
@@ -34,7 +35,7 @@ class SignPresenter extends BasePresenter {
 	}
 
 	public function signInFormSucceeded(Form $form): void {
-		$values = $form->getValues();
+		$values = $form->getValues(SignInFormData::class);
 
 		if ($values->remember) {
 			$this->getUser()->setExpiration('14 days', false);
