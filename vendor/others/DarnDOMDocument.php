@@ -26,7 +26,7 @@ class DarnDOMDocument extends DOMDocument {
 		return $dom;
 	}
 
-	public function saveHTML(DOMNode $element = null): string|false {
+	public function saveHTML(?DOMNode $element = null): string|false {
 		return preg_replace('~^<body[^>]*>(.*)</body>$~s', '$1', parent::saveHTML($this->getElementsByTagName('body')->item(0)));
 	}
 }
