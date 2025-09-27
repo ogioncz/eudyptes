@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Error;
 
+use App\Presentation\BasePresenter;
 use Exception;
 use Nette\Application\BadRequestException;
 use Tracy\Debugger;

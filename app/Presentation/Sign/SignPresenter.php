@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Sign;
 
 use App\FormData\SignInFormData;
+use App\Presentation\BasePresenter;
 use Nette\Application\Attributes\Persistent;
 use Nette\Application\UI\Form;
 use Nette\Security\AuthenticationException;

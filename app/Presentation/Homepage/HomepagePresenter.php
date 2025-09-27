@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Homepage;
 
 use App\Model\Orm\Post\PostRepository;
+use App\Presentation\BasePresenter;
 use DateTimeImmutable;
 use Nette\DI\Attributes\Inject;
 

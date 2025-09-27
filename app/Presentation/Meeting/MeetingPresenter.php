@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Meeting;
 
 use App\Components\Participator;
 use App\Helpers\Formatting\Formatter;
@@ -10,6 +10,7 @@ use App\Model\HelperLoader;
 use App\Model\Orm\Meeting\Meeting;
 use App\Model\Orm\Meeting\MeetingRepository;
 use App\Model\Orm\User\UserRepository;
+use App\Presentation\BasePresenter;
 use Exception;
 use Nette\Application\UI\Form;
 use Nette\Application\UI\Multiplier;

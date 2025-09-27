@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Search;
 
+use App\Presentation\BasePresenter;
 use Indextank_Api;
 use Nette\DI\Attributes\Inject;
 use Nette\DI\Container;

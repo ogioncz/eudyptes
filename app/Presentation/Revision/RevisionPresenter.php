@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Revision;
 
 use Actinarium\Diff\Diff;
 use Actinarium\Diff\Renderer\Html\InlineRenderer;
 use Actinarium\Diff\Renderer\Html\SideBySideRenderer;
 use App\Model\Orm\Revision\RevisionRepository;
+use App\Presentation\BasePresenter;
 use Nette\DI\Attributes\Inject;
 
 /**

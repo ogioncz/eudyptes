@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation;
 
 use App\Components\Chat\ChatControl;
 use App\Helpers\Formatting\ChatFormatter;

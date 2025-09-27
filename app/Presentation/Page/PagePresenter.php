@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Page;
 
 use App\Helpers\Formatting\Formatter;
 use App\Model\Orm\Page\Page;
 use App\Model\Orm\Page\PageRepository;
 use App\Model\Orm\Revision\Revision;
 use App\Model\Orm\User\UserRepository;
+use App\Presentation\BasePresenter;
 use Nette\Application\UI\Form;
 use Nette\Caching\Cache;
 use Nette\Caching\Storage;

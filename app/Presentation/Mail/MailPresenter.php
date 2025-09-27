@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Mail;
 
 use App\Helpers\Formatting\Formatter;
 use App\Model\Orm\Mail\Mail;
 use App\Model\Orm\Mail\MailRepository;
 use App\Model\Orm\User\UserRepository;
+use App\Presentation\BasePresenter;
 use Nette\Application\UI\Form;
 use Nette\DI\Attributes\Inject;
-use Nette\DI\Container;
 use Nette\Forms\Controls\SubmitButton;
 use Nette\Http\IResponse;
 use Nette\Mail\Message;
@@ -21,9 +21,6 @@ use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
  * MailPresenter handles messages sent between users.
  */
 class MailPresenter extends BasePresenter {
-	#[Inject]
-	public Container $context;
-
 	#[Inject]
 	public Formatter $formatter;
 
@@ -53,7 +50,7 @@ class MailPresenter extends BasePresenter {
 		$template = $this->getTemplate();
 
 		if ($tree) {
-			$template->setFile(__DIR__ . '/../templates/Mail/tree.latte');
+			$template->setFile(__DIR__ . '/tree.latte');
 		}
 
 		if (!$this->getUser()->isLoggedIn()) {
@@ -196,7 +193,7 @@ class MailPresenter extends BasePresenter {
 		$messageTemplate = $this->createTemplate();
 		$messageTemplate->sentMail = $mail;
 		$messageTemplate->sender = $mail->sender->username;
-		$messageTemplate->setFile($this->context->parameters['appDir'] . '/templates/Mail/@notification.latte');
+		$messageTemplate->setFile(__DIR__ . '/@notification.latte');
 
 		$message = new Message();
 		$message->setFrom($messageTemplate->sender . ' <neodpovidat@fan-club-penguin.cz>');

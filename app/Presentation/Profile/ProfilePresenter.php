@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Presenters;
+namespace App\Presentation\Profile;
 
 use App\Model\Orm\Stamp\StampRepository;
 use App\Model\Orm\Token\Token;
 use App\Model\Orm\Token\TokenRepository;
 use App\Model\Orm\User\User;
 use App\Model\Orm\User\UserRepository;
+use App\Presentation\BasePresenter;
 use DateInterval;
 use DateTimeImmutable;
 use Exception;
@@ -287,8 +288,7 @@ class ProfilePresenter extends BasePresenter {
 
 			$mailTemplate = $this->createTemplate();
 
-			$appDir = $this->context->parameters['appDir'];
-			$mailTemplate->setFile($appDir . '/templates/Profile/resetPasswordMail.latte');
+			$mailTemplate->setFile(__DIR__ . '/resetPasswordMail.latte');
 
 			$mailTemplate->url = $this->link('//Profile:resetPassword', ['tid' => $token->id, 'token' => $t]);
 			$mailTemplate->username = $user->username;

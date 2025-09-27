@@ -14,8 +14,7 @@ php:
 
 application:
 	errorPresenter: Error
-	mapping:
-		*: App\*Module\Presenters\*Presenter
+	mapping: App\Presentation\*\**Presenter
 
 session:
 	autoStart: yes
