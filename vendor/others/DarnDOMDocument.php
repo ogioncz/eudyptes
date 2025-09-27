@@ -15,7 +15,10 @@ class DarnDOMDocument extends DOMDocument {
 
 		libxml_use_internal_errors(true); // prevent warning when using html5 tags
 
-		$html = mb_convert_encoding($html, 'html-entities', 'utf-8');
+		$convmap = [
+			0x80, 0x1FFFFF, 0, 0x10FFFF,
+		];
+		$html = mb_encode_numericentity($html, $convmap, 'utf8', true);
 		$dom = parent::loadHTML($html, $options);
 
 		libxml_use_internal_errors(false);
