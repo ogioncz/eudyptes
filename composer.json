@@ -65,6 +65,7 @@
 		"cs": "php-cs-fixer fix --verbose --dry-run --diff",
 		"fix": "php-cs-fixer fix --verbose --diff",
 		"rector": "vendor/bin/rector",
+		"phpstan": "phpstan analyse --memory-limit 512M",
 		"test": "php vendor/bin/tester -C tests/unit"
 	}
 }
