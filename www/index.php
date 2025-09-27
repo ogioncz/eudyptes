@@ -5,6 +5,9 @@ declare(strict_types=1);
 // Uncomment this line if you must temporarily take down your site for maintenance.
 // require '.maintenance.php';
 
-$container = require __DIR__ . '/../app/bootstrap.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-$container->getService('application')->run();
+$bootstrap = new App\Bootstrap();
+$container = $bootstrap->bootWebApplication();
+$application = $container->getByType(Nette\Application\Application::class);
+$application->run();
