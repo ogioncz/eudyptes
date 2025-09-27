@@ -12,17 +12,13 @@ use HTMLPurifier;
 use HTMLPurifier_Context;
 use HTMLPurifier_ErrorCollector;
 use Mockery;
-use Override;
 use Tester\Assert;
 use Tester\TestCase;
 
 require __DIR__ . '/bootstrap.php';
 
 class FormatterTest extends TestCase {
-	private ?Formatter $formatter = null;
-
-	#[Override]
-	protected function setUp(): void {
+	private static function makeFormatter(): Formatter {
 		$oembedResponse = Mockery::mock(OEmbedResponse::class);
 		$oembedResponse->shouldReceive('getHtml')->andReturn('<video src="nggyu.webm"></video>');
 		$errorCollector = Mockery::mock(HTMLPurifier_ErrorCollector::class);
@@ -35,14 +31,15 @@ class FormatterTest extends TestCase {
 		$purifier->shouldReceive('purify')->withAnyArgs()->andReturnUsing(fn($text) => $text);
 		$oembed = Mockery::mock(OEmbed::class);
 		$oembed->shouldReceive('request')->with('https://youtu.be/dQw4w9WgXcQ')->andReturn($oembedResponse);
-		$this->formatter = new Formatter($pages, $purifier, $oembed);
+
+		return new Formatter($pages, $purifier, $oembed);
 	}
 
 	public function testPlain(): void {
 		$markdown = 'Hello';
 		$html = "<p>Hello</p>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -51,7 +48,7 @@ class FormatterTest extends TestCase {
 		$markdown = "¡¡¡\nHello\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -60,7 +57,7 @@ class FormatterTest extends TestCase {
 		$markdown = "¡¡¡ Click to open\nHello\n!!!";
 		$html = "<details><summary>Click to open</summary>\n<p>Hello</p></details>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -69,7 +66,7 @@ class FormatterTest extends TestCase {
 		$markdown = "¡¡¡\n¡¡¡\n¡¡¡\nHello\n!!!\n!!!\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details></details></details>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -78,7 +75,7 @@ class FormatterTest extends TestCase {
 		$markdown = "¡¡¡\n1\n¡¡¡\n2\n¡¡¡\nHello\n!!!\n3\n!!!\n4\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>1</p>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>2</p>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n<p>3</p></details>\n<p>4</p></details>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -87,7 +84,7 @@ class FormatterTest extends TestCase {
 		$markdown = "¡¡¡\nHello\n!!!\n¡¡¡\nBye\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Bye</p></details>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -96,7 +93,7 @@ class FormatterTest extends TestCase {
 		$markdown = ':-)';
 		$html = "<p><img src=\"https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg\" alt=\"\" width=\"30\" height=\"29\" /></p>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -105,7 +102,7 @@ class FormatterTest extends TestCase {
 		$markdown = 'https://youtu.be/dQw4w9WgXcQ';
 		$html = "<figure class=\"rwd-media rwd-ratio-16-9\"><video src=\"nggyu.webm\"></video></figure>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -114,7 +111,7 @@ class FormatterTest extends TestCase {
 		$markdown = "Hello\nhttps://youtu.be/dQw4w9WgXcQ\nGood-by";
 		$html = "<p>Hello</p>\n<figure class=\"rwd-media rwd-ratio-16-9\"><video src=\"nggyu.webm\"></video></figure>\n<p>Good-by</p>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
@@ -123,7 +120,7 @@ class FormatterTest extends TestCase {
 		$markdown = 'You must see https://youtu.be/dQw4w9WgXcQ';
 		$html = "<p>You must see https://youtu.be/dQw4w9WgXcQ</p>\n";
 
-		$formatted = $this->formatter->format($markdown);
+		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
 		Assert::equal([], $formatted['errors']);
 	}
