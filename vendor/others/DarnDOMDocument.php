@@ -10,7 +10,7 @@ class DarnDOMDocument extends DOMDocument {
 		return $this->saveHTMLExact();
 	}
 
-	public function loadHTML(string $html, int $options = 0) {
+	public function loadHTML(string $html, int $options = 0): bool {
 		// $options |= LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD; // don’t wrap document fragments
 
 		libxml_use_internal_errors(true); // prevent warning when using html5 tags
