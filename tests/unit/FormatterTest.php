@@ -16,7 +16,7 @@ use Override;
 use Tester\Assert;
 use Tester\TestCase;
 
-$container = require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/bootstrap.php';
 
 class FormatterTest extends TestCase {
 	private ?Formatter $formatter = null;
@@ -129,5 +129,5 @@ class FormatterTest extends TestCase {
 	}
 }
 
-$test = new FormatterTest($container);
+$test = new FormatterTest();
 $test->run();

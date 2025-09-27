@@ -15,7 +15,7 @@ use Override;
 use Tester\Assert;
 use Tester\TestCase;
 
-$container = require __DIR__ . '/bootstrap.php';
+require __DIR__ . '/bootstrap.php';
 
 class ChatFormatterTest extends TestCase {
 	private ?ChatFormatter $formatter = null;
@@ -100,5 +100,5 @@ class ChatFormatterTest extends TestCase {
 	}
 }
 
-$test = new ChatFormatterTest($container);
+$test = new ChatFormatterTest();
 $test->run();
