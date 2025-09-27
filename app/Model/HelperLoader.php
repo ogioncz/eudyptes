@@ -6,7 +6,7 @@ namespace App\Model;
 
 use App\Model\Orm\User\User;
 use DateTimeImmutable;
-use Latte\Runtime\Filters;
+use Latte\Essential\Filters;
 use Nette\Application\Application;
 use Nette\SmartObject;
 use Nette\Utils\Html;
