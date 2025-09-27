@@ -21,7 +21,7 @@ use Nette\Mail\SendmailMailer;
 use Nette\Security\Passwords;
 use Nette\Utils\Image;
 use Nette\Utils\Random;
-use Nextras\Dbal\UniqueConstraintViolationException;
+use Nextras\Dbal\Drivers\Exception\UniqueConstraintViolationException;
 use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 use PDOException;
 use Tracy\Debugger;

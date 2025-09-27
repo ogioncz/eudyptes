@@ -17,7 +17,7 @@ use Nette\Forms\Controls\SubmitButton;
 use Nette\Http\IResponse;
 use Nette\Http\Response;
 use Nette\Utils\Strings;
-use Nextras\Dbal\UniqueConstraintViolationException;
+use Nextras\Dbal\Drivers\Exception\UniqueConstraintViolationException;
 use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 use Tracy\Debugger;
 
