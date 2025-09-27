@@ -36,7 +36,7 @@
 		"nette/security": "^3.2",
 		"nette/utils": "^4.0",
 		"nextras/form-components": "^2.0",
-		"nextras/forms-rendering": "dev-master",
+		"nextras/forms-rendering": "^2.0",
 		"nextras/orm": "^5.0",
 		"tracy/tracy": "^2.9"
 	},
