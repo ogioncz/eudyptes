@@ -71,7 +71,7 @@ abstract class BasePresenter extends Presenter {
 	}
 
 	#[Override]
-	protected function createTemplate($class = null): Template {
+	protected function createTemplate(?string $class = null): Template {
 		$template = parent::createTemplate($class);
 		$template->getLatte()->addFilterLoader($this->helperLoader->loader(...));
 
@@ -127,7 +127,7 @@ abstract class BasePresenter extends Presenter {
 		$template->allowed = $this->allowed(...);
 	}
 
-	public function allowed($resource, $action): bool {
+	public function allowed(string|\Nette\Security\Resource $resource, ?string $action): bool {
 		$user = $this->getUser()->isLoggedIn() ? $this->users->getById($this->getUser()->getIdentity()->getId()) : null;
 
 		return $this->authorizator->isAllowed($user, $resource, $action);

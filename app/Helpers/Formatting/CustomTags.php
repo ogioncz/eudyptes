@@ -54,7 +54,7 @@ class CustomTags {
 	}
 
 	public static function age($text): array|string|null {
-		$text = preg_replace_callback('/<cp-age>(\d{4}-\d{2}-\d{2})<\/cp-age>/sU', function($match): string {
+		$text = preg_replace_callback('/<cp-age>(\d{4}-\d{2}-\d{2})<\/cp-age>/sU', function(array $match): string {
 			$today = new DateTimeImmutable();
 			$registration = new DateTimeImmutable($match[1]);
 

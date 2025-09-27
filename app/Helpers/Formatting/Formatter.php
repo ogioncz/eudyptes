@@ -191,7 +191,7 @@ class Formatter {
 		$alpha = "a-z\x80-\xFF";
 		$domain = "[0-9$alpha](?:[-0-9$alpha]{0,61}[0-9$alpha])?";
 		$topDomain = "[$alpha][-0-9$alpha]{0,17}[$alpha]";
-		$text = preg_replace_callback("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", function($match) use (&$replacements): string {
+		$text = preg_replace_callback("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", function(array $match) use (&$replacements): string {
 			if (!isset($replacements[$match[0]])) {
 				if (\in_array($match[1], self::$OEMBED_WHITELIST, true)) {
 					try {
@@ -222,7 +222,7 @@ class Formatter {
 
 			return $size;
 		};
-		$text = preg_replace_callback('/<gallery type="carousel">(.+?)<\/gallery>/s', function($match) use ($imageSize): string {
+		$text = preg_replace_callback('/<gallery type="carousel">(.+?)<\/gallery>/s', function(array $match) use ($imageSize): string {
 			$temp = sha1((string) random_int(0, mt_getrandmax()));
 			$maxWidth = $maxHeight = 0;
 			$images = preg_replace_callback('/!\[(.*?)\]\(([^"]+?)(?: "([^"]+)")?\)/', function($match) use ($imageSize, &$maxWidth, &$maxHeight): string {
@@ -265,7 +265,7 @@ class Formatter {
 		return $text;
 	}
 
-	public function replaceCustomTags($text) {
+	public function replaceCustomTags($text): ?string {
 		$text = CustomTags::age($text);
 		$text = CustomTags::item($text);
 		$text = CustomTags::coins($text);
@@ -275,7 +275,7 @@ class Formatter {
 	}
 
 	public function replaceWikiLinks($text): array|string|null {
-		$text = preg_replace_callback('~\[\[([^\]|\n]+)(?:\|([^\]|\n]+))?\]\]~u', function($matches): string {
+		$text = preg_replace_callback('~\[\[([^\]|\n]+)(?:\|([^\]|\n]+))?\]\]~u', function(array $matches): string {
 			$link = $label = $matches[1];
 			if (\count($matches) === 3) {
 				$label = $matches[2];
