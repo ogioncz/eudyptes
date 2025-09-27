@@ -26,8 +26,10 @@ use Tracy\Debugger;
 class Formatter {
 	use SmartObject;
 
+	/** @var array<string> */
 	public static $OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be', 'vimeo.com', 'soundcloud.com', 'twitter.com'];
 
+	/** @var array<string, array{src: string, alt: string, width: int, height: int}> */
 	public static $images = [
 		'meh' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/meh.svg', 'alt' => '😕', 'width' => 30, 'height' => 29],
 		'angry' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/angry.svg', 'alt' => '😠', 'width' => 30, 'height' => 29],
@@ -59,6 +61,7 @@ class Formatter {
 		'strawberry-ice-cream' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/strawberry-ice-cream.svg', 'alt' => '(icepink)', 'width' => 30, 'height' => 29],
 	];
 
+	/** @var array<string, string> */
 	public static $emoticons = [
 		'😕' => 'meh',
 		':-/' => 'meh',

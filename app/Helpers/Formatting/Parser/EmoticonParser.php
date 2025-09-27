@@ -18,12 +18,12 @@ class EmoticonParser implements InlineParserInterface {
 	public function __construct(
 		/** @param array[] $images */
 		private array $images,
-		/** @param string[] $emoticons */
+		/** @param array<string, string> $emoticons */
 		private array $emoticons,
 	) {
-		$this->characters = array_unique(array_map(fn($emoticon): string => mb_substr((string) $emoticon, 0, 1), array_keys($emoticons)));
+		$this->characters = array_unique(array_map(fn(string $emoticon): string => mb_substr($emoticon, 0, 1), array_keys($emoticons)));
 
-		$this->regex = '(^(' . implode('|', array_map(fn($emoticon): string => preg_quote((string) $emoticon), array_keys($emoticons))) . '))';
+		$this->regex = '(^(' . implode('|', array_map(preg_quote(...), array_keys($emoticons))) . '))';
 	}
 
 	#[Override]
