@@ -13,14 +13,12 @@ use App\Helpers\Formatting\Parser\SpoilerParser;
 use App\Helpers\Formatting\Renderer\OembedRenderer;
 use App\Helpers\Formatting\Renderer\SpoilerRenderer;
 use App\Model\Orm\Page\PageRepository;
-use Exception;
 use HTMLPurifier;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
-use Tracy\Debugger;
 
 class Formatter {
 	/** @var array<string> */
@@ -142,7 +140,7 @@ class Formatter {
 	public function __construct(
 		private PageRepository $pages,
 		private HTMLPurifier $purifier,
-		private OEmbedSimple $oembed,
+		OEmbedSimple $oembed,
 	) {
 		$environment = Environment::createCommonMarkEnvironment();
 		$environment->addInlineParser(new EmoticonParser(self::$images, self::$emoticons));
@@ -181,33 +179,6 @@ class Formatter {
 		$text = $this->purifier->purify($text);
 
 		return ['text' => $text, 'errors' => $this->purifier->context->get('ErrorCollector')->getRaw()];
-	}
-
-	public function replaceOembed($text): array|string|null {
-		$replacements = [];
-		$alpha = "a-z\x80-\xFF";
-		$domain = "[0-9$alpha](?:[-0-9$alpha]{0,61}[0-9$alpha])?";
-		$topDomain = "[$alpha][-0-9$alpha]{0,17}[$alpha]";
-		$text = preg_replace_callback("(^https?://((?:$domain\\.)*$topDomain|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[[0-9a-f:]{3,39}\\])(:\\d{1,5})?(/\\S*)?$)im", function(array $match) use (&$replacements): string {
-			if (!isset($replacements[$match[0]])) {
-				if (\in_array($match[1], self::$OEMBED_WHITELIST, true)) {
-					try {
-						$request = $this->oembed->request($match[0]);
-						if ($request) {
-							return $replacements[$match[0]] = '<figure class="rwd-media rwd-ratio-16-9">' . $request->getHtml() . '</figure>';
-						}
-					} catch (Exception $e) {
-						Debugger::log($e);
-					} // can’t serve, link is better than nothing so let’s leave it at that
-				}
-
-				return $match[0];
-			}
-
-			return $replacements[$match[0]];
-		}, (string) $text);
-
-		return $text;
 	}
 
 	public function replaceGalleries($text): array|string|null {
