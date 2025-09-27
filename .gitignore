@@ -2,6 +2,7 @@ log/*
 temp/*
 vendor/*
 !vendor/others
+phpstan.neon
 
 .DS_Store
 !.gitignore
