@@ -19,6 +19,7 @@ use Nette\Forms\Controls\SubmitButton;
 use Nette\Http\IResponse;
 use Nette\Utils\Json;
 use Nextras\FormComponents\Controls\DateControl;
+use Nextras\FormComponents\Controls\DateTimeControl;
 use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 use Tracy\Debugger;
 
@@ -65,7 +66,8 @@ class MeetingPresenter extends BasePresenter {
 		$form->addText('server', 'Server:')->setRequired();
 
 		$times = $form->addMultiplier('times', function(Container $time): void {
-			$time->addTimePicker('time', 'čas')->setRequired();
+			$dateTimeControl = $time['time'] = new DateTimeControl('čas');
+			$dateTimeControl->setRequired();
 			$time->addText('event', 'činnost')->setRequired();
 		});
 		$times->setMinCopies(1);
