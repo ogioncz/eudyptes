@@ -18,14 +18,11 @@ use HTMLPurifier;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
 use League\CommonMark\HtmlRenderer;
-use Nette\SmartObject;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
 use Tracy\Debugger;
 
 class Formatter {
-	use SmartObject;
-
 	/** @var array<string> */
 	public static $OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be', 'vimeo.com', 'soundcloud.com', 'twitter.com'];
 

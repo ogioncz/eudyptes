@@ -8,12 +8,9 @@ use App\Model\Orm\User\User;
 use DateTimeImmutable;
 use Latte\Essential\Filters;
 use Nette\Application\Application;
-use Nette\SmartObject;
 use Nette\Utils\Html;
 
 class HelperLoader {
-	use SmartObject;
-
 	public function __construct(private Application $app) {
 	}
 

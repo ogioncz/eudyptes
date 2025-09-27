@@ -7,11 +7,8 @@ namespace App\Model;
 use HTMLPurifier;
 use HTMLPurifier_Config;
 use Nette\Application\Application;
-use Nette\SmartObject;
 
 class PurifierFactory {
-	use SmartObject;
-
 	public function createPurifier(Application $app, $cacheDir): HTMLPurifier {
 		$config = HTMLPurifier_Config::createDefault();
 		$config->set('HTML.Doctype', 'HTML 4.01 Transitional');

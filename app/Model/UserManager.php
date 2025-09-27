@@ -10,11 +10,8 @@ use Nette\Security\IAuthenticator;
 use Nette\Security\IIdentity;
 use Nette\Security\Passwords;
 use Nette\Security\SimpleIdentity;
-use Nette\SmartObject;
 
 class UserManager implements IAuthenticator {
-	use SmartObject;
-
 	public function __construct(
 		private UserRepository $users,
 		private Passwords $passwords,

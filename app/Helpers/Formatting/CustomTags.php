@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace App\Helpers\Formatting;
 
 use DateTimeImmutable;
-use Nette\SmartObject;
 use Nette\Utils\Json;
 
 class CustomTags {
-	use SmartObject;
-
 	public static function item($text): array|string|null {
 		$text = preg_replace_callback('/<(?P<prefix>cp-)(?P<type>(?:item|furniture|igloo|floor|location|puffleitem))(?P<attr>[^>]*)>(?P<id>\d+)<\/(?P=prefix)(?P=type)>/sU', function(array $match): string {
 			if ($match['type'] === 'item') {
