@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Helpers\Formatting\Parser;
 
-use Alb\OEmbed\Simple as OEmbedSimple;
 use App\Helpers\Formatting\Element\OembedBlock;
+use Cohensive\OEmbed\Factory as OEmbedFactory;
 use Exception;
 use League\CommonMark\Block\Parser\BlockParserInterface;
 use League\CommonMark\ContextInterface;
@@ -16,7 +16,7 @@ use Tracy\Debugger;
 
 class OembedParser implements BlockParserInterface {
 	public function __construct(
-		private readonly OEmbedSimple $oembed,
+		private readonly OEmbedFactory $oembed,
 		/** @param string[] */
 		private readonly array $whitelistedDomains,
 	) {
@@ -39,9 +39,9 @@ class OembedParser implements BlockParserInterface {
 
 		if (\in_array(self::getDomain($url), $this->whitelistedDomains, true)) {
 			try {
-				$response = $this->oembed->request($url);
-				if ($response) {
-					$context->addBlock(new OembedBlock($response));
+				$embed = $this->oembed->get($url);
+				if ($embed !== null) {
+					$context->addBlock(new OembedBlock($embed));
 
 					return true;
 				}

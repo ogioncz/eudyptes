@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Test;
 
-use Alb\OEmbed\Response as OEmbedResponse;
-use Alb\OEmbed\Simple as OEmbed;
 use App\Helpers\Formatting\Formatter;
 use App\Model\Orm\Page\PageRepository;
+use Cohensive\OEmbed\Embed;
+use Cohensive\OEmbed\Factory as OEmbedFactory;
 use HTMLPurifier;
 use HTMLPurifier_Context;
 use HTMLPurifier_ErrorCollector;
@@ -19,8 +19,8 @@ require __DIR__ . '/bootstrap.php';
 
 class FormatterTest extends TestCase {
 	private static function makeFormatter(): Formatter {
-		$oembedResponse = Mockery::mock(OEmbedResponse::class);
-		$oembedResponse->shouldReceive('getHtml')->andReturn('<video src="nggyu.webm"></video>');
+		$embed = Mockery::mock(Embed::class);
+		$embed->shouldReceive('html')->andReturn('<video src="nggyu.webm"></video>');
 		$errorCollector = Mockery::mock(HTMLPurifier_ErrorCollector::class);
 		$errorCollector->shouldReceive('getRaw')->andReturn([]);
 		$purifierContext = Mockery::mock(HTMLPurifier_Context::class);
@@ -29,8 +29,8 @@ class FormatterTest extends TestCase {
 		$purifier = Mockery::mock(HTMLPurifier::class);
 		$purifier->context = $purifierContext;
 		$purifier->shouldReceive('purify')->withAnyArgs()->andReturnUsing(fn($text) => $text);
-		$oembed = Mockery::mock(OEmbed::class);
-		$oembed->shouldReceive('request')->with('https://youtu.be/dQw4w9WgXcQ')->andReturn($oembedResponse);
+		$oembed = Mockery::mock(OEmbedFactory::class);
+		$oembed->shouldReceive('get')->with('https://youtu.be/dQw4w9WgXcQ')->andReturn($embed);
 
 		return new Formatter($pages, $purifier, $oembed);
 	}

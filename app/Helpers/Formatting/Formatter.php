@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Helpers\Formatting;
 
-use Alb\OEmbed\Simple as OEmbedSimple;
 use App\Helpers\Formatting\Element\OembedBlock;
 use App\Helpers\Formatting\Element\Spoiler;
 use App\Helpers\Formatting\Parser\EmoticonParser;
@@ -13,6 +12,7 @@ use App\Helpers\Formatting\Parser\SpoilerParser;
 use App\Helpers\Formatting\Renderer\OembedRenderer;
 use App\Helpers\Formatting\Renderer\SpoilerRenderer;
 use App\Model\Orm\Page\PageRepository;
+use Cohensive\OEmbed\Factory as OEmbedFactory;
 use HTMLPurifier;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
@@ -140,7 +140,7 @@ class Formatter {
 	public function __construct(
 		private PageRepository $pages,
 		private HTMLPurifier $purifier,
-		OEmbedSimple $oembed,
+		OEmbedFactory $oembed,
 	) {
 		$environment = Environment::createCommonMarkEnvironment();
 		$environment->addInlineParser(new EmoticonParser(self::$images, self::$emoticons));

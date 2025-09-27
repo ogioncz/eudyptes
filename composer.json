@@ -18,7 +18,7 @@
 	"require": {
 		"php": ">= 8.3",
 		"actinarium/php-diff": "dev-master",
-		"alb/oembed": "dev-master",
+		"cohensive/oembed": "^0.20.1",
 		"contributte/forms-multiplier": "^4.0",
 		"ezyang/htmlpurifier": "dev-master",
 		"flaptor/indextank-php": "dev-master",

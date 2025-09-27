@@ -40,7 +40,7 @@ services:
 	- App\Model\PurifierFactory
 	- App\Model\HelperLoader
 	- App\Model\TelegramNotifier(%telegram.apiKey%, %telegram.chatId%, %telegram.botName%)
-	oembed: Alb\OEmbed\Simple
+	oembed: Cohensive\OEmbed\Factory
 	formatter: App\Helpers\Formatting\Formatter
 	chatFormatter: App\Helpers\Formatting\ChatFormatter
 	router: @App\Router\RouterFactory::createRouter

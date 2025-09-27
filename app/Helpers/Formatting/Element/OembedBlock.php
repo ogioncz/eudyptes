@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace App\Helpers\Formatting\Element;
 
-use Alb\OEmbed\Response;
+use Cohensive\OEmbed\Embed;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Cursor;
 use Override;
 
 class OembedBlock extends AbstractBlock {
 	public function __construct(
-		/** @param Response of the OEmbed provider */
-		private readonly Response $response,
+		/** @param Embedded content returned by the OEmbed provider */
+		private readonly Embed $embed,
 	) {
 	}
 
 	/**
-	 * Returns the response of the OEmbed provider.
+	 * Returns the embedded content returned by the OEmbed provider.
 	 */
-	public function getResponse(): Response {
-		return $this->response;
+	public function getEmbed(): Embed {
+		return $this->embed;
 	}
 
 	/**
