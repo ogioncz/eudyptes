@@ -88,7 +88,9 @@ class MailPresenter extends BasePresenter {
 		$subject->getControlPrototype()->autofocus = true;
 		$subject->getControlPrototype()->addClass('mail-subject')->data('content', 'Předmět zprávy má výstižně charakterizovat, čeho se zpráva týká.');
 		if ($this->getAction() === 'reply') {
-			$subject->setDefaultValue('re: ' . preg_replace('/^(?:re: )+/i', '', $this->getTemplate()->original->subject));
+			/** @var Mail */
+			$mail = $this->getTemplate()->original;
+			$subject->setDefaultValue('re: ' . preg_replace('/^(?:re: )+/i', '', $mail->subject));
 		}
 
 		$form->addTextArea('markdown', 'Obsah:')->setRequired()->getControlPrototype()->addRows(15)->addClass('editor');
