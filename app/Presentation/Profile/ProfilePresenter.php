@@ -232,7 +232,6 @@ class ProfilePresenter extends BasePresenter {
 
 	public function renderResetPassword($tid = null, $token = null): void {
 		$template = $this->getTemplate();
-		$template->robots = 'noindex';
 		if ($token && $tid) {
 			$storedToken = $this->tokens->getById($tid);
 			if ($storedToken && $this->passwords->verify($token, $storedToken->token)) {
