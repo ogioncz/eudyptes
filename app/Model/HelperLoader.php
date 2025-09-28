@@ -44,6 +44,8 @@ class HelperLoader {
 		}
 	}
 
+	public const array EMPTY_TAGS = ['area', 'base', 'basefont', 'br', 'col', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param'];
+
 	/** Truncate text with HTML tags.
 	 * @param string $text string to be shortened, without comments and script blocks
 	 * @param int $limit number of returned characters
@@ -53,7 +55,6 @@ class HelperLoader {
 	 * @copyright Jakub Vrána, http://php.vrana.cz
 	 */
 	public function htmlTruncate(string $text, int $limit): string {
-		static $empty_tags = ['area', 'base', 'basefont', 'br', 'col', 'frame', 'hr', 'img', 'input', 'isindex', 'link', 'meta', 'param'];
 		$length = 0;
 		$textLength = \strlen($text);
 		$tags = []; // not yet closed tags
@@ -78,7 +79,7 @@ class HelperLoader {
 					}
 					if ($text[$start] === '/') { // closing tag
 						$tags = \array_slice($tags, array_search(substr($tag, 1), $tags, true) + 1);
-					} elseif ($text[$i - 1] != '/' && !\in_array($tag, $empty_tags, true)) { // opening tag
+					} elseif ($text[$i - 1] != '/' && !\in_array($tag, self::EMPTY_TAGS, true)) { // opening tag
 						array_unshift($tags, $tag);
 					}
 					break;

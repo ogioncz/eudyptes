@@ -21,10 +21,10 @@ use Nette\Utils\Strings;
 
 class Formatter {
 	/** @var array<string> */
-	public static $OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be', 'vimeo.com', 'soundcloud.com', 'twitter.com'];
+	public const array OEMBED_WHITELIST = ['www.youtube.com', 'youtu.be', 'vimeo.com', 'soundcloud.com', 'twitter.com'];
 
 	/** @var array<string, array{src: string, alt: string, width: int, height: int}> */
-	public static $images = [
+	public const array IMAGES = [
 		'meh' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/meh.svg', 'alt' => '😕', 'width' => 30, 'height' => 29],
 		'angry' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/angry.svg', 'alt' => '😠', 'width' => 30, 'height' => 29],
 		'cake' => ['src' => 'https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/cake.svg', 'alt' => '🎂', 'width' => 30, 'height' => 29],
@@ -56,7 +56,7 @@ class Formatter {
 	];
 
 	/** @var array<string, string> */
-	public static $emoticons = [
+	public const array EMOTICONS = [
 		'😕' => 'meh',
 		':-/' => 'meh',
 		'😠' => 'angry',
@@ -140,8 +140,8 @@ class Formatter {
 		OEmbedFactory $oembed,
 	) {
 		$environment = Environment::createCommonMarkEnvironment();
-		$environment->addInlineParser(new EmoticonParser(self::$images, self::$emoticons));
-		$environment->addBlockParser(new OembedParser($oembed, self::$OEMBED_WHITELIST));
+		$environment->addInlineParser(new EmoticonParser(self::IMAGES, self::EMOTICONS));
+		$environment->addBlockParser(new OembedParser($oembed, self::OEMBED_WHITELIST));
 		$environment->addBlockParser(new SpoilerParser());
 		$environment->addBlockRenderer(OembedBlock::class, new OembedRenderer());
 		$environment->addBlockRenderer(Spoiler::class, new SpoilerRenderer());

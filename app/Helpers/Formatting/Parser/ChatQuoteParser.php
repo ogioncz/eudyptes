@@ -11,7 +11,7 @@ use League\CommonMark\Cursor;
 use Override;
 
 class ChatQuoteParser implements BlockParserInterface {
-	private static string $regex = '(^\{#([0-9]+)\}$)';
+	private const string REGEX = '(^\{#([0-9]+)\}$)';
 
 	#[Override]
 	public function parse(ContextInterface $context, Cursor $cursor): bool {
@@ -20,7 +20,7 @@ class ChatQuoteParser implements BlockParserInterface {
 		}
 
 		$previousState = $cursor->saveState();
-		$quoteBlock = $cursor->match(self::$regex);
+		$quoteBlock = $cursor->match(self::REGEX);
 
 		if ($quoteBlock === null) {
 			$cursor->restoreState($previousState);
@@ -34,7 +34,7 @@ class ChatQuoteParser implements BlockParserInterface {
 	}
 
 	private static function getQuotedId(string $quote): int {
-		preg_match(self::$regex, (string) $quote, $match);
+		preg_match(self::REGEX, (string) $quote, $match);
 
 		return (int) $match[1];
 	}

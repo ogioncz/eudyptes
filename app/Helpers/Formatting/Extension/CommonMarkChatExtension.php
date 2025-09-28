@@ -34,7 +34,7 @@ class CommonMarkChatExtension implements ExtensionInterface {
 	public function register(ConfigurableEnvironmentInterface $environment): void {
 		$environment->addBlockParser(new ChatQuoteParser(), 100);
 
-		$environment->addInlineParser(new EmoticonParser(Formatter::$images, Formatter::$emoticons), 100);
+		$environment->addInlineParser(new EmoticonParser(Formatter::IMAGES, Formatter::EMOTICONS), 100);
 		$environment->addInlineParser(new UrlParser(), 55);
 
 		$environment->addBlockRenderer(Document::class, new BlockRenderer\DocumentRenderer(), 0);
