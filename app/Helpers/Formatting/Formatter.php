@@ -155,13 +155,13 @@ class Formatter {
 
 	/**
 	 * @return array{
-	 * 	text: string,
-	 * 	errors: array<array{
-	 * 		0: int,
-	 * 		1: int,
-	 * 		2: string,
-	 * 		3: array<mixed>,
-	 * 	}>,
+	 *   text: string,
+	 *   errors: array<array{
+	 *     0: int,
+	 *     1: int,
+	 *     2: string,
+	 *     3: array<mixed>,
+	 *   }>,
 	 * }
 	 */
 	public function format($markdown): array {
