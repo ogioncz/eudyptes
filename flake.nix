@@ -20,6 +20,7 @@
         devShells = {
           default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
+              nodejs
               php
               php.packages.composer
               phpactor

@@ -13,7 +13,7 @@ HTTP Server (Apache), PHP, MariaDB (MySQL), Composer, NPM and gulp will be requi
 ```
 composer install
 npm install
-gulp
+npx gulp
 ```
 
 Server should also have right to write into *temp* and *log* directories. Finally you’ll have to set the database in *app/config/config.local.neon* (see *config.local.neon.default*) and also import SQL to your database.
