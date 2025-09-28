@@ -11,7 +11,7 @@ use Nette\Application\Application;
 use Nette\Utils\Html;
 
 class HelperLoader {
-	public function __construct(private Application $app) {
+	public function __construct(private readonly Application $app) {
 	}
 
 	public function loader(string $filter): ?callable {

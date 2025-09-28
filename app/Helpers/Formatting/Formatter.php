@@ -135,8 +135,8 @@ class Formatter {
 	private readonly MarkdownConverter $converter;
 
 	public function __construct(
-		private PageRepository $pages,
-		private HTMLPurifier $purifier,
+		private readonly PageRepository $pages,
+		private readonly HTMLPurifier $purifier,
 		OEmbedFactory $oembed,
 	) {
 		$environment = Environment::createCommonMarkEnvironment();

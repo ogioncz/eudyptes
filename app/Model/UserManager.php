@@ -13,8 +13,8 @@ use Nette\Security\SimpleIdentity;
 
 class UserManager implements Authenticator {
 	public function __construct(
-		private UserRepository $users,
-		private Passwords $passwords,
+		private readonly UserRepository $users,
+		private readonly Passwords $passwords,
 	) {
 	}
 
