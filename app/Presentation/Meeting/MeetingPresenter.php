@@ -196,7 +196,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 		$data = $meeting->toArray();
-		$data['times'] = Json::decode($meeting->program, Json::FORCE_ARRAY);
+		$data['times'] = Json::decode($meeting->program, forceArrays: true);
 		$this['meetingForm']->setDefaults($data);
 	}
 
