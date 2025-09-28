@@ -239,7 +239,7 @@ class PagePresenter extends BasePresenter {
 		}
 
 		if (isset($slug)) {
-			$this['pageForm']['slug']->defaultValue = $slug;
+			$this['pageForm']['slug']->setDefaultValue($slug);
 		}
 	}
 
