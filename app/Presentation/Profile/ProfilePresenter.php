@@ -21,6 +21,7 @@ use Nette\Mail\Message;
 use Nette\Mail\SendmailMailer;
 use Nette\Security\Passwords;
 use Nette\Utils\Image;
+use Nette\Utils\ImageColor;
 use Nette\Utils\Random;
 use Nextras\Dbal\Drivers\Exception\UniqueConstraintViolationException;
 use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
@@ -162,7 +163,7 @@ class ProfilePresenter extends BasePresenter {
 			$values->avatar->move($original);
 			try {
 				$resized = Image::fromFile($original)->resize(100, 100);
-				Image::fromBlank(100, 100, Image::rgb(0, 0, 0, 127))->place($resized, '50%', '50%')->save($medium);
+				Image::fromBlank(100, 100, ImageColor::rgb(0, 0, 0, 0.0))->place($resized, '50%', '50%')->save($medium);
 			} catch (Exception $e) {
 				$form->addError('Chyba při zpracování avataru.');
 				Debugger::log($e);
