@@ -10,7 +10,7 @@ use Nextras\Migrations\Controllers\HttpController;
 use Nextras\Migrations\Drivers\MySqlDriver;
 use Nextras\Migrations\Extensions\SqlHandler;
 
-/** @var Container $container */
+/** @var Container */
 $container = require_once __DIR__ . '/../app/bootstrap.php';
 
 $connection = $container->getByType(Connection::class);
