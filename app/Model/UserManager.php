@@ -6,12 +6,12 @@ namespace App\Model;
 
 use App\Model\Orm\User\UserRepository;
 use Nette\Security\AuthenticationException;
-use Nette\Security\IAuthenticator;
+use Nette\Security\Authenticator;
 use Nette\Security\IIdentity;
 use Nette\Security\Passwords;
 use Nette\Security\SimpleIdentity;
 
-class UserManager implements IAuthenticator {
+class UserManager implements Authenticator {
 	public function __construct(
 		private UserRepository $users,
 		private Passwords $passwords,
@@ -25,15 +25,13 @@ class UserManager implements IAuthenticator {
 	 *
 	 * @return SimpleIdentity
 	 */
-	public function authenticate(array $credentials): IIdentity {
-		[$username, $password] = $credentials;
-
+	public function authenticate(string $username, string $password): IIdentity {
 		$user = $this->users->getBy(['username' => $username]);
 
 		if (!$user) {
-			throw new AuthenticationException('Zadal jsi neexistující uživatelské jméno.', self::IDENTITY_NOT_FOUND);
+			throw new AuthenticationException('Zadal jsi neexistující uživatelské jméno.', self::IdentityNotFound);
 		} elseif (!$this->passwords->verify($password, $user->password)) {
-			throw new AuthenticationException('Zadal jsi nesprávné heslo.', self::INVALID_CREDENTIAL);
+			throw new AuthenticationException('Zadal jsi nesprávné heslo.', self::InvalidCredential);
 		} elseif ($this->passwords->needsRehash($user->password)) {
 			$user->password = $this->passwords->hash($password);
 			$this->users->persistAndFlush($user);
