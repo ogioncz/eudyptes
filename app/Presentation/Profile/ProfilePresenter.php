@@ -66,8 +66,10 @@ class ProfilePresenter extends BasePresenter {
 			$this->error('Uživatel nenalezen');
 		}
 		$template = $this->getTemplate();
-		if (file_exists($this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png')) {
-			$template->avatar = str_replace('♥basePath♥', $this->getHttpRequest()->getUrl()->getBaseUrl(), $this->context->parameters['avatarStoragePublic']) . '/' . $this->profile->id . 'm.png';
+		$avatarStoragePath = $this->context->getParameter('avatarStorage');
+		$avatarStoragePublicPath = $this->context->getParameter('avatarStoragePublic');
+		if (file_exists($avatarStoragePath . '/' . $this->profile->id . 'm.png')) {
+			$template->avatar = str_replace('♥basePath♥', $this->getHttpRequest()->getUrl()->getBaseUrl(), $avatarStoragePublicPath) . '/' . $this->profile->id . 'm.png';
 		}
 
 		$template->ipAddress = $this->getHttpRequest()->getRemoteAddress();
@@ -103,7 +105,8 @@ class ProfilePresenter extends BasePresenter {
 
 		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::FILLED)->addRule(Form::MIME_TYPE, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
 
-		$medium = $this->context->parameters['avatarStorage'] . '/' . $this->profile->id . 'm.png';
+		$avatarStoragePath = $this->context->getParameter('avatarStorage');
+		$medium = $avatarStoragePath . '/' . $this->profile->id . 'm.png';
 		if (file_exists($medium)) {
 			$form->addCheckbox('removeAvatar', 'Odstranit avatar');
 		}
@@ -146,8 +149,9 @@ class ProfilePresenter extends BasePresenter {
 		$user->member = (bool) $values->member;
 		$user->notifyByMail = $values->notifyByMail;
 
-		$original = $this->context->parameters['avatarStorage'] . '/' . $user->id . '.png';
-		$medium = $this->context->parameters['avatarStorage'] . '/' . $user->id . 'm.png';
+		$avatarStoragePath = $this->context->getParameter('avatarStorage');
+		$original = $avatarStoragePath . '/' . $user->id . '.png';
+		$medium = $avatarStoragePath . '/' . $user->id . 'm.png';
 
 		if (isset($values->removeAvatar) && $values->removeAvatar) {
 			@unlink($original);
