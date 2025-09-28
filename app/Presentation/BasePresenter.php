@@ -18,8 +18,8 @@ use DirectoryIterator;
 use Nette\Application\UI\Presenter;
 use Nette\Application\UI\Template;
 use Nette\DI\Attributes\Inject;
-use Nette\Iterators\Mapper;
 use Nette\Security\Permission;
+use Nette\Utils\Iterables;
 use Override;
 use VisualPaginator;
 
@@ -92,7 +92,7 @@ abstract class BasePresenter extends Presenter {
 		$template->logo = file_get_contents(__DIR__ . '/../../www/images/bar.svg');
 
 		$template->customStyles = iterator_to_array(
-			new Mapper(
+			Iterables::map(
 				new CallbackFilterIterator(
 					new DirectoryIterator(__DIR__ . '/../../www/custom'),
 					fn($f, $_k): bool => $f->isFile() && $f->getExtension() == 'css'
@@ -102,7 +102,7 @@ abstract class BasePresenter extends Presenter {
 		);
 
 		$template->customScripts = iterator_to_array(
-			new Mapper(
+			Iterables::map(
 				new CallbackFilterIterator(
 					new DirectoryIterator(__DIR__ . '/../../www/custom'),
 					fn($f, $_k): bool => $f->isFile() && $f->getExtension() == 'js'
@@ -112,7 +112,7 @@ abstract class BasePresenter extends Presenter {
 		);
 
 		$headers = iterator_to_array(
-			new Mapper(
+			Iterables::map(
 				new CallbackFilterIterator(
 					new DirectoryIterator(__DIR__ . '/../../www/images/header'),
 					fn($f, $_k): bool => $f->isFile() && \in_array($f->getExtension(), ['png', 'jpg', 'jpeg', 'gif'], true)
