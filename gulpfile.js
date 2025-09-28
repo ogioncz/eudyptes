@@ -57,7 +57,6 @@ gulp.task('javascript', gulp.series('bower', gulp.parallel(function javascriptAp
 	return gulp.src([
 		config.assets.vendor + '/jquery/dist/jquery.js',
 		config.assets.vendor + '/bootstrap/dist/js/bootstrap.js',
-		config.assets.vendor + '/jquery-details/jquery.details.js',
 		config.assets.vendor + '/nette-forms/src/assets/netteForms.js',
 		config.assets.vendor + '/smalot-bootstrap-datetimepicker/js/bootstrap-datetimepicker.js',
 		config.assets.vendor + '/smalot-bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.cs.js',

@@ -5,7 +5,6 @@
 		"jquery": "~2.2.4",
 		"bootstrap": "~3.3.7",
 		"nette-forms": "git@github.com:nette/forms.git#~2.4",
-		"jquery-details": "mathiasbynens/jquery-details#~0.1.0",
 		"smalot-bootstrap-datetimepicker": "~2.3.11",
 		"nextras-forms": "git@github.com:nextras/forms.git#~2.0",
 		"nette.ajax.js": "~2.3.0",
