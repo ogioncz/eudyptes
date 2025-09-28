@@ -47,6 +47,7 @@
 		"nextras/migrations": "^3.0",
 		"nextras/orm-phpstan": "^2.0",
 		"phpstan/phpstan": "^2.1",
+		"phpstan/phpstan-deprecation-rules": "^2.0",
 		"phpstan/phpstan-mockery": "^2.0",
 		"phpstan/phpstan-nette": "^2.0",
 		"rector/rector": "^2.0",
