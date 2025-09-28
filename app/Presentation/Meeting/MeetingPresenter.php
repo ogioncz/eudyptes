@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Presentation\Meeting;
 
 use App\Components\Participator;
+use App\Components\TimePicker;
 use App\Helpers\Formatting\Formatter;
 use App\Model\HelperLoader;
 use App\Model\Orm\Meeting\Meeting;
@@ -20,7 +21,6 @@ use Nette\Forms\Controls\SubmitButton;
 use Nette\Http\IResponse;
 use Nette\Utils\Json;
 use Nextras\FormComponents\Controls\DateControl;
-use Nextras\FormComponents\Controls\DateTimeControl;
 use Nextras\FormsRendering\Renderers\Bs3FormRenderer;
 use Tracy\Debugger;
 
@@ -67,7 +67,7 @@ class MeetingPresenter extends BasePresenter {
 		$form->addText('server', 'Server:')->setRequired();
 
 		$times = $form->addMultiplier('times', function(Container $time): void {
-			$dateTimeControl = $time['time'] = new DateTimeControl('čas');
+			$dateTimeControl = $time['time'] = new TimePicker('čas');
 			$dateTimeControl->setRequired();
 			$time->addText('event', 'činnost')->setRequired();
 		});
