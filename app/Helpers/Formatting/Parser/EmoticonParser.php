@@ -16,9 +16,9 @@ class EmoticonParser implements InlineParserInterface {
 	private readonly string $regex;
 
 	public function __construct(
-		/** @param array[] $images */
+		/** @var array[] $images */
 		private array $images,
-		/** @param array<string, string> $emoticons */
+		/** @var array<string, string> $emoticons */
 		private array $emoticons,
 	) {
 		$this->characters = array_unique(array_map(fn(string $emoticon): string => mb_substr($emoticon, 0, 1), array_keys($emoticons)));

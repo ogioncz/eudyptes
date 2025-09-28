@@ -17,7 +17,7 @@ use Tracy\Debugger;
 class OembedParser implements BlockParserInterface {
 	public function __construct(
 		private readonly OEmbedFactory $oembed,
-		/** @param string[] */
+		/** @var string[] */
 		private readonly array $whitelistedDomains,
 	) {
 	}

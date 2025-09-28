@@ -10,7 +10,7 @@ use Override;
 
 class ChatQuote extends AbstractBlock {
 	public function __construct(
-		/** @param ID of the quoted chat message */
+		/** ID of the quoted chat message */
 		private readonly int $id,
 	) {
 	}

@@ -11,7 +11,7 @@ use Override;
 
 class OembedBlock extends AbstractBlock {
 	public function __construct(
-		/** @param Embedded content returned by the OEmbed provider */
+		/** Embedded content returned by the OEmbed provider */
 		private readonly Embed $embed,
 	) {
 	}

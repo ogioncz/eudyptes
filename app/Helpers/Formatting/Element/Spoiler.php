@@ -10,7 +10,7 @@ use Override;
 
 class Spoiler extends AbstractBlock {
 	public function __construct(
-		/** @param Summary of the spoiler block */
+		/** Summary of the spoiler block */
 		private readonly ?string $summary = null,
 	) {
 	}
