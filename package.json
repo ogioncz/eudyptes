@@ -20,5 +20,8 @@
 		"gulp-less": "^3.1.0",
 		"gulp-notify": "^2.2.0",
 		"gulp-uglify": "^2.0.0"
+	},
+	"scripts": {
+		"dist": "python3 .github/workflows/create-zipball.py"
 	}
 }
