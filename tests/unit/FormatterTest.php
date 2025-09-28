@@ -62,6 +62,15 @@ class FormatterTest extends TestCase {
 		Assert::equal([], $formatted['errors']);
 	}
 
+	public function testSpoilerNestedWithSummaries(): void {
+		$markdown = "¡¡¡ 1\n¡¡¡ 2\n¡¡¡ 3\nHello\n!!!\n!!!\n!!!";
+		$html = "<details><summary>1</summary>\n<details><summary>2</summary>\n<details><summary>3</summary>\n<p>Hello</p></details></details></details>\n";
+
+		$formatted = self::makeFormatter()->format($markdown);
+		Assert::equal($html, $formatted['text']);
+		Assert::equal([], $formatted['errors']);
+	}
+
 	public function testSpoilerNested(): void {
 		$markdown = "¡¡¡\n¡¡¡\n¡¡¡\nHello\n!!!\n!!!\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details></details></details>\n";
@@ -74,6 +83,60 @@ class FormatterTest extends TestCase {
 	public function testSpoilerNestedInText(): void {
 		$markdown = "¡¡¡\n1\n¡¡¡\n2\n¡¡¡\nHello\n!!!\n3\n!!!\n4\n!!!";
 		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>1</p>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>2</p>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>Hello</p></details>\n<p>3</p></details>\n<p>4</p></details>\n";
+
+		$formatted = self::makeFormatter()->format($markdown);
+		Assert::equal($html, $formatted['text']);
+		Assert::equal([], $formatted['errors']);
+	}
+
+	public function testSpoilerEmpty(): void {
+		$markdown = "¡¡¡\n!!!";
+		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n</details>\n";
+
+		$formatted = self::makeFormatter()->format($markdown);
+		Assert::equal($html, $formatted['text']);
+		Assert::equal([], $formatted['errors']);
+	}
+
+	public function testSpoilerWithQuote(): void {
+		$markdown = "¡¡¡\n> foo\n!!!";
+		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<blockquote>\n<p>foo</p>\n</blockquote></details>\n";
+
+		$formatted = self::makeFormatter()->format($markdown);
+		Assert::equal($html, $formatted['text']);
+		Assert::equal([], $formatted['errors']);
+	}
+
+	public function testSpoilerInQuote(): void {
+		$markdown = "> ¡¡¡\n> foo\n> !!!";
+		$html = "<blockquote>\n<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>foo</p></details>\n</blockquote>\n";
+
+		$formatted = self::makeFormatter()->format($markdown);
+		Assert::equal($html, $formatted['text']);
+		Assert::equal([], $formatted['errors']);
+	}
+
+	public function testSpoilerWithQuoteMultipara(): void {
+		$markdown = "¡¡¡\n> foo\n>\n> bar\n!!!";
+		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<blockquote>\n<p>foo</p>\n<p>bar</p>\n</blockquote></details>\n";
+
+		$formatted = self::makeFormatter()->format($markdown);
+		Assert::equal($html, $formatted['text']);
+		Assert::equal([], $formatted['errors']);
+	}
+
+	public function testSpoilerWithQuoteContinued(): void {
+		$markdown = "¡¡¡\n> foo\nbar\n!!!";
+		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<blockquote>\n<p>foo\nbar</p>\n</blockquote></details>\n";
+
+		$formatted = self::makeFormatter()->format($markdown);
+		Assert::equal($html, $formatted['text']);
+		Assert::equal([], $formatted['errors']);
+	}
+
+	public function testSpoilerMultipara(): void {
+		$markdown = "¡¡¡\nfoo\n\nbar\n!!!";
+		$html = "<details><summary>Pro zobrazení zápletky klikni</summary>\n<p>foo</p>\n<p>bar</p></details>\n";
 
 		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);
