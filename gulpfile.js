@@ -6,7 +6,6 @@ const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify');
 const notify = require("gulp-notify");
-const bower = require('gulp-bower');
 
 const notifyAboutError = notify.onError(function(error) {
 	console.log(error);
@@ -15,7 +14,7 @@ const notifyAboutError = notify.onError(function(error) {
 
 const config = {
 	assets: {
-		vendor: './assets/vendor',
+		vendor: './node_modules',
 		less: './assets/less',
 		javascript: './assets/javascript'
 	},
@@ -25,12 +24,7 @@ const config = {
 	}
 }
 
-gulp.task('bower', function() {
-	return bower()
-	.pipe(gulp.dest(config.assets.vendor));
-});
-
-gulp.task('css', gulp.series('bower', function() {
+gulp.task('css', function() {
 	return gulp.src(config.assets.less + '/screen.less')
 	.pipe(less({
 		paths: [
@@ -41,9 +35,9 @@ gulp.task('css', gulp.series('bower', function() {
 	.pipe(csso())
 	.pipe(autoprefix('last 2 versions'))
 	.pipe(gulp.dest(config.public.css));
-}));
+});
 
-gulp.task('javascript', gulp.series('bower', gulp.parallel(function javascriptApp() {
+gulp.task('javascript', gulp.parallel(function javascriptApp() {
 	return gulp.src([
 		config.assets.javascript + '/**/*.js'
 	])
@@ -68,7 +62,7 @@ gulp.task('javascript', gulp.series('bower', gulp.parallel(function javascriptAp
 	])
 	.pipe(uglify())
 	.pipe(gulp.dest(config.public.javascript));
-})));
+}));
 
 gulp.task('watch', function() {
 	gulp.watch(config.assets.less + '/**/*.less', gulp.series('css'));
