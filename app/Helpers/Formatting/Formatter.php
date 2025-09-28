@@ -14,9 +14,8 @@ use App\Helpers\Formatting\Renderer\SpoilerRenderer;
 use App\Model\Orm\Page\PageRepository;
 use Cohensive\OEmbed\Factory as OEmbedFactory;
 use HTMLPurifier;
-use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
-use League\CommonMark\HtmlRenderer;
+use League\CommonMark\MarkdownConverter;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
 
@@ -133,9 +132,7 @@ class Formatter {
 		'(icepink)' => 'strawberry-ice-cream',
 	];
 
-	private DocParser $parser;
-
-	private HtmlRenderer $htmlRenderer;
+	private readonly MarkdownConverter $converter;
 
 	public function __construct(
 		private PageRepository $pages,
@@ -148,8 +145,8 @@ class Formatter {
 		$environment->addBlockParser(new SpoilerParser());
 		$environment->addBlockRenderer(OembedBlock::class, new OembedRenderer());
 		$environment->addBlockRenderer(Spoiler::class, new SpoilerRenderer());
-		$this->parser = new DocParser($environment);
-		$this->htmlRenderer = new HtmlRenderer($environment);
+
+		$this->converter = new MarkdownConverter($environment);
 	}
 
 	/**
@@ -172,9 +169,7 @@ class Formatter {
 
 		$markdown = $this->replaceCustomTags($markdown);
 
-		$document = $this->parser->parse($markdown);
-
-		$text = $this->htmlRenderer->renderBlock($document);
+		$text = $this->converter->convertToHtml($markdown);
 
 		$text = $this->purifier->purify($text);
 

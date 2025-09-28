@@ -7,19 +7,19 @@ namespace App\Helpers\Formatting;
 use App\Helpers\Formatting\Extension\CommonMarkChatExtension;
 use App\Model\HelperLoader;
 use App\Model\Orm\Chat\ChatRepository;
-use League\CommonMark\CommonMarkConverter;
 use League\CommonMark\Environment;
+use League\CommonMark\MarkdownConverter;
 
 class ChatFormatter {
-	private readonly CommonMarkConverter $converter;
+	private readonly MarkdownConverter $converter;
 
 	public function __construct(ChatRepository $chats, HelperLoader $helperLoader) {
-		$environment = new Environment();
-		$environment->addExtension(new CommonMarkChatExtension($chats, $helperLoader));
-		$config = [
+		$environment = new Environment([
 			'html_input' => 'escape',
-		];
-		$this->converter = new CommonMarkConverter($config, $environment);
+		]);
+		$environment->addExtension(new CommonMarkChatExtension($chats, $helperLoader));
+
+		$this->converter = new MarkdownConverter($environment);
 	}
 
 	public function format(string $markdown): string {
