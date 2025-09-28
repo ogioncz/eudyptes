@@ -1,0 +1,8 @@
+[deployments.default]
+upload_uri = "sftp://ogion.cz/var/www/fan-club-penguin.cz/@beta/current/"
+web_root = "www/"
+web_uri = "https://beta.fan-club-penguin.cz/"
+transfer_files = [
+    "app/config/config.local.neon",
+]
+extra_post_args = { cookies.beta = "1" }
