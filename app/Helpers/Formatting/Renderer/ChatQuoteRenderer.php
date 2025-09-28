@@ -9,27 +9,27 @@ use App\Model\HelperLoader;
 use App\Model\Orm\Chat\ChatRepository;
 use DOMXPath;
 use InvalidArgumentException;
-use League\CommonMark\Block\Element\AbstractBlock;
-use League\CommonMark\Block\Renderer\BlockRendererInterface;
-use League\CommonMark\ElementRendererInterface;
-use League\CommonMark\HtmlElement;
+use League\CommonMark\Node\Node;
+use League\CommonMark\Renderer\ChildNodeRendererInterface;
+use League\CommonMark\Renderer\NodeRendererInterface;
+use League\CommonMark\Util\HtmlElement;
 use Ogion\Utils\DarnDOMDocument;
 use Override;
 
-class ChatQuoteRenderer implements BlockRendererInterface {
+class ChatQuoteRenderer implements NodeRendererInterface {
 	public function __construct(private readonly ChatRepository $chats, private readonly HelperLoader $helperLoader) {
 	}
 
 	/**
-	 * @param ChatQuote $block
+	 * @param ChatQuote $node
 	 */
 	#[Override]
-	public function render(AbstractBlock $block, ElementRendererInterface $htmlRenderer, bool $inTightList = false): HtmlElement|string {
-		if (!($block instanceof ChatQuote)) {
-			throw new InvalidArgumentException('Incompatible block type: ' . $block::class);
+	public function render(Node $node, ChildNodeRendererInterface $childRenderer): HtmlElement|string {
+		if (!($node instanceof ChatQuote)) {
+			throw new InvalidArgumentException('Incompatible block type: ' . $node::class);
 		}
 
-		$original = $this->chats->getById($block->getId());
+		$original = $this->chats->getById($node->getId());
 		if (!$original) {
 			return '';
 		}
@@ -38,12 +38,12 @@ class ChatQuoteRenderer implements BlockRendererInterface {
 		$dom->loadHTML($original->content);
 		$xpath = new DOMXPath($dom);
 		$nodes = $xpath->query('//blockquote');
-		foreach ($nodes as $node) {
-			$node->parentNode->removeChild($node);
+		foreach ($nodes as $domNode) {
+			$domNode->parentNode->removeChild($domNode);
 		}
 		$quotedText = $dom->saveHTML();
 
-		$separator = $htmlRenderer->getOption('inner_separator', "\n");
+		$separator = $childRenderer->getBlockSeparator();
 		$userLink = $this->helperLoader->userLink($original->user, true);
 		$userHeading = new HtmlElement('strong', [], $userLink);
 		$content = $userHeading . $separator . trim($quotedText);

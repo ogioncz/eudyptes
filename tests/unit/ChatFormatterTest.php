@@ -44,7 +44,7 @@ class ChatFormatterTest extends TestCase {
 
 	public function testEmoji(): void {
 		$markdown = 'Hello :-)';
-		$html = "<p>Hello <img src=\"https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg\" alt=\"\" width=\"30\" height=\"29\" /></p>\n";
+		$html = "<p>Hello <img alt=\"\" width=\"30\" height=\"29\" src=\"https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg\" /></p>\n";
 		Assert::equal($html, self::makeFormatter()->format($markdown));
 	}
 

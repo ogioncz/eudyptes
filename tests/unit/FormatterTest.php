@@ -154,7 +154,7 @@ class FormatterTest extends TestCase {
 
 	public function testEmoji(): void {
 		$markdown = ':-)';
-		$html = "<p><img src=\"https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg\" alt=\"\" width=\"30\" height=\"29\" /></p>\n";
+		$html = "<p><img alt=\"\" width=\"30\" height=\"29\" src=\"https://cdn.rawgit.com/ogioncz/club-penguin-emoji/master/happy.svg\" /></p>\n";
 
 		$formatted = self::makeFormatter()->format($markdown);
 		Assert::equal($html, $formatted['text']);

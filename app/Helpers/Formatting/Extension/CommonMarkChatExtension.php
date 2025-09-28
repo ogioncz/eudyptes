@@ -12,15 +12,18 @@ use App\Helpers\Formatting\Parser\UrlParser;
 use App\Helpers\Formatting\Renderer\ChatQuoteRenderer;
 use App\Model\HelperLoader;
 use App\Model\Orm\Chat\ChatRepository;
-use League\CommonMark\Block\Element\Document;
-use League\CommonMark\Block\Element\Paragraph;
-use League\CommonMark\Block\Renderer as BlockRenderer;
-use League\CommonMark\ConfigurableEnvironmentInterface;
+use League\CommonMark\Environment\EnvironmentBuilderInterface;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Link;
+use League\CommonMark\Extension\CommonMark\Renderer\Inline\ImageRenderer;
+use League\CommonMark\Extension\CommonMark\Renderer\Inline\LinkRenderer;
 use League\CommonMark\Extension\ExtensionInterface;
-use League\CommonMark\Inline\Element\Image;
-use League\CommonMark\Inline\Element\Link;
-use League\CommonMark\Inline\Element\Text;
-use League\CommonMark\Inline\Renderer as InlineRenderer;
+use League\CommonMark\Node\Block\Document;
+use League\CommonMark\Node\Block\Paragraph;
+use League\CommonMark\Node\Inline\Text;
+use League\CommonMark\Renderer\Block\DocumentRenderer;
+use League\CommonMark\Renderer\Block\ParagraphRenderer;
+use League\CommonMark\Renderer\Inline\TextRenderer;
 use Override;
 
 class CommonMarkChatExtension implements ExtensionInterface {
@@ -31,18 +34,18 @@ class CommonMarkChatExtension implements ExtensionInterface {
 	}
 
 	#[Override]
-	public function register(ConfigurableEnvironmentInterface $environment): void {
-		$environment->addBlockParser(new ChatQuoteParser(), 100);
+	public function register(EnvironmentBuilderInterface $environment): void {
+		$environment->addBlockStartParser(new ChatQuoteParser(), 100);
 
 		$environment->addInlineParser(new EmoticonParser(Formatter::IMAGES, Formatter::EMOTICONS), 100);
 		$environment->addInlineParser(new UrlParser(), 55);
 
-		$environment->addBlockRenderer(Document::class, new BlockRenderer\DocumentRenderer(), 0);
-		$environment->addBlockRenderer(Paragraph::class, new BlockRenderer\ParagraphRenderer(), 0);
+		$environment->addRenderer(Document::class, new DocumentRenderer());
+		$environment->addRenderer(Paragraph::class, new ParagraphRenderer());
 
-		$environment->addBlockRenderer(ChatQuote::class, new ChatQuoteRenderer($this->chats, $this->helperLoader), 0);
-		$environment->addInlineRenderer(Image::class, new InlineRenderer\ImageRenderer(), 0);
-		$environment->addInlineRenderer(Link::class, new InlineRenderer\LinkRenderer(), 0);
-		$environment->addInlineRenderer(Text::class, new InlineRenderer\TextRenderer(), 0);
+		$environment->addRenderer(ChatQuote::class, new ChatQuoteRenderer($this->chats, $this->helperLoader));
+		$environment->addRenderer(Image::class, new ImageRenderer());
+		$environment->addRenderer(Link::class, new LinkRenderer());
+		$environment->addRenderer(Text::class, new TextRenderer());
 	}
 }

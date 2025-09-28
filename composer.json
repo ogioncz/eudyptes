@@ -23,7 +23,7 @@
 		"ezyang/htmlpurifier": "dev-master",
 		"flaptor/indextank-php": "dev-master",
 		"latte/latte": "^3.0",
-		"league/commonmark": "^1.0.0",
+		"league/commonmark": "^2.7",
 		"longman/telegram-bot": "^0.83.1",
 		"nette/application": "^3.2",
 		"nette/bootstrap": "^3.0",

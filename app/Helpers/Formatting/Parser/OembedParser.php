@@ -7,14 +7,14 @@ namespace App\Helpers\Formatting\Parser;
 use App\Helpers\Formatting\Element\OembedBlock;
 use Cohensive\OEmbed\Factory as OEmbedFactory;
 use Exception;
-use League\CommonMark\Block\Parser\BlockParserInterface;
-use League\CommonMark\ContextInterface;
-use League\CommonMark\Cursor;
-use League\CommonMark\Inline\Element\Link;
+use League\CommonMark\Parser\Block\BlockStart;
+use League\CommonMark\Parser\Block\BlockStartParserInterface;
+use League\CommonMark\Parser\Cursor;
+use League\CommonMark\Parser\MarkdownParserStateInterface;
 use Override;
 use Tracy\Debugger;
 
-class OembedParser implements BlockParserInterface {
+class OembedParser implements BlockStartParserInterface {
 	public function __construct(
 		private readonly OEmbedFactory $oembed,
 		/** @var string[] */
@@ -23,36 +23,31 @@ class OembedParser implements BlockParserInterface {
 	}
 
 	#[Override]
-	public function parse(ContextInterface $context, Cursor $cursor): bool {
+	public function tryStart(Cursor $cursor, MarkdownParserStateInterface $parserState): ?BlockStart {
 		if ($cursor->isIndented()) {
-			return false;
+			return BlockStart::none();
 		}
 
-		$previousState = $cursor->saveState();
 		$url = $cursor->match(self::getUrlRegex());
 
 		if ($url === null) {
-			$cursor->restoreState($previousState);
-
-			return false;
+			return BlockStart::none();
 		}
 
 		if (\in_array(self::getDomain($url), $this->whitelistedDomains, true)) {
 			try {
 				$embed = $this->oembed->get($url);
 				if ($embed !== null) {
-					$context->addBlock(new OembedBlock($embed));
+					$block = new OembedBlock($embed);
 
-					return true;
+					return BlockStart::of(new OembedContinueParser($block))->at($cursor);
 				}
 			} catch (Exception $e) {
 				Debugger::log($e);
 			} // can’t serve, link is better than nothing so let’s leave it at that
 		}
 
-		$cursor->restoreState($previousState);
-
-		return false;
+		return BlockStart::none();
 	}
 
 	private static function getDomain(string $url): string {

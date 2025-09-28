@@ -8,13 +8,14 @@ use App\Helpers\Formatting\Element\OembedBlock;
 use App\Helpers\Formatting\Element\Spoiler;
 use App\Helpers\Formatting\Parser\EmoticonParser;
 use App\Helpers\Formatting\Parser\OembedParser;
-use App\Helpers\Formatting\Parser\SpoilerParser;
+use App\Helpers\Formatting\Parser\SpoilerStartParser;
 use App\Helpers\Formatting\Renderer\OembedRenderer;
 use App\Helpers\Formatting\Renderer\SpoilerRenderer;
 use App\Model\Orm\Page\PageRepository;
 use Cohensive\OEmbed\Factory as OEmbedFactory;
 use HTMLPurifier;
-use League\CommonMark\Environment;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\MarkdownConverter;
 use Nette\Utils\Html;
 use Nette\Utils\Strings;
@@ -132,19 +133,21 @@ class Formatter {
 		'(icepink)' => 'strawberry-ice-cream',
 	];
 
-	private readonly MarkdownConverter $converter;
+	private MarkdownConverter $converter;
 
 	public function __construct(
 		private readonly PageRepository $pages,
 		private readonly HTMLPurifier $purifier,
 		OEmbedFactory $oembed,
 	) {
-		$environment = Environment::createCommonMarkEnvironment();
+		$environment = new Environment();
+		$environment->addExtension(new CommonMarkCoreExtension());
 		$environment->addInlineParser(new EmoticonParser(self::IMAGES, self::EMOTICONS));
-		$environment->addBlockParser(new OembedParser($oembed, self::OEMBED_WHITELIST));
-		$environment->addBlockParser(new SpoilerParser());
-		$environment->addBlockRenderer(OembedBlock::class, new OembedRenderer());
-		$environment->addBlockRenderer(Spoiler::class, new SpoilerRenderer());
+		// Priority needs to be ≥ 250, since it starts with letter.
+		$environment->addBlockStartParser(new OembedParser($oembed, self::OEMBED_WHITELIST), 250);
+		$environment->addBlockStartParser(new SpoilerStartParser());
+		$environment->addRenderer(OembedBlock::class, new OembedRenderer());
+		$environment->addRenderer(Spoiler::class, new SpoilerRenderer());
 
 		$this->converter = new MarkdownConverter($environment);
 	}
@@ -169,7 +172,7 @@ class Formatter {
 
 		$markdown = $this->replaceCustomTags($markdown);
 
-		$text = $this->converter->convertToHtml($markdown);
+		$text = (string) $this->converter->convert($markdown);
 
 		$text = $this->purifier->purify($text);
 

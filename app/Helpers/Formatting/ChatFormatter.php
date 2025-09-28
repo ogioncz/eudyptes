@@ -7,7 +7,7 @@ namespace App\Helpers\Formatting;
 use App\Helpers\Formatting\Extension\CommonMarkChatExtension;
 use App\Model\HelperLoader;
 use App\Model\Orm\Chat\ChatRepository;
-use League\CommonMark\Environment;
+use League\CommonMark\Environment\Environment;
 use League\CommonMark\MarkdownConverter;
 
 class ChatFormatter {
@@ -23,6 +23,6 @@ class ChatFormatter {
 	}
 
 	public function format(string $markdown): string {
-		return $this->converter->convertToHtml($markdown);
+		return (string) $this->converter->convert($markdown);
 	}
 }

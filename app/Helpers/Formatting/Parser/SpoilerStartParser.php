@@ -4,37 +4,28 @@ declare(strict_types=1);
 
 namespace App\Helpers\Formatting\Parser;
 
-use App\Helpers\Formatting\Element\ChatQuote;
+use App\Helpers\Formatting\Element\Spoiler;
 use League\CommonMark\Parser\Block\BlockStart;
 use League\CommonMark\Parser\Block\BlockStartParserInterface;
 use League\CommonMark\Parser\Cursor;
 use League\CommonMark\Parser\MarkdownParserStateInterface;
 use Override;
 
-class ChatQuoteParser implements BlockStartParserInterface {
-	private const string REGEX = '(^\{#([0-9]+)\}$)';
-
+class SpoilerStartParser implements BlockStartParserInterface {
 	#[Override]
 	public function tryStart(Cursor $cursor, MarkdownParserStateInterface $parserState): ?BlockStart {
 		if ($cursor->isIndented()) {
 			return BlockStart::none();
 		}
 
-		$match = $cursor->match(self::REGEX);
-
+		$match = $cursor->match('/^¡¡¡(\s.*)?$/');
 		if ($match === null) {
 			return BlockStart::none();
 		}
 
-		$quotedId = self::getQuotedId($match);
-		$block = new ChatQuote($quotedId);
+		$summary = trim(mb_substr($match, mb_strlen('¡¡¡')));
+		$block = new Spoiler($summary !== '' ? $summary : null);
 
-		return BlockStart::of(new ChatQuoteContinueParser($block))->at($cursor);
-	}
-
-	private static function getQuotedId(string $quote): int {
-		preg_match(self::REGEX, $quote, $match);
-
-		return (int) $match[1];
+		return BlockStart::of(new SpoilerParser($block))->at($cursor);
 	}
 }

@@ -4,49 +4,43 @@ declare(strict_types=1);
 
 namespace App\Helpers\Formatting\Parser;
 
-use League\CommonMark\Inline\Element\Image;
-use League\CommonMark\Inline\Parser\InlineParserInterface;
-use League\CommonMark\InlineParserContext;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Image;
+use League\CommonMark\Parser\Inline\InlineParserInterface;
+use League\CommonMark\Parser\Inline\InlineParserMatch;
+use League\CommonMark\Parser\InlineParserContext;
 use Override;
 
 class EmoticonParser implements InlineParserInterface {
-	/** @var string[] */
-	private readonly array $characters;
-
-	private readonly string $regex;
-
 	public function __construct(
 		/** @var array<string, array{src: string, alt: string, width: int, height: int}> */
 		private array $images,
 		/** @var array<string, string> */
 		private array $emoticons,
 	) {
-		$this->characters = array_unique(array_map(fn(string $emoticon): string => mb_substr($emoticon, 0, 1), array_keys($emoticons)));
-
-		$this->regex = '(^(' . implode('|', array_map(preg_quote(...), array_keys($emoticons))) . '))';
 	}
 
 	#[Override]
-	public function getCharacters(): array {
-		return $this->characters;
+	public function getMatchDefinition(): InlineParserMatch {
+		return InlineParserMatch::oneOf(...array_keys($this->emoticons))->caseSensitive();
 	}
 
 	#[Override]
 	public function parse(InlineParserContext $inlineContext): bool {
-		$cursor = $inlineContext->getCursor();
+		$emoticon = $inlineContext->getFullMatch();
 
-		$previousState = $cursor->saveState();
-		$emoticon = $cursor->match($this->regex);
-
-		if ($emoticon === null) {
-			$cursor->restoreState($previousState);
-
+		$image = $this->emoticons[$emoticon] ?? null;
+		if ($image === null) {
 			return false;
 		}
 
-		$data = $this->images[$this->emoticons[$emoticon]];
+		$cursor = $inlineContext->getCursor();
+		$cursor->advanceBy($inlineContext->getFullMatchLength());
+
+		$data = $this->images[$image];
 		$img = new Image($data['src']);
-		$img->data['attributes'] = $data;
+		['alt' => $alt, 'width' => $width, 'height' => $height] = $data;
+		$attributes = ['alt' => $alt, 'width' => (string) $width, 'height' => (string) $height];
+		$img->data->set('attributes', $attributes);
 		$inlineContext->getContainer()->appendChild($img);
 
 		return true;
