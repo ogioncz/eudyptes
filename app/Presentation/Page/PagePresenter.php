@@ -136,7 +136,7 @@ class PagePresenter extends BasePresenter {
 		$renderer = new Bs3FormRenderer();
 		$form->setRenderer($renderer);
 		$form->addText('title', 'Nadpis:')->setRequired()->getControlPrototype()->autofocus = true;
-		$slug = $form->addText('slug', 'Adresa:')->setRequired()->setType('url');
+		$slug = $form->addText('slug', 'Adresa:')->setRequired()->setHtmlType('url');
 		if ($this->getAction() == 'edit') {
 			$slug->setDisabled(true);
 		}

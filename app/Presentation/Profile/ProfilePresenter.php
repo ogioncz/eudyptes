@@ -111,7 +111,7 @@ class ProfilePresenter extends BasePresenter {
 			$form->addCheckbox('removeAvatar', 'Odstranit avatar');
 		}
 
-		$email = $form->addText('email', 'E-Mail:')->setType('email');
+		$email = $form->addText('email', 'E-Mail:')->setHtmlType('email');
 		$email->setOption('description', 'Slouží k upozorňování na zprávy a obnovu hesla. Bez tvého souhlasu ti nebudeme nic posílat.');
 		$email->setRequired('Zadej prosím svůj e-mail.');
 		$email->addRule(Form::Email, 'Zadej prosím platný e-mail.');
@@ -194,7 +194,7 @@ class ProfilePresenter extends BasePresenter {
 		$username->setRequired('Zadej prosím své uživatelské jméno.');
 		$username->setOption('description', 'Pod tímto jménem tě budou znát ostatní uživatelé.');
 
-		$email = $form->addText('email', 'E-Mail:')->setType('email');
+		$email = $form->addText('email', 'E-Mail:')->setHtmlType('email');
 		$email->setOption('description', 'Slouží k upozorňování na zprávy a obnovu hesla. Bez tvého souhlasu ti nebudeme nic posílat.');
 		$email->setRequired('Zadej prosím svůj e-mail.');
 		$email->addRule(Form::Email, 'Zadej prosím platný e-mail.');
