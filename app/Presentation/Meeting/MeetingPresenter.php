@@ -109,7 +109,7 @@ class MeetingPresenter extends BasePresenter {
 				$this->error('Sraz nenalezen.');
 			}
 			if (!$this->allowed($meeting, $this->getAction())) {
-				$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+				$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', IResponse::S403_Forbidden);
 			}
 		}
 
@@ -180,7 +180,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('meeting', $this->getAction())) {
-			$this->error('Pro založení srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro založení srazu musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 	}
 
@@ -193,7 +193,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Sraz nenalezen.');
 		}
 		if (!$this->allowed($meeting, 'edit')) {
-			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro úpravu cizího srazu musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 		$data = $meeting->toArray();
 		$data['times'] = Json::decode($meeting->program, Json::FORCE_ARRAY);
@@ -221,7 +221,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Sraz nenalezen.');
 		}
 		if (!$this->allowed($meeting, $this->getAction())) {
-			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 
 		$this->meetings->removeAndFlush($meeting);
@@ -239,7 +239,7 @@ class MeetingPresenter extends BasePresenter {
 			$this->error('Sraz nenalezen.');
 		}
 		if (!$this->allowed('meeting', $this->getAction())) {
-			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro smazání cizího srazu musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 
 		$this->getTemplate()->meeting = $meeting;

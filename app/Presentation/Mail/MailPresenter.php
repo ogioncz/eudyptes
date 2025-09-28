@@ -64,7 +64,7 @@ class MailPresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($mail, 'show')) {
-			$this->error('Toto není tvá zpráva', IResponse::S403_FORBIDDEN);
+			$this->error('Toto není tvá zpráva', IResponse::S403_Forbidden);
 		}
 
 		if (!$mail->read && $mail->recipient->id === $this->getUser()->getIdentity()->getId()) {
@@ -134,7 +134,7 @@ class MailPresenter extends BasePresenter {
 			}
 
 			if ($original->recipient->id !== $this->getUser()->getIdentity()->getId()) {
-				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', IResponse::S403_FORBIDDEN);
+				$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', IResponse::S403_Forbidden);
 			}
 
 			$mail->recipient = $this->users->getById($original->sender);
@@ -241,7 +241,7 @@ class MailPresenter extends BasePresenter {
 		}
 
 		if ($original->recipient->id !== $this->getUser()->getIdentity()->getId()) {
-			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', IResponse::S403_FORBIDDEN);
+			$this->error('Zpráva, na kterou chceš odpovědět není určena do tvých rukou.', IResponse::S403_Forbidden);
 		}
 		$this->getTemplate()->original = $original;
 	}

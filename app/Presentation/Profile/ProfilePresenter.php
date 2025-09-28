@@ -103,7 +103,7 @@ class ProfilePresenter extends BasePresenter {
 			$username->setDisabled(true);
 		}
 
-		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::FILLED)->addRule(Form::MIME_TYPE, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
+		$form->addUpload('avatar', 'Avatar:')->addCondition(Form::Filled)->addRule(Form::MimeType, 'Nahraj prosím obrázek ve formátu PNG.', ['image/png']);
 
 		$avatarStoragePath = $this->context->getParameter('avatarStorage');
 		$medium = $avatarStoragePath . '/' . $this->profile->id . 'm.png';
@@ -114,7 +114,7 @@ class ProfilePresenter extends BasePresenter {
 		$email = $form->addText('email', 'E-Mail:')->setType('email');
 		$email->setOption('description', 'Slouží k upozorňování na zprávy a obnovu hesla. Bez tvého souhlasu ti nebudeme nic posílat.');
 		$email->setRequired('Zadej prosím svůj e-mail.');
-		$email->addRule($form::EMAIL, 'Zadej prosím platný e-mail.');
+		$email->addRule(Form::Email, 'Zadej prosím platný e-mail.');
 
 		$form->addText('skype', 'Skype:');
 
@@ -197,13 +197,13 @@ class ProfilePresenter extends BasePresenter {
 		$email = $form->addText('email', 'E-Mail:')->setType('email');
 		$email->setOption('description', 'Slouží k upozorňování na zprávy a obnovu hesla. Bez tvého souhlasu ti nebudeme nic posílat.');
 		$email->setRequired('Zadej prosím svůj e-mail.');
-		$email->addRule($form::EMAIL, 'Zadej prosím platný e-mail.');
+		$email->addRule(Form::Email, 'Zadej prosím platný e-mail.');
 
 		$form->addPassword('password', 'Heslo:')->setRequired('Zadej prosím své heslo.');
 
 		$noSpam = $form->addText('nospam', 'Zadej „nospam“');
-		$noSpam->addRule(Form::FILLED, 'Ošklivý spamovací robote!');
-		$noSpam->addRule(Form::EQUAL, 'Ošklivý spamovací robote!', 'nospam');
+		$noSpam->addRule(Form::Filled, 'Ošklivý spamovací robote!');
+		$noSpam->addRule(Form::Equal, 'Ošklivý spamovací robote!', 'nospam');
 		$noSpam->getLabelPrototype()->class('nospam');
 		$noSpam->getControlPrototype()->class('nospam');
 
@@ -261,8 +261,8 @@ class ProfilePresenter extends BasePresenter {
 		$handle->setOption('description', 'Na tvůj e-mail ti pošleme odkaz, pomocí kterého si můžeš heslo změnit.');
 
 		$noSpam = $form->addText('nospam', 'Zadej „nospam“');
-		$noSpam->addRule(Form::FILLED, 'Ošklivý spamovací robote!');
-		$noSpam->addRule(Form::EQUAL, 'Ošklivý spamovací robote!', 'nospam');
+		$noSpam->addRule(Form::Filled, 'Ošklivý spamovací robote!');
+		$noSpam->addRule(Form::Equal, 'Ošklivý spamovací robote!', 'nospam');
 		$noSpam->getLabelPrototype()->class('nospam');
 		$noSpam->getControlPrototype()->class('nospam');
 

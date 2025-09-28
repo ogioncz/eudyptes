@@ -73,7 +73,7 @@ class ChatControl extends Control {
 			$this->redirect('Sign:in', ['backlink' => $presenter->storeRequest()]);
 		}
 		if (!$presenter->getUser()->isAllowed('chat', 'send')) {
-			$presenter->error('Pro odesílání do chatu musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$presenter->error('Pro odesílání do chatu musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 		$values = $form->getValues();
 

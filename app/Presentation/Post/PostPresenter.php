@@ -50,7 +50,7 @@ class PostPresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($post, 'purge')) {
-			$this->error('Nemáš právo vymazat cache!', IResponse::S403_FORBIDDEN);
+			$this->error('Nemáš právo vymazat cache!', IResponse::S403_Forbidden);
 		}
 
 		$cache = new Cache($this->storage, 'posts');
@@ -103,7 +103,7 @@ class PostPresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($this->getAction() === 'create' ? 'post' : $post, $this->getAction())) {
-			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro vytváření či úpravu příspěvků musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 
 		$post->published = $values->published;
@@ -163,7 +163,7 @@ class PostPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('post', $this->getAction())) {
-			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro vytváření příspěvků musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 	}
 
@@ -172,7 +172,7 @@ class PostPresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('post', $this->getAction())) {
-			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro úpravu příspěvků musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 		$post = $this->posts->getById($id);
 		if (!$post) {

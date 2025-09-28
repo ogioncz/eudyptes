@@ -46,7 +46,7 @@ class PagePresenter extends BasePresenter {
 		if (!$page) {
 			if ($this->allowed('page', 'create')) {
 				$httpResponse = $this->response;
-				$httpResponse->setCode(Response::S404_NOT_FOUND);
+				$httpResponse->setCode(Response::S404_NotFound);
 				$this->getTemplate()->slug = $slug;
 				$this->setView('@no-page');
 				$this->sendTemplate();
@@ -80,7 +80,7 @@ class PagePresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($page, 'purge')) {
-			$this->error('Nemáš právo vymazat cache!', IResponse::S403_FORBIDDEN);
+			$this->error('Nemáš právo vymazat cache!', IResponse::S403_Forbidden);
 		}
 
 		$cache = new Cache($this->storage, 'pages');
@@ -171,7 +171,7 @@ class PagePresenter extends BasePresenter {
 		}
 
 		if (!$this->allowed($this->getAction() === 'create' ? 'page' : $page, $this->getAction())) {
-			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro vytváření či úpravu stránek musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 
 		$page->title = $values->title;
@@ -235,7 +235,7 @@ class PagePresenter extends BasePresenter {
 			$this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
 		}
 		if (!$this->allowed('page', $this->getAction())) {
-			$this->error('Pro vytváření stránek musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro vytváření stránek musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 
 		if (isset($slug)) {
@@ -252,7 +252,7 @@ class PagePresenter extends BasePresenter {
 			$this->error('Stránka nenalezena');
 		}
 		if (!$this->allowed($page, $this->getAction())) {
-			$this->error('Pro úpravu stránek musíš mít oprávnění.', IResponse::S403_FORBIDDEN);
+			$this->error('Pro úpravu stránek musíš mít oprávnění.', IResponse::S403_Forbidden);
 		}
 
 		$data = $page->toArray();
